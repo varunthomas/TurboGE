@@ -1,0 +1,3 @@
+[submodule "TurboGE/vendor/spdlog"]
+	path = TurboGE/vendor/spdlog
+	url = https://github.com/gabime/spdlog
