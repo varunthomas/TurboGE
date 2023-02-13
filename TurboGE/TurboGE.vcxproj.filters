@@ -1,42 +1,99 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="TurboGE">
+      <UniqueIdentifier>{7DA60D5F-E985-8CFA-F29D-17D15EFCF25B}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="TurboGE\Events">
+      <UniqueIdentifier>{C1831126-AD51-052C-96E5-75528252E190}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="TurboGE\Imgui">
+      <UniqueIdentifier>{87CD6A01-F38D-E637-BCC8-2FB528482B14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TurboGE\Platform">
+      <UniqueIdentifier>{717F9F0C-5D78-BE5E-86AA-A3E372029E6A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TurboGE\Platform\OpenGL">
+      <UniqueIdentifier>{853FC697-F176-0E2F-FA80-725266373528}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TurboGE\Platform\Windows">
+      <UniqueIdentifier>{AB0AAAE8-972F-F968-C07A-DEF8ACFEF786}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\TurboGE\Core.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClInclude Include="src\TurboGE.h" />
     <ClInclude Include="src\TurboGE\Application.h">
-      <Filter>Header Files</Filter>
+      <Filter>TurboGE</Filter>
     </ClInclude>
-    <ClInclude Include="src\TurboGE.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\TurboGE\Core.h">
+      <Filter>TurboGE</Filter>
     </ClInclude>
     <ClInclude Include="src\TurboGE\EntryPoint.h">
-      <Filter>Header Files</Filter>
+      <Filter>TurboGE</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TurboGE\Events\AppEvent.h">
+      <Filter>TurboGE\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TurboGE\Events\Event.h">
+      <Filter>TurboGE\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TurboGE\Events\KeyboardEvent.h">
+      <Filter>TurboGE\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TurboGE\Events\MouseEvent.h">
+      <Filter>TurboGE\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TurboGE\Imgui\ImguiLayer.h">
+      <Filter>TurboGE\Imgui</Filter>
     </ClInclude>
     <ClInclude Include="src\TurboGE\Logger.h">
-      <Filter>Header Files</Filter>
+      <Filter>TurboGE</Filter>
     </ClInclude>
+    <ClInclude Include="src\TurboGE\Platform\OpenGL\ImguiOpenGLRenderer.h">
+      <Filter>TurboGE\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TurboGE\Platform\OpenGL\imgui_impl_opengl3_loader.h">
+      <Filter>TurboGE\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TurboGE\Platform\Windows\WindowsWindow.h">
+      <Filter>TurboGE\Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TurboGE\Test.h">
+      <Filter>TurboGE</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TurboGE\Window.h">
+      <Filter>TurboGE</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tgepch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TurboGE\Application.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>TurboGE</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TurboGE\Events\AppEvent.cpp">
+      <Filter>TurboGE\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TurboGE\Events\KeyboardEvent.cpp">
+      <Filter>TurboGE\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TurboGE\Events\MouseEvent.cpp">
+      <Filter>TurboGE\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TurboGE\Imgui\ImguiLayer.cpp">
+      <Filter>TurboGE\Imgui</Filter>
     </ClCompile>
     <ClCompile Include="src\TurboGE\Logger.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>TurboGE</Filter>
     </ClCompile>
+    <ClCompile Include="src\TurboGE\Platform\OpenGL\ImguiOpenGLRenderer.cpp">
+      <Filter>TurboGE\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TurboGE\Platform\Windows\WindowsWindow.cpp">
+      <Filter>TurboGE\Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TurboGE\Test.cpp">
+      <Filter>TurboGE</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tgepch.cpp" />
   </ItemGroup>
 </Project>

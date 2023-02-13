@@ -1,3 +1,4 @@
+#include"tgepch.h"
 #include "Logger.h"
 
 namespace TurboGE
