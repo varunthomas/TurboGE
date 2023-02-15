@@ -1,8 +1,12 @@
 #Directories
 .vs/
+
 bin/
 bin-int/
 
 #Files
-*.bak
-*.user
+**.bak
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**.vcxproj.user
