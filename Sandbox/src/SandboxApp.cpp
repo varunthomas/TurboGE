@@ -5,10 +5,10 @@ class Sandbox : public TurboGE::Application
 public:
 	Sandbox()
 	{
-		TurboGE::ImguiLayer* layer{ new TurboGE::ImguiLayer() };
+		//TurboGE::ImguiLayer* layer{ new TurboGE::ImguiLayer() };
 		
-		layer->onAttach();
-		setLayerInstance(layer);
+		//layer->onAttach();
+		//setLayerInstance(layer);
 	}
 
 	~Sandbox()

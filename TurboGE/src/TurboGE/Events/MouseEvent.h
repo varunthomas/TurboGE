@@ -28,8 +28,8 @@ namespace TurboGE
 
 	class MouseScrollEvent : public Event
 	{
-		double m_xOffset;
-		double m_yOffset;
+		float m_xOffset;
+		float m_yOffset;
 	public:
 		MouseScrollEvent(float, float);
 		//void dispatchEvent(MouseScrollEvent& e, std::function<void(MouseScrollEvent&)>) override;

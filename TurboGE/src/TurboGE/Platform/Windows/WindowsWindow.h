@@ -1,6 +1,6 @@
 #pragma once
 #include"TurboGE/Window.h"
-
+#include"GLFW/glfw3.h"
 #include "TurboGE/Logger.h"
 
 namespace TurboGE
@@ -24,6 +24,7 @@ namespace TurboGE
 		void Init(WindowProp) override;
 		void shutDown() override;
 		void onUpdate() override;
+		inline void* GetNativeWindow() override { return m_window; }
 		void SetVSync(bool) override;
 
 		

@@ -1,5 +1,6 @@
 workspace "TurboGE"
 	architecture "x64"
+	startproject "Sandbox"
 
 	configurations
 	{
@@ -24,9 +25,10 @@ group ""
 
 project "TurboGE"
 	location "TurboGE"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
-	staticruntime "off"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -39,7 +41,10 @@ project "TurboGE"
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp"
 	}
-
+	defines
+	{
+		"_CRT_SECURE_NO_WARNINGS"
+	}
 	includedirs
 	{
 		"%{prj.name}/src",
@@ -58,7 +63,6 @@ project "TurboGE"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
 		systemversion "latest"
 
 		defines
@@ -68,31 +72,27 @@ project "TurboGE"
 			"GLFW_INCLUDE_NONE"
 		}
 
-		postbuildcommands
-		{
-			("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
-		}
-
 	filter "configurations:Debug"
 		defines "TGE_DEBUG"
 		runtime "Debug"
-		symbols "On"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines "TGE_RELEASE"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
 
 	filter "configurations:Dist"
 		defines "TGE_DIST"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
 
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
-	staticruntime "off"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -107,8 +107,7 @@ project "Sandbox"
 	{
 		"TurboGE/vendor/spdlog/include",
 		"TurboGE/src",
-		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.Glad}"
+		"TurboGE/vendor",
 	}
 
 	links
@@ -117,23 +116,21 @@ project "Sandbox"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
 		systemversion "latest"
 
 		defines
 		{
-			"TGE_WINDOWS",
-			"GLFW_INCLUDE_NONE"
+			"TGE_WINDOWS"
 		}
 
 	filter "configurations:Debug"
 		defines "TGE_DEBUG"
-		symbols "On"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines "TGE_RELEASE"
-		optimize "On"
+		optimize "on"
 
 	filter "configurations:Dist"
 		defines "TGE_DIST"
-		optimize "On"
+		optimize "on"

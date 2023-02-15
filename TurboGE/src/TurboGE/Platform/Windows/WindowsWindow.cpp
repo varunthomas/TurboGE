@@ -39,6 +39,8 @@ namespace TurboGE
 		glfwMakeContextCurrent(m_window);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		
+		std::cout << glGetString(GL_VENDOR) << " " << glGetString(GL_VERSION) << " " << glGetString(GL_RENDERER) << std::endl;
+
 		glfwSetWindowUserPointer(m_window, &m_data);
 		SetVSync(true);
 

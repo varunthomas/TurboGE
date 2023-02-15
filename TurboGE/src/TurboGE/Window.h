@@ -1,7 +1,7 @@
 #pragma once
 #include"tgepch.h"
 #include"Core.h"
-#include<GLFW/glfw3.h>
+//#include<GLFW/glfw3.h>
 #include"Logger.h"
 #include"Events/Event.h"
 namespace TurboGE
@@ -34,7 +34,6 @@ namespace TurboGE
 		}
 		using CallBackFn = std::function<void(Event&)>;
 		static std::unique_ptr<Window> Create(WindowProp props = WindowProp());
-		//static Window* Create(WindowProp props = WindowProp());
 		inline void setCallback(CallBackFn fn) { m_data.callbackFn = fn; }
 		inline unsigned int GetWidth() const {  return m_data.width; }
 		inline unsigned int GetHeight() const { return m_data.height; }
@@ -43,6 +42,7 @@ namespace TurboGE
 		virtual void SetVSync(bool enabled) = 0;
 		virtual void shutDown() = 0;
 		virtual void onUpdate() = 0;
+		virtual void* GetNativeWindow() = 0;
 
 		virtual ~Window() = default;
 
