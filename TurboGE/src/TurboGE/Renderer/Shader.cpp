@@ -32,7 +32,7 @@ namespace TurboGE
 			glDeleteShader(vertexShader);
 
 			// Use the infoLog as you see fit.
-			TURBO_CORE_ERR("{0}", infoLog.data());
+			TURBO_CORE_ERR(" Vertex Shader {0}", infoLog.data());
 			// In this simple program, we'll just leave
 			return;
 		}
@@ -64,7 +64,7 @@ namespace TurboGE
 			glDeleteShader(vertexShader);
 
 			// Use the infoLog as you see fit.
-			TURBO_CORE_ERR("{0}", infoLog.data());
+			TURBO_CORE_ERR(" Fragment shader {0}", infoLog.data());
 			// In this simple program, we'll just leave
 			return;
 		}

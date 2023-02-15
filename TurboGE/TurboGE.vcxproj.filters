@@ -58,6 +58,8 @@
     <ClInclude Include="src\tgepch.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="src\TurboGE\Renderer\Shader.h" />
+    <ClInclude Include="src\TurboGE\Renderer\Buffer.h" />
+    <ClInclude Include="src\TurboGE\Platform\OpenGL\OpenGLBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TurboGE\Application.cpp">
@@ -89,5 +91,7 @@
     </ClCompile>
     <ClCompile Include="src\tgepch.cpp" />
     <ClCompile Include="src\TurboGE\Renderer\Shader.cpp" />
+    <ClCompile Include="src\TurboGE\Platform\OpenGL\OpenGLBuffer.cpp" />
+    <ClCompile Include="src\TurboGE\Renderer\Buffer.cpp" />
   </ItemGroup>
 </Project>

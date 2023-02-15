@@ -154,7 +154,9 @@
     <ClInclude Include="src\TurboGE\Events\MouseEvent.h" />
     <ClInclude Include="src\TurboGE\Imgui\ImguiLayer.h" />
     <ClInclude Include="src\TurboGE\Logger.h" />
+    <ClInclude Include="src\TurboGE\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\TurboGE\Platform\Windows\WindowsWindow.h" />
+    <ClInclude Include="src\TurboGE\Renderer\Buffer.h" />
     <ClInclude Include="src\TurboGE\Renderer\Shader.h" />
     <ClInclude Include="src\TurboGE\Test.h" />
     <ClInclude Include="src\TurboGE\Window.h" />
@@ -168,7 +170,9 @@
     <ClCompile Include="src\TurboGE\Imgui\ImguiBuild.cpp" />
     <ClCompile Include="src\TurboGE\Imgui\ImguiLayer.cpp" />
     <ClCompile Include="src\TurboGE\Logger.cpp" />
+    <ClCompile Include="src\TurboGE\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\TurboGE\Platform\Windows\WindowsWindow.cpp" />
+    <ClCompile Include="src\TurboGE\Renderer\Buffer.cpp" />
     <ClCompile Include="src\TurboGE\Renderer\Shader.cpp" />
     <ClCompile Include="src\TurboGE\Test.cpp" />
     <ClCompile Include="src\tgepch.cpp">
