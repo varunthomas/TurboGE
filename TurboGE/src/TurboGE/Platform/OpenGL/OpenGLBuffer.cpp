@@ -1,7 +1,6 @@
 #include"tgepch.h"
 #include"OpenGLBuffer.h"
 #include<glad/glad.h>
-
 namespace TurboGE
 {
 	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size)
@@ -27,6 +26,7 @@ namespace TurboGE
 
 	OpenGLIndexBuffer::OpenGLIndexBuffer(unsigned int* indices, uint32_t size)
 	{
+		m_count = size / sizeof(uint32_t);
 		glCreateBuffers(1, &m_RendererID);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);

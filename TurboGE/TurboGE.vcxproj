@@ -143,7 +143,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Shader.h" />
     <ClInclude Include="src\TurboGE.h" />
     <ClInclude Include="src\TurboGE\Application.h" />
     <ClInclude Include="src\TurboGE\Core.h" />
@@ -155,9 +154,13 @@
     <ClInclude Include="src\TurboGE\Imgui\ImguiLayer.h" />
     <ClInclude Include="src\TurboGE\Logger.h" />
     <ClInclude Include="src\TurboGE\Platform\OpenGL\OpenGLBuffer.h" />
+    <ClInclude Include="src\TurboGE\Platform\OpenGL\OpenGLRenderer.h" />
+    <ClInclude Include="src\TurboGE\Platform\OpenGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\TurboGE\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\TurboGE\Renderer\Buffer.h" />
+    <ClInclude Include="src\TurboGE\Renderer\Renderer.h" />
     <ClInclude Include="src\TurboGE\Renderer\Shader.h" />
+    <ClInclude Include="src\TurboGE\Renderer\VertexArray.h" />
     <ClInclude Include="src\TurboGE\Test.h" />
     <ClInclude Include="src\TurboGE\Window.h" />
     <ClInclude Include="src\tgepch.h" />
@@ -171,9 +174,13 @@
     <ClCompile Include="src\TurboGE\Imgui\ImguiLayer.cpp" />
     <ClCompile Include="src\TurboGE\Logger.cpp" />
     <ClCompile Include="src\TurboGE\Platform\OpenGL\OpenGLBuffer.cpp" />
+    <ClCompile Include="src\TurboGE\Platform\OpenGL\OpenGLRenderer.cpp" />
+    <ClCompile Include="src\TurboGE\Platform\OpenGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\TurboGE\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\TurboGE\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\TurboGE\Renderer\Renderer.cpp" />
     <ClCompile Include="src\TurboGE\Renderer\Shader.cpp" />
+    <ClCompile Include="src\TurboGE\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\TurboGE\Test.cpp" />
     <ClCompile Include="src\tgepch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

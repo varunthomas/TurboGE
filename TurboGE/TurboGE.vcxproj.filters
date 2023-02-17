@@ -13,8 +13,14 @@
     <Filter Include="TurboGE\Platform">
       <UniqueIdentifier>{717F9F0C-5D78-BE5E-86AA-A3E372029E6A}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TurboGE\Platform\OpenGL">
+      <UniqueIdentifier>{853FC697-F176-0E2F-FA80-725266373528}</UniqueIdentifier>
+    </Filter>
     <Filter Include="TurboGE\Platform\Windows">
       <UniqueIdentifier>{AB0AAAE8-972F-F968-C07A-DEF8ACFEF786}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TurboGE\Renderer">
+      <UniqueIdentifier>{C3867CE7-AF7F-9B39-D8B1-80BEC4097B45}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -46,8 +52,23 @@
     <ClInclude Include="src\TurboGE\Logger.h">
       <Filter>TurboGE</Filter>
     </ClInclude>
+    <ClInclude Include="src\TurboGE\Platform\OpenGL\OpenGLBuffer.h">
+      <Filter>TurboGE\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TurboGE\Platform\OpenGL\OpenGLVertexArray.h">
+      <Filter>TurboGE\Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\TurboGE\Platform\Windows\WindowsWindow.h">
       <Filter>TurboGE\Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TurboGE\Renderer\Buffer.h">
+      <Filter>TurboGE\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TurboGE\Renderer\Shader.h">
+      <Filter>TurboGE\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TurboGE\Renderer\VertexArray.h">
+      <Filter>TurboGE\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\TurboGE\Test.h">
       <Filter>TurboGE</Filter>
@@ -56,10 +77,8 @@
       <Filter>TurboGE</Filter>
     </ClInclude>
     <ClInclude Include="src\tgepch.h" />
-    <ClInclude Include="Shader.h" />
-    <ClInclude Include="src\TurboGE\Renderer\Shader.h" />
-    <ClInclude Include="src\TurboGE\Renderer\Buffer.h" />
-    <ClInclude Include="src\TurboGE\Platform\OpenGL\OpenGLBuffer.h" />
+    <ClInclude Include="src\TurboGE\Renderer\Renderer.h" />
+    <ClInclude Include="src\TurboGE\Platform\OpenGL\OpenGLRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TurboGE\Application.cpp">
@@ -83,15 +102,29 @@
     <ClCompile Include="src\TurboGE\Logger.cpp">
       <Filter>TurboGE</Filter>
     </ClCompile>
+    <ClCompile Include="src\TurboGE\Platform\OpenGL\OpenGLBuffer.cpp">
+      <Filter>TurboGE\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TurboGE\Platform\OpenGL\OpenGLVertexArray.cpp">
+      <Filter>TurboGE\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\TurboGE\Platform\Windows\WindowsWindow.cpp">
       <Filter>TurboGE\Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TurboGE\Renderer\Buffer.cpp">
+      <Filter>TurboGE\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TurboGE\Renderer\Shader.cpp">
+      <Filter>TurboGE\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TurboGE\Renderer\VertexArray.cpp">
+      <Filter>TurboGE\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\TurboGE\Test.cpp">
       <Filter>TurboGE</Filter>
     </ClCompile>
     <ClCompile Include="src\tgepch.cpp" />
-    <ClCompile Include="src\TurboGE\Renderer\Shader.cpp" />
-    <ClCompile Include="src\TurboGE\Platform\OpenGL\OpenGLBuffer.cpp" />
-    <ClCompile Include="src\TurboGE\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\TurboGE\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\TurboGE\Platform\OpenGL\OpenGLRenderer.cpp" />
   </ItemGroup>
 </Project>

@@ -5,7 +5,6 @@
 #include "Imgui/ImguiLayer.h"
 #include"imgui_tables.cpp"
 #include<glad/glad.h>
-//#include<glad/glad.h>
 
 namespace TurboGE
 {
@@ -18,47 +17,62 @@ namespace TurboGE
 		layer->onAttach();
 		TURBO_CORE_ERR("Setting callback");
 		m_window->setCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
+		m_Renderer.reset(Renderer::Create());
 
-		glGenVertexArrays(1, &m_VertexArray);
-		glBindVertexArray(m_VertexArray);
+		float vertices[3 * 7] =
+		{
+			-0.5f, -0.5f, 0.0f, 0.8f,0.2f,0.8f,1.0f,
+			0.5f, -0.5f, 0.0f, 0.2f,0.3f,0.8f,1.0f,
+			0.0f, 0.5f, 0.0f, 0.8f,0.8f,0.2f,1.0f
+		};
 
-		
-		//glGenBuffers(1, &m_VertexBuffer);
-		//glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+		m_VertexArray.reset(VertexArray::Create());
+		m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+		VertexLayout layout;
+		layout.m_attribVec = { {0, AttribType::Float3, false },{1, AttribType::Float4, false} };
+		layout.MakeLayout();
+		m_VertexArray->SetLayout(layout);
+		m_VertexArray->BindVertexBuffer();
+		unsigned int indices[] = {0,1,2};
+		m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices)));
+		m_VertexArray->setIndexBuffer(m_IndexBuffer);
 
-		float vertices[] =
+
+		m_SquareVA.reset(VertexArray::Create());
+
+		//EVERYTHING IS MADE OF TRIANGLE. SO WE NEED TO CREATE SQUARE USING 2 TRIANGLE. SO WE NEED TO SPECIFY 3+3 VERTEX POSITIONS. BUT 2 VERTICES
+		//ARE DUPLICATES. THESE DUPLICATES WILL USE MEMORY. SO IN ORDER TO SAVE MEMORY WE REMOVE THE 2 DUPLICATES AND PROVIDE THE REMAINING 4 VERTICES
+		//INDEX BUFFER WILL TAKE CARE OF CREATING SQUARE FROM 2 TRIANGLE WITHOUT USING DUPLICATES
+		float sqVertices[] =
 		{
 			-0.5f, -0.5f, 0.0f,
 			0.5f, -0.5f, 0.0f,
-			0.0f, 0.5f, 0.0f
+			0.5f, 0.5f, 0.0f,
+			-0.5f, 0.5f, 0.0f
 		};
-		m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
-			//new VertexBuffer(vertices, sizeof(vertices));
-		//m_VertexBuffer->Bind(vertices, sizeof(vertices))
-
-		//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
-		
-
-		
-		//glGenBuffers(1, &m_IndexBuffer);
-
-		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
-
-		unsigned int indices[] = { 0,1,2 };
-		m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices)));
-		//new IndexBuffer(indices, sizeof(indices) / sizeof(unsigned int));
-		//m_IndexBuffer->Bind(indices, sizeof(indices) / sizeof(unsigned int));
-		//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+		m_SquareVB.reset(VertexBuffer::Create(sqVertices, sizeof(sqVertices)));
+		VertexLayout layoutsq;
+		layoutsq.m_attribVec = { {0, AttribType::Float3, false } };
+		layoutsq.MakeLayout();
+		m_SquareVA->SetLayout(layoutsq);
+		m_SquareVA->BindVertexBuffer();
+		//INDICES FOR SQUARE IS 0 1 2 FOR FIRST TRIANGLE. THEN 2 3 0 FOR SECOND TRIANGLE. INDICES ARE NUMBERED IN ANTICLOCKWISE DIR
+		unsigned int indicesSQ[] = { 0, 1, 2, 2, 3, 0 };
+		m_SquareIB.reset(IndexBuffer::Create(indicesSQ, sizeof(indicesSQ)));
+		m_SquareVA->setIndexBuffer(m_SquareIB);
 
 		std::string vertexSrc = R"(
 			#version 330 core
 			
 			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec4 a_Color;
 			
+			out vec3 v_Position;
+			out vec4 v_Color;
+
 			void main()
 			{
+				v_Color = a_Color;
 				gl_Position = vec4(a_Position, 1.0);
 			}
 			)";
@@ -67,20 +81,48 @@ namespace TurboGE
 			#version 330 core
 			
 			layout(location = 0) out vec4 color;
+
+			in vec3 v_Position;
+			in vec4 v_Color;
 			
 			void main()
 			{
-				color = vec4(0.8,0.2,0.2,1.0);
+				color = vec4(v_Position * 0.5 + 0.5, 1.0);
+				color = v_Color;
 			}
 			)";
 
 		m_Shader.reset(new Shader(vertexSrc, fragmentSrc));
+		
+		std::string blueShaderVertexSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_Position;
+			out vec3 v_Position;
+			void main()
+			{
+				v_Position = a_Position;
+				gl_Position = vec4(a_Position, 1.0);	
+			}
+		)";
+
+		std::string blueShaderFragmentSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) out vec4 color;
+			in vec3 v_Position;
+			void main()
+			{
+				color = vec4(0.2, 0.3, 0.8, 1.0);
+			}
+		)";
+
+		m_SquareShader.reset(new Shader(blueShaderVertexSrc, blueShaderFragmentSrc));
 	}
 
 	void Application::OnEvent(Event& e)
 	{
 		layer->onEvent(e);
-		//TURBO_CORE_ERR("Callback done {0}", e.getString());
 	}
 	Application::~Application()
 	{
@@ -91,11 +133,21 @@ namespace TurboGE
 		
 		while (true)
 		{
-			glClearColor(0.5f, 0.5f, 0.5f, 1);
-			glClear(GL_COLOR_BUFFER_BIT);
+			m_Renderer->setClearColor();
+			m_Renderer->Clear();
+			//glClearColor(0.5f, 0.5f, 0.5f, 1);
+			//glClear(GL_COLOR_BUFFER_BIT);
+
+			m_SquareShader->Bind();
+
+			m_Renderer->Submit(m_SquareVA);
+			//m_SquareVA->Bind();
+			//glDrawElements(GL_TRIANGLES, m_SquareIB->getCount(), GL_UNSIGNED_INT, nullptr);
+
 			m_Shader->Bind();
-			glBindVertexArray(m_VertexArray);
-			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+			m_Renderer->Submit(m_VertexArray);
+			//m_VertexArray->Bind();
+			//glDrawElements(GL_TRIANGLES, m_IndexBuffer->getCount(), GL_UNSIGNED_INT, nullptr);
 			layer->onUpdate();
 			m_window->onUpdate();
 		}
