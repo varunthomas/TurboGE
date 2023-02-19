@@ -2,10 +2,11 @@
 #include"Shader.h"
 #include<glad/glad.h>
 #include"TurboGE/Logger.h"
+#include"glm/gtc/type_ptr.hpp"
 
 namespace TurboGE
 {
-	Shader::Shader(std::string& vertexSrc, std::string& fragmentSrc)
+	Shader::Shader(const std::string& vertexSrc, const std::string& fragmentSrc)
 	{
 		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
@@ -106,6 +107,12 @@ namespace TurboGE
 			return;
 		}
 
+	}
+
+	void Shader::uploadUniformMat4(const std::string& name, const glm::mat4& matrix)
+	{
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
 	Shader::~Shader()

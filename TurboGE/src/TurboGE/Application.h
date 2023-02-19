@@ -7,6 +7,8 @@
 #include"Renderer/Buffer.h"
 #include"Renderer/VertexArray.h"
 #include"Renderer/Renderer.h"
+
+
 namespace TurboGE
 {
 	class TGE_API Application
@@ -28,6 +30,8 @@ namespace TurboGE
 		std::unique_ptr<Shader> m_SquareShader;
 
 		std::unique_ptr<Renderer> m_Renderer;
+
+		OrthographicCamera m_Camera{ -1.6f, 1.6f, -0.9f, 0.9f };
 
 		static Application* s_Instance;
 	//protected:

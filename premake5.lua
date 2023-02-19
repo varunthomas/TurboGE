@@ -15,11 +15,13 @@ IncludeDir = {}
 IncludeDir["GLFW"] = "TurboGE/vendor/GLFW/include"
 IncludeDir["Glad"] = "TurboGE/vendor/Glad/include"
 IncludeDir["Imgui"] = "TurboGE/vendor/imgui"
+IncludeDir["glm"] = "TurboGE/vendor/glm"
 
 group "Dependencies"
 	include "TurboGE/vendor/GLFW"
 	include "TurboGE/vendor/Glad"
 	include "TurboGE/vendor/imgui"
+	
 	
 group ""
 
@@ -39,7 +41,9 @@ project "TurboGE"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/glm/glm/**.hpp",
+		"%{prj.name}/vendor/glm/glm/**.inl"
 	}
 	defines
 	{
@@ -51,7 +55,8 @@ project "TurboGE"
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
-		"%{IncludeDir.Imgui}"
+		"%{IncludeDir.Imgui}",
+		"%{IncludeDir.glm}"
 	}
 	
 	links
@@ -108,6 +113,7 @@ project "Sandbox"
 		"TurboGE/vendor/spdlog/include",
 		"TurboGE/src",
 		"TurboGE/vendor",
+		"%{IncludeDir.glm}"
 	}
 
 	links

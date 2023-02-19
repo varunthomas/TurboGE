@@ -4,7 +4,8 @@
 #include "Test.h"
 #include "Imgui/ImguiLayer.h"
 #include"imgui_tables.cpp"
-#include<glad/glad.h>
+#include"Renderer/Camera.h"
+//#include<glad/glad.h>
 
 namespace TurboGE
 {
@@ -67,13 +68,14 @@ namespace TurboGE
 			layout(location = 0) in vec3 a_Position;
 			layout(location = 1) in vec4 a_Color;
 			
-			out vec3 v_Position;
+			uniform mat4 u_ViewProjection;
+
 			out vec4 v_Color;
 
 			void main()
 			{
 				v_Color = a_Color;
-				gl_Position = vec4(a_Position, 1.0);
+				gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
 			}
 			)";
 
@@ -82,35 +84,34 @@ namespace TurboGE
 			
 			layout(location = 0) out vec4 color;
 
-			in vec3 v_Position;
+			
 			in vec4 v_Color;
 			
 			void main()
 			{
-				color = vec4(v_Position * 0.5 + 0.5, 1.0);
 				color = v_Color;
 			}
 			)";
-
 		m_Shader.reset(new Shader(vertexSrc, fragmentSrc));
 		
 		std::string blueShaderVertexSrc = R"(
 			#version 330 core
 			
 			layout(location = 0) in vec3 a_Position;
-			out vec3 v_Position;
+
+			uniform mat4 u_ViewProjection;		
+
 			void main()
 			{
-				v_Position = a_Position;
-				gl_Position = vec4(a_Position, 1.0);	
+				
+				gl_Position = u_ViewProjection * vec4(a_Position, 1.0);	
 			}
 		)";
-
 		std::string blueShaderFragmentSrc = R"(
 			#version 330 core
 			
 			layout(location = 0) out vec4 color;
-			in vec3 v_Position;
+			
 			void main()
 			{
 				color = vec4(0.2, 0.3, 0.8, 1.0);
@@ -138,14 +139,17 @@ namespace TurboGE
 			//glClearColor(0.5f, 0.5f, 0.5f, 1);
 			//glClear(GL_COLOR_BUFFER_BIT);
 
-			m_SquareShader->Bind();
+			m_Camera.setPosition({ 0.5f, 0.5f, 0.0f });
+			m_Camera.setRotation(45.0f);
+			m_Renderer->StartScene(m_Camera);
+			//m_SquareShader->Bind();
 
-			m_Renderer->Submit(m_SquareVA);
+			m_Renderer->Submit(m_SquareShader, m_SquareVA);
 			//m_SquareVA->Bind();
 			//glDrawElements(GL_TRIANGLES, m_SquareIB->getCount(), GL_UNSIGNED_INT, nullptr);
 
-			m_Shader->Bind();
-			m_Renderer->Submit(m_VertexArray);
+			//m_Shader->Bind();
+			m_Renderer->Submit(m_Shader, m_VertexArray);
 			//m_VertexArray->Bind();
 			//glDrawElements(GL_TRIANGLES, m_IndexBuffer->getCount(), GL_UNSIGNED_INT, nullptr);
 			layer->onUpdate();
