@@ -12,6 +12,6 @@ namespace TurboGE
 		void setClearColor() override;
 		void Clear() override;
 		void StartScene(const OrthographicCamera&);
-		void Submit(std::unique_ptr<Shader>&, std::unique_ptr<VertexArray>&) override;
+		void Submit(std::unique_ptr<Shader>&, std::unique_ptr<VertexArray>&, glm::mat4&) override;
 	};
 }
