@@ -153,6 +153,7 @@
     <ClInclude Include="src\TurboGE\Events\KeyboardEvent.h" />
     <ClInclude Include="src\TurboGE\Events\MouseEvent.h" />
     <ClInclude Include="src\TurboGE\Imgui\ImguiLayer.h" />
+    <ClInclude Include="src\TurboGE\Input.h" />
     <ClInclude Include="src\TurboGE\Logger.h" />
     <ClInclude Include="src\TurboGE\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\TurboGE\Platform\OpenGL\OpenGLRenderer.h" />
@@ -163,7 +164,9 @@
     <ClInclude Include="src\TurboGE\Renderer\Renderer.h" />
     <ClInclude Include="src\TurboGE\Renderer\Shader.h" />
     <ClInclude Include="src\TurboGE\Renderer\VertexArray.h" />
+    <ClInclude Include="src\TurboGE\Source.h" />
     <ClInclude Include="src\TurboGE\Test.h" />
+    <ClInclude Include="src\TurboGE\Time.h" />
     <ClInclude Include="src\TurboGE\Window.h" />
     <ClInclude Include="src\tgepch.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
@@ -590,6 +593,7 @@
     <ClCompile Include="src\TurboGE\Events\MouseEvent.cpp" />
     <ClCompile Include="src\TurboGE\Imgui\ImguiBuild.cpp" />
     <ClCompile Include="src\TurboGE\Imgui\ImguiLayer.cpp" />
+    <ClCompile Include="src\TurboGE\Input.cpp" />
     <ClCompile Include="src\TurboGE\Logger.cpp" />
     <ClCompile Include="src\TurboGE\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\TurboGE\Platform\OpenGL\OpenGLRenderer.cpp" />
@@ -600,6 +604,7 @@
     <ClCompile Include="src\TurboGE\Renderer\Renderer.cpp" />
     <ClCompile Include="src\TurboGE\Renderer\Shader.cpp" />
     <ClCompile Include="src\TurboGE\Renderer\VertexArray.cpp" />
+    <ClCompile Include="src\TurboGE\Source.cpp" />
     <ClCompile Include="src\TurboGE\Test.cpp" />
     <ClCompile Include="src\tgepch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

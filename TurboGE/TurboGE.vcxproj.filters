@@ -1361,6 +1361,9 @@
     </ClInclude>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="src\TurboGE\Renderer\Camera.h" />
+    <ClInclude Include="src\TurboGE\Source.h" />
+    <ClInclude Include="src\TurboGE\Input.h" />
+    <ClInclude Include="src\TurboGE\Time.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TurboGE\Application.cpp">
@@ -1415,5 +1418,7 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\TurboGE\Renderer\Camera.cpp" />
+    <ClCompile Include="src\TurboGE\Source.cpp" />
+    <ClCompile Include="src\TurboGE\Input.cpp" />
   </ItemGroup>
 </Project>

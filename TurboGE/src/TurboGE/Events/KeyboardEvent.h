@@ -11,8 +11,9 @@ namespace TurboGE
 		KeyboardPressEvent(int key, int repeat);
 		//void dispatchEvent(KeyboardPressEvent& e, std::function<void(KeyboardPressEvent&)>) override;
 		EventType getEventType() override;
-		inline int getKey() { return m_key; }
 		std::string getString() override;
+
+		inline int getKey() { return m_key; }
 
 	};
 

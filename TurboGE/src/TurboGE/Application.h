@@ -3,10 +3,13 @@
 #include"Core.h"
 #include"Window.h"
 #include"Imgui/ImguiLayer.h"
-#include"Renderer/Shader.h"
-#include"Renderer/Buffer.h"
-#include"Renderer/VertexArray.h"
-#include"Renderer/Renderer.h"
+#include"Events/Event.h"
+#include"Source.h" //TEMP
+
+//#include"Renderer/Shader.h"
+//#include"Renderer/Buffer.h"
+//#include"Renderer/VertexArray.h"
+//#include"Renderer/Renderer.h"
 
 
 namespace TurboGE
@@ -18,8 +21,10 @@ namespace TurboGE
 		//std::unique_ptr<ImguiLayer> layer;
 		//ImguiLayer layer;S
 		ImguiLayer* layer;
+		
+		Example* s; //TEMP
 
-		std::unique_ptr<VertexArray> m_VertexArray;
+		/*std::unique_ptr<VertexArray> m_VertexArray;
 		std::unique_ptr<VertexBuffer> m_VertexBuffer;
 		std::shared_ptr<IndexBuffer> m_IndexBuffer;
 		std::unique_ptr<Shader> m_Shader;
@@ -31,7 +36,7 @@ namespace TurboGE
 
 		std::unique_ptr<Renderer> m_Renderer;
 
-		OrthographicCamera m_Camera{ -1.6f, 1.6f, -0.9f, 0.9f };
+		OrthographicCamera m_Camera{ -1.6f, 1.6f, -0.9f, 0.9f };*/
 
 		static Application* s_Instance;
 	//protected:
