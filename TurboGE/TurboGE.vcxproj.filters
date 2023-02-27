@@ -46,6 +46,9 @@
     <Filter Include="vendor\glm\glm\gtx">
       <UniqueIdentifier>{B3A6A76B-9F8A-68C1-08EB-6214F4ED5243}</UniqueIdentifier>
     </Filter>
+    <Filter Include="vendor\stbImage">
+      <UniqueIdentifier>{CE2E0566-3ABA-722A-43CB-F51EAFD5CE2A}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\TurboGE.h">
@@ -75,6 +78,9 @@
     <ClInclude Include="src\TurboGE\Imgui\ImguiLayer.h">
       <Filter>src\TurboGE\Imgui</Filter>
     </ClInclude>
+    <ClInclude Include="src\TurboGE\Input.h">
+      <Filter>src\TurboGE</Filter>
+    </ClInclude>
     <ClInclude Include="src\TurboGE\Logger.h">
       <Filter>src\TurboGE</Filter>
     </ClInclude>
@@ -82,6 +88,12 @@
       <Filter>src\TurboGE\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\TurboGE\Platform\OpenGL\OpenGLRenderer.h">
+      <Filter>src\TurboGE\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TurboGE\Platform\OpenGL\OpenGLShader.h">
+      <Filter>src\TurboGE\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TurboGE\Platform\OpenGL\OpenGLTexture.h">
       <Filter>src\TurboGE\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\TurboGE\Platform\OpenGL\OpenGLVertexArray.h">
@@ -93,16 +105,28 @@
     <ClInclude Include="src\TurboGE\Renderer\Buffer.h">
       <Filter>src\TurboGE\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\TurboGE\Renderer\Camera.h">
+      <Filter>src\TurboGE\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\TurboGE\Renderer\Renderer.h">
       <Filter>src\TurboGE\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\TurboGE\Renderer\Shader.h">
       <Filter>src\TurboGE\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\TurboGE\Renderer\Texture.h">
+      <Filter>src\TurboGE\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\TurboGE\Renderer\VertexArray.h">
       <Filter>src\TurboGE\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\TurboGE\Source.h">
+      <Filter>src\TurboGE</Filter>
+    </ClInclude>
     <ClInclude Include="src\TurboGE\Test.h">
+      <Filter>src\TurboGE</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TurboGE\Time.h">
       <Filter>src\TurboGE</Filter>
     </ClInclude>
     <ClInclude Include="src\TurboGE\Window.h">
@@ -1359,11 +1383,9 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="src\TurboGE\Renderer\Camera.h" />
-    <ClInclude Include="src\TurboGE\Source.h" />
-    <ClInclude Include="src\TurboGE\Input.h" />
-    <ClInclude Include="src\TurboGE\Time.h" />
+    <ClInclude Include="vendor\stbImage\stb_image.h">
+      <Filter>vendor\stbImage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TurboGE\Application.cpp">
@@ -1384,6 +1406,9 @@
     <ClCompile Include="src\TurboGE\Imgui\ImguiLayer.cpp">
       <Filter>src\TurboGE\Imgui</Filter>
     </ClCompile>
+    <ClCompile Include="src\TurboGE\Input.cpp">
+      <Filter>src\TurboGE</Filter>
+    </ClCompile>
     <ClCompile Include="src\TurboGE\Logger.cpp">
       <Filter>src\TurboGE</Filter>
     </ClCompile>
@@ -1391,6 +1416,12 @@
       <Filter>src\TurboGE\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\TurboGE\Platform\OpenGL\OpenGLRenderer.cpp">
+      <Filter>src\TurboGE\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TurboGE\Platform\OpenGL\OpenGLShader.cpp">
+      <Filter>src\TurboGE\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TurboGE\Platform\OpenGL\OpenGLTexture.cpp">
       <Filter>src\TurboGE\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\TurboGE\Platform\OpenGL\OpenGLVertexArray.cpp">
@@ -1402,14 +1433,23 @@
     <ClCompile Include="src\TurboGE\Renderer\Buffer.cpp">
       <Filter>src\TurboGE\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\TurboGE\Renderer\Camera.cpp">
+      <Filter>src\TurboGE\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\TurboGE\Renderer\Renderer.cpp">
       <Filter>src\TurboGE\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\TurboGE\Renderer\Shader.cpp">
       <Filter>src\TurboGE\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\TurboGE\Renderer\Texture.cpp">
+      <Filter>src\TurboGE\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\TurboGE\Renderer\VertexArray.cpp">
       <Filter>src\TurboGE\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TurboGE\Source.cpp">
+      <Filter>src\TurboGE</Filter>
     </ClCompile>
     <ClCompile Include="src\TurboGE\Test.cpp">
       <Filter>src\TurboGE</Filter>
@@ -1417,8 +1457,8 @@
     <ClCompile Include="src\tgepch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\TurboGE\Renderer\Camera.cpp" />
-    <ClCompile Include="src\TurboGE\Source.cpp" />
-    <ClCompile Include="src\TurboGE\Input.cpp" />
+    <ClCompile Include="vendor\stbImage\stb_image.cpp">
+      <Filter>vendor\stbImage</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

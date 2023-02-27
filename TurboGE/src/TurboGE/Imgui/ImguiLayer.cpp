@@ -17,21 +17,25 @@ namespace TurboGE
         TURBO_CORE_ERR("Constructed\n");
 	}
 
-
-	void ImguiLayer::onUpdate()
-	{
-		static bool show_demo_window = true;
-		ImGuiIO& io = ImGui::GetIO();
-        Application& app = Application::Get();
-        io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
+    void ImguiLayer::Begin()
+    {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+    }
 
-		ImGui::ShowDemoWindow(&show_demo_window);
+    void ImguiLayer::End()
+    {
+        static bool show_demo_window = true;
+        ImGuiIO& io = ImGui::GetIO();
+        Application& app = Application::Get();
+        io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
 
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        ImGui::ShowDemoWindow(&show_demo_window);
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
         {
@@ -40,7 +44,12 @@ namespace TurboGE
             ImGui::RenderPlatformWindowsDefault();
             glfwMakeContextCurrent(backup_current_context);
         }
-	}
+    }
+
+	//void ImguiLayer::onUpdate()
+	//{
+		
+	//}
 
 	void ImguiLayer::onAttach()
 	{
@@ -77,7 +86,6 @@ namespace TurboGE
 	//{
         
 	//}
-
 
     ImguiLayer::~ImguiLayer()
     {

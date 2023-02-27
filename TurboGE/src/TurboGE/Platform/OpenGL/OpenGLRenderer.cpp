@@ -1,5 +1,6 @@
 #include"tgepch.h"
 #include"OpenGLRenderer.h"
+#include"OpenGLShader.h"
 #include<glad/glad.h>
 namespace TurboGE
 {
@@ -28,9 +29,11 @@ namespace TurboGE
 	void OpenGLRenderer::Submit(std::unique_ptr<Shader>& shader, std::unique_ptr<VertexArray>& va, glm::mat4& transform)
 	{
 		shader->Bind();
-		shader->uploadUniformMat4("u_ViewProjection", m_viewProjectionMatrix);
-		shader->uploadUniformMat4("u_Transform", transform);
+		dynamic_cast<OpenGLShader*>(shader.get())->uploadUniformMat4("u_ViewProjection", m_viewProjectionMatrix);
+		dynamic_cast<OpenGLShader*>(shader.get())->uploadUniformMat4("u_Transform", transform);
+
 		va->Bind();
 		glDrawElements(GL_TRIANGLES, va->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, nullptr);
+
 	}
 }

@@ -41,8 +41,10 @@ namespace TurboGE
 			Time deltaTime = curr_time - prev_time;
 			prev_time = curr_time;
 			TURBO_CORE_ERR("Time is {0}", deltaTime);
+			layer->Begin();
 			s->onUpdate(deltaTime);
-			layer->onUpdate();
+			s->renderCustom();
+			layer->End();
 			m_window->onUpdate();
 		}
 	}

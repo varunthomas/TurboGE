@@ -13,9 +13,12 @@ namespace TurboGE
 		float m_Time = 0.0f;
 	public:
 		ImguiLayer();
-		void onUpdate();
+		//void onUpdate();
 		void onAttach();
+		void Begin();
+		void End();
 		inline void onEvent(Event& e) {};
+
 
 
 		~ImguiLayer();

@@ -3,7 +3,7 @@
 
 namespace TurboGE
 {
-	enum class AttribType { None = 0, Float3, Float4, vec2, vec3, vec4 };
+	enum class AttribType { None = 0, Float2, Float3, Float4, vec2, vec3, vec4 };
 
 	struct VertexAttrib
 	{
