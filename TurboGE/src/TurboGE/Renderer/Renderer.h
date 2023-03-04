@@ -10,6 +10,7 @@ namespace TurboGE
 		virtual ~Renderer() = default;
 		virtual void setClearColor() = 0;
 		virtual void Clear() = 0;
+		virtual void Init() = 0;
 		virtual void StartScene(const OrthographicCamera&) = 0;
 		virtual void Submit(std::unique_ptr<Shader>&, std::unique_ptr<VertexArray>&, glm::mat4& ) = 0;
 

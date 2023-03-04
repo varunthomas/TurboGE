@@ -23,6 +23,7 @@ class Example
 	std::unique_ptr<TurboGE::Shader> m_Shader;
 	std::unique_ptr<TurboGE::Shader> m_TextureShader;
 	std::unique_ptr<TurboGE::Texture2D> m_Texture;
+	std::unique_ptr<TurboGE::Texture2D> m_CheckTexture;
 
 	std::unique_ptr<TurboGE::VertexArray> m_SquareVA;
 	std::unique_ptr<TurboGE::VertexBuffer> m_SquareVB;

@@ -10,6 +10,7 @@
 	{
 		m_Input.reset(new TurboGE::Input());
 		m_Renderer.reset(TurboGE::Renderer::Create());
+		m_Renderer->Init();
 
 		float vertices[3 * 7] =
 		{
@@ -146,10 +147,13 @@
 
 		m_TextureShader.reset(TurboGE::Shader::Create(textureShaderVertexSrc, textureShaderFragmentSrc));
 
-		m_Texture = TurboGE::Texture2D::Create("assets/textures/pikachu.png");
 
 		m_TextureShader->Bind();
 		dynamic_cast<TurboGE::OpenGLShader*>(m_TextureShader.get())->UploadUniformInt("u_Texture", 0);
+
+		m_Texture = TurboGE::Texture2D::Create("assets/textures/pikachu.png");
+
+		m_CheckTexture = TurboGE::Texture2D::Create("assets/textures/Checkerboard.png");
 	}
 
 	void Example::onUpdate(Time delta)
@@ -200,16 +204,12 @@
 			}
 		}
 
+		
+		m_CheckTexture->Bind();
+		m_Renderer->Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 		m_Texture->Bind();
 		m_Renderer->Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
-		//m_SquareVA->Bind();
-		//glDrawElements(GL_TRIANGLES, m_SquareIB->getCount(), GL_UNSIGNED_INT, nullptr);
-
-		//m_Shader->Bind();
-		//m_Renderer->Submit(m_Shader, m_VertexArray, glm::mat4(1.0f));
-		//m_VertexArray->Bind();
-		//glDrawElements(GL_TRIANGLES, m_IndexBuffer->getCount(), GL_UNSIGNED_INT, nullptr);
 	}
 
 
