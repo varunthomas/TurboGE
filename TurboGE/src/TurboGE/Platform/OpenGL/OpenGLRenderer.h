@@ -10,6 +10,7 @@ namespace TurboGE
 	public:
 		OpenGLRenderer();
 		void setClearColor() override;
+		void setViewPort(uint32_t, uint32_t) override;
 		void Clear() override;
 		void Init() override;
 		void StartScene(const OrthographicCamera&);

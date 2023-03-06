@@ -1,14 +1,13 @@
 #include"tgepch.h"
 #include"Source.h"
-#include"GLFW/glfw3.h"
 #include"imgui.h"
 #include"glm/gtc/matrix_transform.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include"Platform/OpenGL/OpenGLShader.h"
+#include"Events/AppEvent.h"
 
 	Example::Example()
 	{
-		m_Input.reset(new TurboGE::Input());
 		m_Renderer.reset(TurboGE::Renderer::Create());
 		m_Renderer->Init();
 
@@ -115,37 +114,7 @@
 
 		m_SquareShader.reset(TurboGE::Shader::Create(blueShaderVertexSrc, blueShaderFragmentSrc));
 
-
-
-		std::string textureShaderVertexSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec2 a_TexCoord;
-			uniform mat4 u_ViewProjection;
-			uniform mat4 u_Transform;
-			out vec2 v_TexCoord;
-			void main()
-			{
-				v_TexCoord = a_TexCoord;
-				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
-			}
-		)";
-
-		std::string textureShaderFragmentSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) out vec4 color;
-			in vec2 v_TexCoord;
-			
-			uniform sampler2D u_Texture;
-			void main()
-			{
-				color = texture(u_Texture, v_TexCoord);
-			}
-		)";
-
-		m_TextureShader.reset(TurboGE::Shader::Create(textureShaderVertexSrc, textureShaderFragmentSrc));
+		m_TextureShader.reset(TurboGE::Shader::Create("assets/shaders/Texture.glsl"));
 
 
 		m_TextureShader->Bind();
@@ -156,39 +125,14 @@
 		m_CheckTexture = TurboGE::Texture2D::Create("assets/textures/Checkerboard.png");
 	}
 
-	void Example::onUpdate(Time delta)
+	void Example::onUpdate(TurboGE::Time delta)
 	{
 		m_Renderer->setClearColor();
 		m_Renderer->Clear();
 
-		if (m_Input->isKeyPressed(GLFW_KEY_UP))
-		{
-			m_CameraPos.y += 5.0f * delta;
-		}
-		else if (m_Input->isKeyPressed(GLFW_KEY_DOWN))
-		{
-			m_CameraPos.y -= 5.0f * delta;
-		}
-		else if (m_Input->isKeyPressed(GLFW_KEY_LEFT))
-		{
-			m_CameraPos.x -= 5.0f * delta;
-		}
-		else if (m_Input->isKeyPressed(GLFW_KEY_RIGHT))
-		{
-			m_CameraPos.x += 5.0f * delta;
-		}
-		else if (m_Input->isKeyPressed(GLFW_KEY_A))
-		{
-			m_CameraRot -= 4.0f * delta;
-		}
-		else if (m_Input->isKeyPressed(GLFW_KEY_D))
-		{
-			m_CameraRot += 4.0f * delta;
-		}
-		m_Camera.setPosition(m_CameraPos);
-		m_Camera.setRotation(m_CameraRot);
+		m_CameraController.OnUpdate(delta);
 
-		m_Renderer->StartScene(m_Camera);
+		m_Renderer->StartScene(m_CameraController.GetCamera());
 
 		m_SquareShader->Bind();
 		dynamic_cast<TurboGE::OpenGLShader*>(m_SquareShader.get())->uploadUniformFloat3("u_Color", m_SquareColor);
@@ -212,6 +156,17 @@
 
 	}
 
+	void Example::onEvent(TurboGE::Event& e)
+	{
+		//RENDER NEW AREAS AFTER SIZE IS INCREASED
+		if (e.getEventType() == TurboGE::EventType::WindowSizeEvent)
+		{
+			auto& winEvent = dynamic_cast<TurboGE::WindowSizeEvent&>(e);
+			m_Renderer->setViewPort(winEvent.GetWidth(), winEvent.GetHeight());
+		}
+
+		m_CameraController.onEvent(e);
+	}
 
 	void Example::renderCustom()
 	{

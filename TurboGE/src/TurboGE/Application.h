@@ -4,44 +4,23 @@
 #include"Window.h"
 #include"Imgui/ImguiLayer.h"
 #include"Events/Event.h"
-#include"Source.h" //TEMP
+//#include"Source.h" //TEMP
+#include"../../Sandbox/src/Sandbox2D.h" //TEMP
 
-//#include"Renderer/Shader.h"
-//#include"Renderer/Buffer.h"
-//#include"Renderer/VertexArray.h"
-//#include"Renderer/Renderer.h"
 
 
 namespace TurboGE
 {
 	class TGE_API Application
 	{
+		bool m_minimized = false;
 		std::unique_ptr<Window> m_window;
-		//ImguiLayer* layerPtr;
-		//std::unique_ptr<ImguiLayer> layer;
-		//ImguiLayer layer;S
 		ImguiLayer* layer;
 		
-		Example* s; //TEMP
+		Sandbox2D* s; //TEMP
 
-		/*std::unique_ptr<VertexArray> m_VertexArray;
-		std::unique_ptr<VertexBuffer> m_VertexBuffer;
-		std::shared_ptr<IndexBuffer> m_IndexBuffer;
-		std::unique_ptr<Shader> m_Shader;
-
-		std::unique_ptr<VertexArray> m_SquareVA;
-		std::unique_ptr<VertexBuffer> m_SquareVB;
-		std::shared_ptr<IndexBuffer> m_SquareIB;
-		std::unique_ptr<Shader> m_SquareShader;
-
-		std::unique_ptr<Renderer> m_Renderer;
-
-		OrthographicCamera m_Camera{ -1.6f, 1.6f, -0.9f, 0.9f };*/
 
 		static Application* s_Instance;
-	//protected:
-		//inline void setLayerInstance(ImguiLayer* layer) { layerPtr = layer; }
-		//inline ImguiLayer* getLayerInstance() { return layerPtr; }
 	public:
 		Application();
 		virtual ~Application();

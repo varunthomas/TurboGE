@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClInclude Include="src\TurboGE.h" />
     <ClInclude Include="src\TurboGE\Application.h" />
+    <ClInclude Include="src\TurboGE\CameraController.hpp" />
     <ClInclude Include="src\TurboGE\Core.h" />
     <ClInclude Include="src\TurboGE\EntryPoint.h" />
     <ClInclude Include="src\TurboGE\Events\AppEvent.h" />
@@ -591,6 +592,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TurboGE\Application.cpp" />
+    <ClCompile Include="src\TurboGE\CameraController.cpp" />
     <ClCompile Include="src\TurboGE\Events\AppEvent.cpp" />
     <ClCompile Include="src\TurboGE\Events\KeyboardEvent.cpp" />
     <ClCompile Include="src\TurboGE\Events\MouseEvent.cpp" />

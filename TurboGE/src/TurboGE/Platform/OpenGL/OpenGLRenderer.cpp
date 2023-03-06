@@ -15,6 +15,11 @@ namespace TurboGE
 		glClearColor(0.5f, 0.5f, 0.5f, 1);
 	}
 
+	void OpenGLRenderer::setViewPort(uint32_t width, uint32_t height)
+	{
+		glViewport(0, 0, width, height);
+	}
+
 	void OpenGLRenderer::Clear()
 	{
 		//NOT SAME IN CHERNO

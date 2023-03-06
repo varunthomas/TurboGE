@@ -17,6 +17,7 @@ namespace TurboGE
 		void setPosition(const glm::vec3&);
 		void setRotation(float);
 		inline glm::mat4 getViewProjectionMatrix() const { return m_ViewProjectionMatrix; };
+		void setProjection(float, float, float, float);
 		void RecalculateMatrices();
 	};
 }

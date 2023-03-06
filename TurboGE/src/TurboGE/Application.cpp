@@ -3,11 +3,8 @@
 #include "Application.h"
 #include "Test.h"
 #include "Imgui/ImguiLayer.h"
-#include"imgui_tables.cpp"
 #include"GLFW/glfw3.h"
 #include"Time.h"
-//#include"Renderer/Camera.h"
-//#include<glad/glad.h>
 
 namespace TurboGE
 {
@@ -20,13 +17,30 @@ namespace TurboGE
 		layer->onAttach();
 		TURBO_CORE_ERR("Setting callback");
 		m_window->setCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
-		s = new Example(); //TEMP
+		//s = new Example(); //TEMP
+		s = new Sandbox2D(); //TEMP
 
 	}
 
 	void Application::OnEvent(Event& e)
 	{
 		layer->onEvent(e);
+		if (e.getEventType() == EventType::WindowSizeEvent)
+		{
+			//STOP RENDERING IF MINIMIZED
+			if (dynamic_cast<WindowSizeEvent&>(e).GetHeight() == 0)
+			{
+				m_minimized = true;
+				
+			}
+			else
+			{
+				m_minimized = false;
+			}
+		
+
+		}
+		s->onEvent(e);
 	}
 	Application::~Application()
 	{
@@ -40,10 +54,12 @@ namespace TurboGE
 			curr_time = (float)glfwGetTime();
 			Time deltaTime = curr_time - prev_time;
 			prev_time = curr_time;
-			TURBO_CORE_ERR("Time is {0}", deltaTime);
 			layer->Begin();
-			s->onUpdate(deltaTime);
-			s->renderCustom();
+			if (!m_minimized)
+			{
+				s->onUpdate(deltaTime);
+				s->renderCustom();
+			}
 			layer->End();
 			m_window->onUpdate();
 		}

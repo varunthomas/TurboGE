@@ -9,12 +9,16 @@ namespace TurboGE
 		uint32_t m_RendererID;
 	public:
 		OpenGLShader(const std::string&, const std::string&);
+		OpenGLShader(const std::string&);
 		~OpenGLShader();
+		void parseFile(const std::string&, std::string&, std::string&);
+		void CompileProgram(const std::string&, const std::string&);
 		void Bind() override;
 		void Unbind() override;
 
 		void UploadUniformInt(const std::string&, int);
 		void uploadUniformMat4(const std::string&, const glm::mat4&);
 		void uploadUniformFloat3(const std::string&, const glm::vec3&);
+		void uploadUniformFloat4(const std::string&, const glm::vec4&);
 	};
 }

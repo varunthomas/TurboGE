@@ -8,6 +8,70 @@ namespace TurboGE
 {
 	OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc)
 	{
+
+		CompileProgram(vertexSrc, fragmentSrc);
+
+	}
+
+	OpenGLShader::OpenGLShader(const std::string& path)
+	{
+		
+		std::string vertexSrc, fragmentSrc;
+		parseFile(path, vertexSrc, fragmentSrc);
+		CompileProgram(vertexSrc, fragmentSrc);
+	}
+
+	void OpenGLShader::parseFile(const std::string& path, std::string& vertexSrc, std::string& fragmentSrc)
+	{
+		bool shaderFlag = false;
+		bool vertexFlag = false, fragmentFlag = false;
+		std::ifstream inf{ path };
+		if (!inf)
+		{
+			TURBO_CORE_ERR("No file found");
+		}
+
+		while (inf)
+		{
+			std::string text;
+			std::getline(inf, text);
+			if (text.find("#text") == std::string::npos)
+			{
+				if (vertexFlag == true)
+				{
+					vertexSrc.append(text);
+					vertexSrc.append("\n");
+				}
+				else if (fragmentFlag == true)
+				{
+					fragmentSrc.append(text);
+					fragmentSrc.append("\n");
+				}
+			}
+			else
+			{
+				shaderFlag = true;
+				vertexFlag = false;
+				fragmentFlag = false;
+				if (text.find("vertex") != std::string::npos)
+
+				{
+					vertexFlag = true;
+				}
+				else if (text.find("fragment") != std::string::npos)
+				{
+					fragmentFlag = true;
+				}
+			}
+		}
+
+
+		std::cout << "V " << vertexSrc << std::endl;
+		std::cout << "f " << fragmentSrc << std::endl;
+	}
+
+	void OpenGLShader::CompileProgram(const std::string& vertexSrc, const std::string& fragmentSrc)
+	{
 		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
 		// Send the vertex shader source code to GL
@@ -119,6 +183,12 @@ namespace TurboGE
 	{
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniform3f(location, vec.x, vec.y, vec.z);
+	}
+
+	void OpenGLShader::uploadUniformFloat4(const std::string& name, const glm::vec4& vec)
+	{
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+		glUniform4f(location, vec.x, vec.y, vec.z, vec.w);
 	}
 
 	void OpenGLShader::UploadUniformInt(const std::string& name, int value)
