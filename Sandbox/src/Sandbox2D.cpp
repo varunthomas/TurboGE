@@ -11,6 +11,13 @@ Sandbox2D::Sandbox2D()
 	m_Renderer->Init();
 	renderer2DInstance.Init();
 
+	OnAttach();
+
+}
+
+void Sandbox2D::OnAttach()
+{
+	m_CheckTexture = TurboGE::Texture2D::Create("assets/textures/Checkerboard.png");
 }
 
 void Sandbox2D::onUpdate(TurboGE::Time delta)
@@ -21,7 +28,9 @@ void Sandbox2D::onUpdate(TurboGE::Time delta)
 	m_CameraController.OnUpdate(delta);
 
 	renderer2DInstance.StartScene(m_CameraController.GetCamera());
-	renderer2DInstance.DrawQuad({ 0.0f, 0.0f }, { 1.0f, 1.0f }, m_SquareColor);
+	renderer2DInstance.DrawQuad({ -1.0f, -1.0f }, { 0.5f, 1.0f }, m_SquareColor);
+	renderer2DInstance.DrawQuad({ 1.0f, 1.0f }, { 1.0f, 1.0f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+	renderer2DInstance.DrawQuad({ 2.0f, 2.0f }, { 10.0f, 10.0f }, m_CheckTexture);
 	
 }
 

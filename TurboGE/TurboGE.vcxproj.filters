@@ -111,6 +111,9 @@
     <ClInclude Include="src\TurboGE\Renderer\Renderer.h">
       <Filter>src\TurboGE\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\TurboGE\Renderer\Renderer2D.h">
+      <Filter>src\TurboGE\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\TurboGE\Renderer\Shader.h">
       <Filter>src\TurboGE\Renderer</Filter>
     </ClInclude>
@@ -1386,11 +1389,12 @@
     <ClInclude Include="vendor\stbImage\stb_image.h">
       <Filter>vendor\stbImage</Filter>
     </ClInclude>
-    <ClInclude Include="src\TurboGE\CameraController.hpp" />
-    <ClInclude Include="src\TurboGE\Renderer\Renderer2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TurboGE\Application.cpp">
+      <Filter>src\TurboGE</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TurboGE\CameraController.cpp">
       <Filter>src\TurboGE</Filter>
     </ClCompile>
     <ClCompile Include="src\TurboGE\Events\AppEvent.cpp">
@@ -1441,6 +1445,9 @@
     <ClCompile Include="src\TurboGE\Renderer\Renderer.cpp">
       <Filter>src\TurboGE\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\TurboGE\Renderer\Renderer2D.cpp">
+      <Filter>src\TurboGE\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\TurboGE\Renderer\Shader.cpp">
       <Filter>src\TurboGE\Renderer</Filter>
     </ClCompile>
@@ -1462,7 +1469,5 @@
     <ClCompile Include="vendor\stbImage\stb_image.cpp">
       <Filter>vendor\stbImage</Filter>
     </ClCompile>
-    <ClCompile Include="src\TurboGE\CameraController.cpp" />
-    <ClCompile Include="src\TurboGE\Renderer\Renderer2D.cpp" />
   </ItemGroup>
 </Project>

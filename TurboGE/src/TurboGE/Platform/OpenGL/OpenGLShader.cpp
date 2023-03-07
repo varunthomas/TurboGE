@@ -197,6 +197,24 @@ namespace TurboGE
 		glUniform1i(location, value);
 	}
 
+	void OpenGLShader::SetMat4(const std::string& name, glm::mat4 matrix)
+	{
+		uploadUniformMat4(name, matrix);
+	}
+	void OpenGLShader::SetFloat4(const std::string& name, glm::vec4 vector)
+	{
+		uploadUniformFloat4(name, vector);
+	}
+	void OpenGLShader::SetFloat3(const std::string& name, glm::vec3 vector)
+	{
+		uploadUniformFloat3(name, vector);
+	}
+
+	void OpenGLShader::SetInt(const std::string& name, int value)
+	{
+		UploadUniformInt(name, value);
+	}
+
 	OpenGLShader::~OpenGLShader()
 	{
 		glDeleteProgram(m_RendererID);
