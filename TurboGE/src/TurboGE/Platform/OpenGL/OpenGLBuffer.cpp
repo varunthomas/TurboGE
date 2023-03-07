@@ -13,6 +13,7 @@ namespace TurboGE
 	OpenGLVertexBuffer::~OpenGLVertexBuffer()
 	{
 		glDeleteBuffers(1, &m_RendererID);
+		std::cout << "Deleted vb\n";
 	}
 
 	void OpenGLVertexBuffer::Bind()
@@ -35,6 +36,7 @@ namespace TurboGE
 
 	OpenGLIndexBuffer::~OpenGLIndexBuffer()
 	{
+		std::cout << "Deleted ib\n";
 		glDeleteBuffers(1, &m_RendererID);
 	}
 

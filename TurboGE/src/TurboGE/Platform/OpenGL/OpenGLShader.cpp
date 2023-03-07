@@ -199,7 +199,7 @@ namespace TurboGE
 
 	OpenGLShader::~OpenGLShader()
 	{
-		glDeleteShader(m_RendererID);
+		glDeleteProgram(m_RendererID);
 	}
 
 	void OpenGLShader::Bind()

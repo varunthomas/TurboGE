@@ -164,6 +164,7 @@
     <ClInclude Include="src\TurboGE\Renderer\Buffer.h" />
     <ClInclude Include="src\TurboGE\Renderer\Camera.h" />
     <ClInclude Include="src\TurboGE\Renderer\Renderer.h" />
+    <ClInclude Include="src\TurboGE\Renderer\Renderer2D.h" />
     <ClInclude Include="src\TurboGE\Renderer\Shader.h" />
     <ClInclude Include="src\TurboGE\Renderer\Texture.h" />
     <ClInclude Include="src\TurboGE\Renderer\VertexArray.h" />
@@ -609,6 +610,7 @@
     <ClCompile Include="src\TurboGE\Renderer\Buffer.cpp" />
     <ClCompile Include="src\TurboGE\Renderer\Camera.cpp" />
     <ClCompile Include="src\TurboGE\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\TurboGE\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\TurboGE\Renderer\Shader.cpp" />
     <ClCompile Include="src\TurboGE\Renderer\Texture.cpp" />
     <ClCompile Include="src\TurboGE\Renderer\VertexArray.cpp" />

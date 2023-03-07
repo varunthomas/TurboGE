@@ -1387,6 +1387,7 @@
       <Filter>vendor\stbImage</Filter>
     </ClInclude>
     <ClInclude Include="src\TurboGE\CameraController.hpp" />
+    <ClInclude Include="src\TurboGE\Renderer\Renderer2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TurboGE\Application.cpp">
@@ -1462,5 +1463,6 @@
       <Filter>vendor\stbImage</Filter>
     </ClCompile>
     <ClCompile Include="src\TurboGE\CameraController.cpp" />
+    <ClCompile Include="src\TurboGE\Renderer\Renderer2D.cpp" />
   </ItemGroup>
 </Project>

@@ -34,6 +34,11 @@ namespace TurboGE
 		}
 	}
 
+	void OpenGLVertexArray::DrawCommand()
+	{
+		glDrawElements(GL_TRIANGLES, this->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, nullptr);
+	}
+
 	void OpenGLVertexArray::Bind()
 	{
 		glBindVertexArray(m_RendererID);
