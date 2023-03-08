@@ -18,6 +18,7 @@ namespace TurboGE
 		ImguiLayer* layer;
 		
 		Sandbox2D* s; //TEMP
+		bool m_Running = true;
 
 
 		static Application* s_Instance;

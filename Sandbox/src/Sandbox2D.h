@@ -3,7 +3,7 @@
 #include"TurboGE/Renderer/Renderer.h"
 #include"Time.h"
 #include"TurboGE/Events/Event.h"
-#include"TurboGE/CameraController.hpp"
+#include"TurboGE/CameraController.h"
 #include"TurboGE/Renderer/Renderer2D.h"
 #include"TurboGE/Renderer/Texture.h"
 
@@ -24,5 +24,4 @@ public:
 	void onUpdate(TurboGE::Time);
 	void renderCustom();
 	void onEvent(TurboGE::Event&);
-
 };

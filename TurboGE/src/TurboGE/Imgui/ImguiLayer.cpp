@@ -26,12 +26,9 @@ namespace TurboGE
 
     void ImguiLayer::End()
     {
-        static bool show_demo_window = true;
         ImGuiIO& io = ImGui::GetIO();
         Application& app = Application::Get();
         io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
-
-        ImGui::ShowDemoWindow(&show_demo_window);
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)

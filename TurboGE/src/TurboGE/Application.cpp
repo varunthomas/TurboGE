@@ -37,8 +37,10 @@ namespace TurboGE
 			{
 				m_minimized = false;
 			}
-		
-
+		}
+		else if (e.getEventType() == EventType::WindowCloseEvent)
+		{
+			m_Running = false;
 		}
 		s->onEvent(e);
 	}
@@ -49,7 +51,7 @@ namespace TurboGE
 	void Application::Run()
 	{
 		float curr_time = 0.0f, prev_time = 0.0f;
-		while (true)
+		while (m_Running)
 		{
 			curr_time = (float)glfwGetTime();
 			Time deltaTime = curr_time - prev_time;

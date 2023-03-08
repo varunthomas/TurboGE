@@ -1,5 +1,5 @@
 #include"tgepch.h"
-#include"CameraController.hpp"
+#include"CameraController.h"
 #include"GLFW/glfw3.h"
 
 namespace TurboGE

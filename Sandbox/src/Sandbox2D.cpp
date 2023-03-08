@@ -4,6 +4,9 @@
 #include <glm/gtc/type_ptr.hpp>
 #include"TurboGE/Events/AppEvent.h"
 #include"TurboGE/Renderer/Renderer2D.h"
+#include<chrono>
+
+
 
 Sandbox2D::Sandbox2D()
 {
@@ -22,16 +25,23 @@ void Sandbox2D::OnAttach()
 
 void Sandbox2D::onUpdate(TurboGE::Time delta)
 {
-	m_Renderer->setClearColor();
-	m_Renderer->Clear();
-
-	m_CameraController.OnUpdate(delta);
-
-	renderer2DInstance.StartScene(m_CameraController.GetCamera());
-	renderer2DInstance.DrawQuad({ -1.0f, -1.0f }, { 0.5f, 1.0f }, m_SquareColor);
-	renderer2DInstance.DrawQuad({ 1.0f, 1.0f }, { 1.0f, 1.0f }, { 0.8f, 0.2f, 0.3f, 1.0f });
-	renderer2DInstance.DrawQuad({ 2.0f, 2.0f }, { 10.0f, 10.0f }, m_CheckTexture);
-	
+	TGE_PROFILE_FUNCTION();
+	{
+		TGE_PROFILE_SCOPE("Render prep")
+		m_Renderer->setClearColor();
+		m_Renderer->Clear();
+	}
+	{
+		TGE_PROFILE_SCOPE("Camera Controller");
+		m_CameraController.OnUpdate(delta);
+	}
+	{
+		TGE_PROFILE_SCOPE("Draw Render");
+		renderer2DInstance.StartScene(m_CameraController.GetCamera());
+		renderer2DInstance.DrawQuad({ -1.0f, -1.0f }, { 0.5f, 1.0f }, m_SquareColor);
+		renderer2DInstance.DrawQuad({ 1.0f, 1.0f }, { 1.0f, 1.0f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+		renderer2DInstance.DrawQuad({ 2.0f, 2.0f }, { 10.0f, 10.0f }, m_CheckTexture);
+	}
 }
 
 void Sandbox2D::onEvent(TurboGE::Event& e)
@@ -48,6 +58,7 @@ void Sandbox2D::onEvent(TurboGE::Event& e)
 
 void Sandbox2D::renderCustom()
 {
+	TGE_PROFILE_FUNCTION();
 	ImGui::Begin("Color settings");
 	ImGui::ColorEdit4("Square color", glm::value_ptr(m_SquareColor));
 	ImGui::End();

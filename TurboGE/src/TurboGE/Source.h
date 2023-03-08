@@ -7,7 +7,7 @@
 #include"TurboGE/Renderer/Texture.h"
 #include"Time.h"
 #include"Events/Event.h"
-#include"CameraController.hpp"
+#include"CameraController.h"
 
 //TEMPORARY UNTIL I UNDERSTAND WHY LAYERS ARE USED
 class Example

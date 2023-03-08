@@ -1389,6 +1389,8 @@
     <ClInclude Include="vendor\stbImage\stb_image.h">
       <Filter>vendor\stbImage</Filter>
     </ClInclude>
+    <ClInclude Include="src\TurboGE\Debug\Instrumentor.h" />
+    <ClInclude Include="src\TurboGE\CameraController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TurboGE\Application.cpp">

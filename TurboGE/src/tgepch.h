@@ -12,3 +12,6 @@
 #include<sstream>
 #include<algorithm>
 #include<memory>
+
+#include "TurboGE/Debug/Instrumentor.h"
+

@@ -1,4 +1,5 @@
 #pragma once
+#include<memory>
 #include"Renderer/Camera.h"
 #include"Time.h"
 #include"Input.h"
