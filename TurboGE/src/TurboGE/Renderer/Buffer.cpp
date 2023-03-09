@@ -39,6 +39,11 @@ namespace TurboGE
 		return new OpenGLVertexBuffer(vertices, size);
 	}
 
+	VertexBuffer* VertexBuffer::Create(uint32_t size)
+	{
+		return new OpenGLVertexBuffer(size);
+	}
+
 	IndexBuffer* IndexBuffer::Create(unsigned int* indices, uint32_t size)
 	{
 		return new OpenGLIndexBuffer(indices, size);

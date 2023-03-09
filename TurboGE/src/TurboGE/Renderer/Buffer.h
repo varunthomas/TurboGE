@@ -38,9 +38,11 @@ namespace TurboGE
 	{
 	public:
 		virtual ~VertexBuffer() = default;
+		virtual void SetBatchData(uint32_t, const void*) = 0;
 		virtual void Bind() = 0;
 		virtual void Unbind() = 0;
 		static VertexBuffer* Create(float*, uint32_t);
+		static VertexBuffer* Create(uint32_t);
 	};
 
 	class IndexBuffer

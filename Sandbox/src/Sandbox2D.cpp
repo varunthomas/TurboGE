@@ -38,9 +38,10 @@ void Sandbox2D::onUpdate(TurboGE::Time delta)
 	{
 		TGE_PROFILE_SCOPE("Draw Render");
 		renderer2DInstance.StartScene(m_CameraController.GetCamera());
-		renderer2DInstance.DrawQuad({ -1.0f, -1.0f }, { 0.5f, 1.0f }, m_SquareColor);
-		renderer2DInstance.DrawQuad({ 1.0f, 1.0f }, { 1.0f, 1.0f }, { 0.8f, 0.2f, 0.3f, 1.0f });
-		renderer2DInstance.DrawQuad({ 2.0f, 2.0f }, { 10.0f, 10.0f }, m_CheckTexture);
+		renderer2DInstance.DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+		renderer2DInstance.DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f });
+		//renderer2DInstance.DrawQuad({ 2.0f, 2.0f }, { 10.0f, 10.0f }, m_CheckTexture);
+		renderer2DInstance.EndScene();
 	}
 }
 

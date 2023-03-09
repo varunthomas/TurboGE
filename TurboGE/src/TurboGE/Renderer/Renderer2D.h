@@ -19,6 +19,21 @@ namespace TurboGE
 		std::unique_ptr<Texture2D> m_WhiteTexture;
 		std::unique_ptr<VertexBuffer> m_SquareVB;
 		std::shared_ptr<IndexBuffer> m_SquareIB;
+
+		const uint32_t maxQuads = 10000;
+		const uint32_t maxIndices = maxQuads * 6;
+		const uint32_t maxVertices = maxQuads * 4;
+
+		struct QuadVertices
+		{
+			glm::vec3 position;
+			glm::vec4 color;
+			glm::vec2 textCoord;
+		};
+
+		QuadVertices* quadVerticesIndexPtr = nullptr;
+		QuadVertices* quadVerticesIndexBase = nullptr;
+		uint32_t quadIndexCount = 0;
 		
 	public:
 		Renderer2D(const Renderer2D&) = delete;
@@ -28,6 +43,7 @@ namespace TurboGE
 		
 		void Init();
 		void StartScene(const OrthographicCamera&);
+		void EndScene();
 		void ShutDown();
 
 		void DrawQuad(const glm::vec2&, const glm::vec2&, const glm::vec4&);

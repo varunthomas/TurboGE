@@ -34,9 +34,18 @@ namespace TurboGE
 		}
 	}
 
-	void OpenGLVertexArray::DrawCommand()
+	void OpenGLVertexArray::DrawCommand(uint32_t count)
 	{
-		glDrawElements(GL_TRIANGLES, this->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, nullptr);
+		if (count == 0)
+		{
+			glDrawElements(GL_TRIANGLES, this->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, nullptr);
+		}
+		else
+		{
+			glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
+		}
+		//THIS IS PRESENT IN CHERNO
+		//glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	void OpenGLVertexArray::Bind()

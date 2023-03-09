@@ -33,7 +33,9 @@ namespace TurboGE
 		glTextureStorage2D(m_rendererID, 1, inputFormat, m_width, m_height);
 		glTextureParameteri(m_rendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTextureParameteri(m_rendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		//CHERNO HAVE MORE CALLS
+		//BELOW CALLS ARE PRESENT IN CHERNO
+		//glTextureParameteri(m_rendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		//glTextureParameteri(m_rendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTextureSubImage2D(m_rendererID, 0, 0, 0, m_width, m_height, outputFormat, GL_UNSIGNED_BYTE, data);
 
 		stbi_image_free(data);
@@ -46,7 +48,9 @@ namespace TurboGE
 		glTextureStorage2D(m_rendererID, 1, GL_RGBA8, 1, 1);
 		glTextureParameteri(m_rendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTextureParameteri(m_rendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		//CHERNO HAVE MORE CALLS
+		//BELOW CALLS ARE PRESENT IN CHERNO
+		//glTextureParameteri(m_rendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		//glTextureParameteri(m_rendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTextureSubImage2D(m_rendererID, 0, 0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &blankTexture);
 	}
 
