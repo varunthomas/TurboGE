@@ -21,11 +21,13 @@ Sandbox2D::Sandbox2D()
 void Sandbox2D::OnAttach()
 {
 	m_CheckTexture = TurboGE::Texture2D::Create("assets/textures/Checkerboard.png");
+	m_SpriteSheet = TurboGE::Texture2D::Create("assets/textures/RPGpack_sheet_2X.png");
 }
 
 void Sandbox2D::onUpdate(TurboGE::Time delta)
 {
 	TGE_PROFILE_FUNCTION();
+	renderer2DInstance.ResetStats();
 	{
 		TGE_PROFILE_SCOPE("Render prep")
 		m_Renderer->setClearColor();
@@ -37,11 +39,28 @@ void Sandbox2D::onUpdate(TurboGE::Time delta)
 	}
 	{
 		TGE_PROFILE_SCOPE("Draw Render");
+#if 1
 		renderer2DInstance.StartScene(m_CameraController.GetCamera());
 		renderer2DInstance.DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
 		renderer2DInstance.DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f });
+		renderer2DInstance.DrawQuad({ -5.0f, -5.0f, -0.1f }, { 20.0f, 20.0f }, m_CheckTexture, 10.0f);
 		//renderer2DInstance.DrawQuad({ 2.0f, 2.0f }, { 10.0f, 10.0f }, m_CheckTexture);
+
+		for (float y = -5.0f; y < 5.0f; y += 0.5f)
+		{
+			for (float x = -5.0f; x < 5.0f; x += 0.5f)
+			{
+				glm::vec4 color = { (x + 5.0f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f, 0.7f };
+				renderer2DInstance.DrawQuad({ x, y }, { 0.45f, 0.45f }, color);
+			}
+		}
 		renderer2DInstance.EndScene();
+#endif
+
+		renderer2DInstance.StartScene(m_CameraController.GetCamera());
+		renderer2DInstance.DrawQuad({ 0.0f, 0.0f, 0.2f}, { 1.0f, 1.0f }, m_SpriteSheet, 1.0f);
+		renderer2DInstance.EndScene();
+
 	}
 }
 
@@ -61,6 +80,8 @@ void Sandbox2D::renderCustom()
 {
 	TGE_PROFILE_FUNCTION();
 	ImGui::Begin("Color settings");
+	ImGui::Text("Draw calls: %d", renderer2DInstance.GetStats().drawCalls);
+	ImGui::Text("Quad count: %d", renderer2DInstance.GetStats().quadCount);
 	ImGui::ColorEdit4("Square color", glm::value_ptr(m_SquareColor));
 	ImGui::End();
 }

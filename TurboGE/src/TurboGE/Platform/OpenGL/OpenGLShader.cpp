@@ -197,6 +197,12 @@ namespace TurboGE
 		glUniform1i(location, value);
 	}
 
+	void OpenGLShader::UploadUniformIntArray(const std::string& name, int* value, uint32_t count)
+	{
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+		glUniform1iv(location, count, value);
+	}
+
 	void OpenGLShader::SetMat4(const std::string& name, glm::mat4 matrix)
 	{
 		uploadUniformMat4(name, matrix);
@@ -213,6 +219,11 @@ namespace TurboGE
 	void OpenGLShader::SetInt(const std::string& name, int value)
 	{
 		UploadUniformInt(name, value);
+	}
+
+	void OpenGLShader::SetIntArray(const std::string& name, int* value, uint32_t count)
+	{
+		UploadUniformIntArray(name, value, count);
 	}
 
 	OpenGLShader::~OpenGLShader()

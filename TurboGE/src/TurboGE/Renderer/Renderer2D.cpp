@@ -16,11 +16,11 @@ namespace TurboGE
 
 		m_SquareVA.reset(VertexArray::Create());
 		m_SquareVB.reset(VertexBuffer::Create(maxVertices * sizeof(QuadVertices)));
-
-		quadVerticesIndexBase = new QuadVertices[maxVertices];
+		
+		quadVerticesIndexBase.resize(maxIndices);
 
 		VertexLayout layoutsq;
-		layoutsq.m_attribVec = { {0, AttribType::Float3, false }, {1, AttribType::Float4, false}, {2, AttribType::Float2, false} };
+		layoutsq.m_attribVec = { {0, AttribType::Float3, false }, {1, AttribType::Float4, false}, {2, AttribType::Float2, false}, {3, AttribType::Float, false },  {4, AttribType::Float, false } };
 		layoutsq.MakeLayout();
 		m_SquareVA->SetLayout(layoutsq);
 		m_SquareVA->BindVertexBuffer();
@@ -46,8 +46,20 @@ namespace TurboGE
 
 		m_WhiteTexture = Texture2D::Create();
 		m_Shader.reset(Shader::Create("assets/shaders/Texture.glsl"));
+		
+		//m_Shader->Bind();
+		//m_Shader->SetInt("u_Texture", 0);
+
+		int slots[maxTextures];
+
+		for (uint32_t i = 0; i < maxTextures; i++)
+		{
+			slots[i] = i;
+		}
 		m_Shader->Bind();
-		m_Shader->SetInt("u_Texture", 0);
+		m_Shader->SetIntArray("u_Texture", slots, maxTextures);
+
+		textures[0] = m_WhiteTexture;
 
 		/*
 
@@ -85,19 +97,32 @@ namespace TurboGE
 	}
 	void Renderer2D::StartScene(const OrthographicCamera& camera)
 	{
+		textureSlot = 1;
 		quadIndexCount = 0;
+		m_Index = 0;
 		m_Shader->Bind();
 		m_Shader->SetMat4("u_ViewProjection", camera.getViewProjectionMatrix());
-		quadVerticesIndexPtr = quadVerticesIndexBase;
 	}
 
 	void Renderer2D::EndScene()
 	{
-		uint32_t size = (uint8_t*)quadVerticesIndexPtr - (uint8_t*)quadVerticesIndexBase;
-
-		m_SquareVB->SetBatchData(size, quadVerticesIndexBase);
+		uint32_t size = m_Index * sizeof(QuadVertices);
+		m_SquareVB->SetBatchData(size, &quadVerticesIndexBase[0]);
 		
+		for (uint32_t i = 0; i < textureSlot; i++)
+		{
+			textures[i]->Bind(i);
+		}
 		m_SquareVA->DrawCommand(quadIndexCount);
+		stats.drawCalls++;
+		
+	}
+
+	void Renderer2D::ResetCounters()
+	{
+		textureSlot = 1;
+		quadIndexCount = 0;
+		m_Index = 0;
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
@@ -107,33 +132,28 @@ namespace TurboGE
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
-		
-		quadVerticesIndexPtr->position = {position.x, position.y, 0.0f};
-		quadVerticesIndexPtr->color = color;
-		quadVerticesIndexPtr->textCoord = { 0.0f, 0.0f };
+		if (quadIndexCount >= maxIndices)
+		{
+			EndScene();
+			ResetCounters();
+		}
+		const float textSlot = 0.0f;
+		const float tilingFactor = 1.0f;
+		quadVerticesIndexBase[m_Index] = {position, color, { 0.0f, 0.0f }, textSlot, tilingFactor };
+		m_Index++;
 
-		quadVerticesIndexPtr++;
+		quadVerticesIndexBase[m_Index] = { { position.x + size.x, position.y, 0.0f }, color, { 1.0f, 0.0f }, textSlot, tilingFactor };
+		m_Index++;
 
-		quadVerticesIndexPtr->position = { position.x + size.x, position.y, 0.0f };
-		quadVerticesIndexPtr->color = color;
-		quadVerticesIndexPtr->textCoord = { 1.0f, 0.0f };
+		quadVerticesIndexBase[m_Index] = { { position.x + size.x, position.y + size.y, 0.0f }, color, { 1.0f, 1.0f }, textSlot, tilingFactor };
+		m_Index++;
 
-		quadVerticesIndexPtr++;
+		quadVerticesIndexBase[m_Index] = { { position.x, position.y + size.y, 0.0f }, color, { 0.0f, 1.0f }, textSlot, tilingFactor };
+		m_Index++;
 
-		quadVerticesIndexPtr->position = { position.x + size.x, position.y + size.y, 0.0f };
-		quadVerticesIndexPtr->color = color;
-		quadVerticesIndexPtr->textCoord = { 1.0f, 1.0f };
-
-		quadVerticesIndexPtr++;
-
-		quadVerticesIndexPtr->position = { position.x, position.y + size.y, 0.0f };
-		quadVerticesIndexPtr->color = color;
-		quadVerticesIndexPtr->textCoord = { 0.0f, 1.0f };
-
-		quadVerticesIndexPtr++;
 		quadIndexCount += 6;
 
-
+		stats.quadCount++;
 	}
 
 	/*void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
@@ -152,13 +172,48 @@ namespace TurboGE
 
 	}*/
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, std::unique_ptr<Texture2D>& texture)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, std::shared_ptr<Texture2D>& texture, float tilingFactor)
 	{
-		DrawQuad({ position.x, position.y, 0.0f }, size, texture);
+		DrawQuad({ position.x, position.y, 0.0f }, size, texture, tilingFactor);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, std::unique_ptr<Texture2D>& texture)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, std::shared_ptr<Texture2D>& texture, float tilingFactor)
 	{
+		if (quadIndexCount >= maxIndices || textureSlot >= maxTextures)
+		{
+			EndScene();
+			ResetCounters();
+		}
+
+
+
+		constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
+		//DIFFERENT LOGIC IN CHERNO
+		if (textures[textureSlot].get() == nullptr || *textures[textureSlot].get() != *texture.get())
+		{
+			textures[textureSlot] = texture;
+		}
+
+
+		quadVerticesIndexBase[m_Index] = { position, color, {0.0f, 0.0f}, (float)textureSlot, tilingFactor};
+		m_Index++;
+
+		quadVerticesIndexBase[m_Index] = { { position.x + size.x, position.y, 0.0f }, color, { 1.0f, 0.0f }, (float)textureSlot, tilingFactor };
+		m_Index++;
+
+		quadVerticesIndexBase[m_Index] = { { position.x + size.x, position.y + size.y, 0.0f }, color, { 1.0f, 1.0f }, (float)textureSlot, tilingFactor };
+		m_Index++;
+
+		quadVerticesIndexBase[m_Index] = { { position.x, position.y + size.y, 0.0f }, color, { 0.0f, 1.0f }, (float)textureSlot, tilingFactor };
+		m_Index++;
+
+
+		textureSlot++;
+		quadIndexCount += 6;
+
+		stats.quadCount++;
+
+		/*
 		auto transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
 		m_Shader->Bind();
@@ -169,7 +224,17 @@ namespace TurboGE
 
 		m_SquareVA->Bind();
 		m_SquareVA->DrawCommand();
+		*/
+	}
 
+	void Renderer2D::ResetStats()
+	{
+		memset(&stats, 0, sizeof(Statistics));
+	}
+
+	Renderer2D::Statistics Renderer2D::GetStats()
+	{
+		return stats;
 	}
 
 }

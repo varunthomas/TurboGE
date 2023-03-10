@@ -18,6 +18,7 @@ namespace TurboGE
 
 
 		void UploadUniformInt(const std::string&, int);
+		void UploadUniformIntArray(const std::string&, int*, uint32_t);
 		void uploadUniformMat4(const std::string&, const glm::mat4&);
 		void uploadUniformFloat3(const std::string&, const glm::vec3&);
 		void uploadUniformFloat4(const std::string&, const glm::vec4&);
@@ -26,5 +27,6 @@ namespace TurboGE
 		void SetFloat4(const std::string&, const glm::vec4) override;
 		void SetFloat3(const std::string&, const glm::vec3) override;
 		void SetInt(const std::string&, int) override;
+		void SetIntArray(const std::string&, int*, uint32_t) override;
 	};
 }

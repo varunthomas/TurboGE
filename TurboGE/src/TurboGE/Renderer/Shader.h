@@ -17,5 +17,6 @@ namespace TurboGE
 		virtual void SetFloat4(const std::string&, glm::vec4) = 0;
 		virtual void SetFloat3(const std::string&, glm::vec3) = 0;
 		virtual void SetInt(const std::string&, int) = 0;
+		virtual void SetIntArray(const std::string&, int*, uint32_t) = 0;
 	};
 }

@@ -20,8 +20,8 @@ class Example
 	std::shared_ptr<TurboGE::IndexBuffer> m_IndexBuffer;
 	std::unique_ptr<TurboGE::Shader> m_Shader;
 	std::unique_ptr<TurboGE::Shader> m_TextureShader;
-	std::unique_ptr<TurboGE::Texture2D> m_Texture;
-	std::unique_ptr<TurboGE::Texture2D> m_CheckTexture;
+	std::shared_ptr<TurboGE::Texture2D> m_Texture;
+	std::shared_ptr<TurboGE::Texture2D> m_CheckTexture;
 
 	std::unique_ptr<TurboGE::VertexArray> m_SquareVA;
 	std::unique_ptr<TurboGE::VertexBuffer> m_SquareVB;

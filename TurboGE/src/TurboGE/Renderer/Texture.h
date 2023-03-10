@@ -16,8 +16,9 @@ namespace TurboGE
 	class Texture2D : public Texture
 	{
 	public:
-		static std::unique_ptr<Texture2D> Create(const std::string&);
-		static std::unique_ptr<Texture2D> Create();
+		static std::shared_ptr<Texture2D> Create(const std::string&);
+		static std::shared_ptr<Texture2D> Create();
+		virtual bool operator!=(const Texture2D&) = 0;
 	};
 
 }

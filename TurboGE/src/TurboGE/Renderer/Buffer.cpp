@@ -20,6 +20,9 @@ namespace TurboGE
 	{
 		switch (type)
 		{
+		case AttribType::Float:
+			size = 1;
+			return 1 * sizeof(float);
 		case AttribType::Float2:
 			size = 2;
 			return 2 * sizeof(float);

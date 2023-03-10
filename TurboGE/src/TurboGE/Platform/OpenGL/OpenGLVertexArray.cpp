@@ -11,6 +11,7 @@ namespace TurboGE
 	{
 		switch (type)
 		{
+		case AttribType::Float:		return GL_FLOAT;
 		case AttribType::Float2:	return GL_FLOAT;
 		case AttribType::Float3:	return GL_FLOAT;
 		case AttribType::Float4:	return GL_FLOAT;

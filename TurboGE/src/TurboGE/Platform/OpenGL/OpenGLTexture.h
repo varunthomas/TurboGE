@@ -12,6 +12,7 @@ namespace TurboGE
 	public:
 		OpenGLTexture2D(const std::string& path);
 		OpenGLTexture2D();
+		bool operator!=(const Texture2D& tex) override { return m_rendererID != ((OpenGLTexture2D&)tex).m_rendererID; }
 
 		void Bind(uint32_t slot = 0) override;
 		void Unbind() override;
