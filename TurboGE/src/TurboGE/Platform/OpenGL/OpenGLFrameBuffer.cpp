@@ -6,6 +6,8 @@ namespace TurboGE
 {
 	OpenGLFrameBuffer::OpenGLFrameBuffer(uint32_t width, uint32_t height)
 	{
+		m_width = width;
+		m_height = height;
 		glCreateFramebuffers(1, &m_RendererID);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
 
@@ -31,11 +33,14 @@ namespace TurboGE
 	OpenGLFrameBuffer::~OpenGLFrameBuffer()
 	{
 		glDeleteFramebuffers(1, &m_RendererID);
+		glDeleteTextures(1, &m_ColorAttachment);
+		glDeleteTextures(1, &m_DepthAttachment);
 	}
 
 	void OpenGLFrameBuffer::Bind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
+		glViewport(0, 0, m_width, m_height);
 	}
 
 	void OpenGLFrameBuffer::Unbind()

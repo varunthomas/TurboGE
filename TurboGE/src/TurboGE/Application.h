@@ -5,7 +5,8 @@
 #include"Imgui/ImguiLayer.h"
 #include"Events/Event.h"
 //#include"Source.h" //TEMP
-#include"../../Sandbox/src/Sandbox2D.h" //TEMP
+//#include"../../Sandbox/src/Sandbox2D.h" //TEMP
+#include"../../Editor/src/Editor2D.h"  //TEMP
 
 
 
@@ -17,7 +18,8 @@ namespace TurboGE
 		std::unique_ptr<Window> m_window;
 		ImguiLayer* layer;
 		
-		Sandbox2D* s; //TEMP
+		//Sandbox2D* s; //TEMP
+		Editor2D* s; //TEMP
 		bool m_Running = true;
 
 

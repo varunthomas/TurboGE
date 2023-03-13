@@ -20,6 +20,7 @@ namespace TurboGE
 		//virtual double getY() = 0;
 		virtual EventType getEventType() = 0;
 		virtual std::string getString() = 0;
+		virtual ~Event() = default;
 
 		//template<typename T>
 		//virtual void dispatchEvent(T& e, std::function<void(Event&)>) = 0;

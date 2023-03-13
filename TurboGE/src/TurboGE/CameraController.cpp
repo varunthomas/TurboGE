@@ -78,4 +78,9 @@ namespace TurboGE
 		m_Camera.setProjection(-m_aspxRatio * m_ZoomLevel, m_aspxRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 	}
 
+	void OrthographicCameraController::onResize(float width, float height)
+	{
+		m_aspxRatio = width / height;
+		m_Camera.setProjection(-m_aspxRatio * m_ZoomLevel, m_aspxRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+	}
 }

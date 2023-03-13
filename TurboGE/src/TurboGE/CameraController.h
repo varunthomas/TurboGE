@@ -25,6 +25,7 @@ namespace TurboGE
 		inline OrthographicCamera GetCamera() { return m_Camera; }
 		void onWindowResize(WindowSizeEvent&);
 		void onMouseScrollEvent(MouseScrollEvent&);
+		void onResize(float, float);
 
 		~OrthographicCameraController() = default;
 	};

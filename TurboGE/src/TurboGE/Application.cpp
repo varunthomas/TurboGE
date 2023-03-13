@@ -6,6 +6,7 @@
 #include"GLFW/glfw3.h"
 #include"Time.h"
 
+
 namespace TurboGE
 {
 	Application* Application::s_Instance = nullptr;
@@ -18,7 +19,8 @@ namespace TurboGE
 		TURBO_CORE_ERR("Setting callback");
 		m_window->setCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 		//s = new Example(); //TEMP
-		s = new Sandbox2D(); //TEMP
+		//s = new Sandbox2D(); //TEMP
+		s = new Editor2D();
 
 	}
 
