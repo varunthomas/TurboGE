@@ -5,6 +5,7 @@
 #include"TurboGE/Renderer/Buffer.h"
 #include"TurboGE/Renderer/Shader.h"
 #include"TurboGE/Renderer/Texture.h"
+#include"TurboGE/Renderer/SubTexture2D.h"
 
 //WE ARE CREATING STATIC CLASS BECAUSE RENDERERS WILL ONLY HAVE 1 INSTANCE. WE CAN USE OBJECT TO INSTANTIATE RENDERER CLASS BUT WE DONT NEED
 //DIFFERENT INSTANCES
@@ -68,7 +69,10 @@ namespace TurboGE
 
 		void DrawQuad(const glm::vec2&, const glm::vec2&, const glm::vec4&);
 		void DrawQuad(const glm::vec3&, const glm::vec2&, const glm::vec4&);
+
 		void DrawQuad(const glm::vec2&, const glm::vec2&, std::shared_ptr<Texture2D>&, float);
 		void DrawQuad(const glm::vec3&, const glm::vec2&, std::shared_ptr<Texture2D>&, float);
+
+		void DrawQuad(const glm::vec3&, const glm::vec2&, std::unique_ptr<SubTexture2D>&, float);
 	};
 }

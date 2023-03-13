@@ -30,6 +30,7 @@ namespace TurboGE
 		inline static Application& Get() { return *s_Instance; }
 		void Run();
 		void OnEvent(Event& e);
+		void Close();
 	};
 	Application* CreateApplication();
 

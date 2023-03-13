@@ -185,8 +185,16 @@ namespace TurboGE
 			ResetCounters();
 		}
 
+		/*float x = 1, y = 3;
+		float spriteHeight = 128.0f, spriteWidth = 128.0f;
+		float maxHeight = 1664.0f, maxWidth = 2560.0f;
 
-
+		glm::vec2 textCoor[] = { {(x * spriteWidth) / maxWidth, (y * spriteHeight) / maxHeight},
+								{((x + 1) * spriteWidth) / maxWidth, (y * spriteHeight) / maxHeight},
+								{((x + 1) * spriteWidth) / maxWidth, ((y + 1) * spriteHeight) / maxHeight},
+								{(x * spriteWidth) / maxWidth, ((y + 1) * spriteHeight) / maxHeight}, };
+		//x * spriteWidth 
+		*/
 		constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 		//DIFFERENT LOGIC IN CHERNO
 		if (textures[textureSlot].get() == nullptr || *textures[textureSlot].get() != *texture.get())
@@ -198,13 +206,13 @@ namespace TurboGE
 		quadVerticesIndexBase[m_Index] = { position, color, {0.0f, 0.0f}, (float)textureSlot, tilingFactor};
 		m_Index++;
 
-		quadVerticesIndexBase[m_Index] = { { position.x + size.x, position.y, 0.0f }, color, { 1.0f, 0.0f }, (float)textureSlot, tilingFactor };
+		quadVerticesIndexBase[m_Index] = { { position.x + size.x, position.y, 0.0f }, color, {1.0f, 0.0f}, (float)textureSlot, tilingFactor };
 		m_Index++;
 
-		quadVerticesIndexBase[m_Index] = { { position.x + size.x, position.y + size.y, 0.0f }, color, { 1.0f, 1.0f }, (float)textureSlot, tilingFactor };
+		quadVerticesIndexBase[m_Index] = { { position.x + size.x, position.y + size.y, 0.0f }, color, {1.0f, 1.0f}, (float)textureSlot, tilingFactor };
 		m_Index++;
 
-		quadVerticesIndexBase[m_Index] = { { position.x, position.y + size.y, 0.0f }, color, { 0.0f, 1.0f }, (float)textureSlot, tilingFactor };
+		quadVerticesIndexBase[m_Index] = { { position.x, position.y + size.y, 0.0f }, color, {0.0f, 1.0f}, (float)textureSlot, tilingFactor };
 		m_Index++;
 
 
@@ -226,6 +234,49 @@ namespace TurboGE
 		m_SquareVA->DrawCommand();
 		*/
 	}
+
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, std::unique_ptr<SubTexture2D>& subtexture, float tilingFactor)
+	{
+		if (quadIndexCount >= maxIndices || textureSlot >= maxTextures)
+		{
+			EndScene();
+			ResetCounters();
+		}
+
+		constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+		glm::vec2* textCoord = subtexture->getCoordinates();
+
+		std::shared_ptr<Texture2D> texture = subtexture->getTexture();
+
+		//DIFFERENT LOGIC IN CHERNO
+		if (textures[textureSlot].get() == nullptr || *textures[textureSlot].get() != *texture.get())
+		{
+			textures[textureSlot] = texture;
+		}
+
+
+		quadVerticesIndexBase[m_Index] = { position, color, textCoord[0], (float)textureSlot, tilingFactor};
+		m_Index++;
+
+		quadVerticesIndexBase[m_Index] = { { position.x + size.x, position.y, 0.0f }, color, textCoord[1], (float)textureSlot, tilingFactor };
+		m_Index++;
+
+		quadVerticesIndexBase[m_Index] = { { position.x + size.x, position.y + size.y, 0.0f }, color, textCoord[2], (float)textureSlot, tilingFactor };
+		m_Index++;
+
+		quadVerticesIndexBase[m_Index] = { { position.x, position.y + size.y, 0.0f }, color, textCoord[3], (float)textureSlot, tilingFactor };
+		m_Index++;
+
+
+		textureSlot++;
+		quadIndexCount += 6;
+
+		stats.quadCount++;
+
+	}
+
+
 
 	void Renderer2D::ResetStats()
 	{

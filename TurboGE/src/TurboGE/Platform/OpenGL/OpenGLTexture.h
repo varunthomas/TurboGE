@@ -17,6 +17,9 @@ namespace TurboGE
 		void Bind(uint32_t slot = 0) override;
 		void Unbind() override;
 
+		uint32_t getHeight() override { return m_height; };
+		uint32_t getWidth() override { return m_width; };
+
 		~OpenGLTexture2D();
 	};
 }

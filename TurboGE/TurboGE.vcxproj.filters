@@ -1391,6 +1391,9 @@
     </ClInclude>
     <ClInclude Include="src\TurboGE\Debug\Instrumentor.h" />
     <ClInclude Include="src\TurboGE\CameraController.h" />
+    <ClInclude Include="src\TurboGE\Renderer\SubTexture2D.h" />
+    <ClInclude Include="src\TurboGE\Renderer\FrameBuffer.h" />
+    <ClInclude Include="src\TurboGE\Platform\OpenGL\OpenGLFrameBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TurboGE\Application.cpp">
@@ -1471,5 +1474,8 @@
     <ClCompile Include="vendor\stbImage\stb_image.cpp">
       <Filter>vendor\stbImage</Filter>
     </ClCompile>
+    <ClCompile Include="src\TurboGE\Renderer\SubTexture2D.cpp" />
+    <ClCompile Include="src\TurboGE\Renderer\FrameBuffer.cpp" />
+    <ClCompile Include="src\TurboGE\Platform\OpenGL\OpenGLFrameBuffer.cpp" />
   </ItemGroup>
 </Project>

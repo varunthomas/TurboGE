@@ -40,13 +40,14 @@ namespace TurboGE
 		}
 		else if (e.getEventType() == EventType::WindowCloseEvent)
 		{
-			m_Running = false;
+			Close();
 		}
 		s->onEvent(e);
 	}
 	Application::~Application()
 	{
-
+		std::cout << "Delete application\n";
+		delete s;
 	}
 	void Application::Run()
 	{
@@ -65,6 +66,11 @@ namespace TurboGE
 			layer->End();
 			m_window->onUpdate();
 		}
+	}
+
+	void Application::Close()
+	{
+		m_Running = false;
 	}
 
 }

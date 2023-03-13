@@ -157,6 +157,7 @@
     <ClInclude Include="src\TurboGE\Input.h" />
     <ClInclude Include="src\TurboGE\Logger.h" />
     <ClInclude Include="src\TurboGE\Platform\OpenGL\OpenGLBuffer.h" />
+    <ClInclude Include="src\TurboGE\Platform\OpenGL\OpenGLFrameBuffer.h" />
     <ClInclude Include="src\TurboGE\Platform\OpenGL\OpenGLRenderer.h" />
     <ClInclude Include="src\TurboGE\Platform\OpenGL\OpenGLShader.h" />
     <ClInclude Include="src\TurboGE\Platform\OpenGL\OpenGLTexture.h" />
@@ -164,9 +165,11 @@
     <ClInclude Include="src\TurboGE\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\TurboGE\Renderer\Buffer.h" />
     <ClInclude Include="src\TurboGE\Renderer\Camera.h" />
+    <ClInclude Include="src\TurboGE\Renderer\FrameBuffer.h" />
     <ClInclude Include="src\TurboGE\Renderer\Renderer.h" />
     <ClInclude Include="src\TurboGE\Renderer\Renderer2D.h" />
     <ClInclude Include="src\TurboGE\Renderer\Shader.h" />
+    <ClInclude Include="src\TurboGE\Renderer\SubTexture2D.h" />
     <ClInclude Include="src\TurboGE\Renderer\Texture.h" />
     <ClInclude Include="src\TurboGE\Renderer\VertexArray.h" />
     <ClInclude Include="src\TurboGE\Source.h" />
@@ -603,6 +606,7 @@
     <ClCompile Include="src\TurboGE\Input.cpp" />
     <ClCompile Include="src\TurboGE\Logger.cpp" />
     <ClCompile Include="src\TurboGE\Platform\OpenGL\OpenGLBuffer.cpp" />
+    <ClCompile Include="src\TurboGE\Platform\OpenGL\OpenGLFrameBuffer.cpp" />
     <ClCompile Include="src\TurboGE\Platform\OpenGL\OpenGLRenderer.cpp" />
     <ClCompile Include="src\TurboGE\Platform\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="src\TurboGE\Platform\OpenGL\OpenGLTexture.cpp" />
@@ -610,9 +614,11 @@
     <ClCompile Include="src\TurboGE\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\TurboGE\Renderer\Buffer.cpp" />
     <ClCompile Include="src\TurboGE\Renderer\Camera.cpp" />
+    <ClCompile Include="src\TurboGE\Renderer\FrameBuffer.cpp" />
     <ClCompile Include="src\TurboGE\Renderer\Renderer.cpp" />
     <ClCompile Include="src\TurboGE\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\TurboGE\Renderer\Shader.cpp" />
+    <ClCompile Include="src\TurboGE\Renderer\SubTexture2D.cpp" />
     <ClCompile Include="src\TurboGE\Renderer\Texture.cpp" />
     <ClCompile Include="src\TurboGE\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\TurboGE\Source.cpp" />
