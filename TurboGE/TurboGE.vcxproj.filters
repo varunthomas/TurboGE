@@ -28,6 +28,9 @@
     <Filter Include="src\TurboGE\Renderer">
       <UniqueIdentifier>{BA90E94E-A61F-7318-4F3E-87133BAC83BE}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\TurboGE\Scene">
+      <UniqueIdentifier>{B1B24F79-1DC9-4D0F-6640-D930D2951E97}</UniqueIdentifier>
+    </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
     </Filter>
@@ -140,6 +143,9 @@
     </ClInclude>
     <ClInclude Include="src\TurboGE\Renderer\VertexArray.h">
       <Filter>src\TurboGE\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TurboGE\Scene\Scene.h">
+      <Filter>src\TurboGE\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\TurboGE\Source.h">
       <Filter>src\TurboGE</Filter>
@@ -1407,6 +1413,8 @@
     <ClInclude Include="vendor\stbImage\stb_image.h">
       <Filter>vendor\stbImage</Filter>
     </ClInclude>
+    <ClInclude Include="src\TurboGE\Scene\Components.h" />
+    <ClInclude Include="src\TurboGE\Scene\EntityWrapper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TurboGE\Application.cpp">
@@ -1484,6 +1492,9 @@
     <ClCompile Include="src\TurboGE\Renderer\VertexArray.cpp">
       <Filter>src\TurboGE\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\TurboGE\Scene\Scene.cpp">
+      <Filter>src\TurboGE\Scene</Filter>
+    </ClCompile>
     <ClCompile Include="src\TurboGE\Source.cpp">
       <Filter>src\TurboGE</Filter>
     </ClCompile>
@@ -1496,5 +1507,6 @@
     <ClCompile Include="vendor\stbImage\stb_image.cpp">
       <Filter>vendor\stbImage</Filter>
     </ClCompile>
+    <ClCompile Include="src\TurboGE\Scene\EntityWrapper.cpp" />
   </ItemGroup>
 </Project>

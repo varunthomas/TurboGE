@@ -11,7 +11,7 @@
 
 Sandbox2D::Sandbox2D()
 {
-	m_Renderer.reset(TurboGE::Renderer::Create());
+	m_Renderer = TurboGE::Renderer::Create();
 	m_Renderer->Init();
 	renderer2DInstance.Init();
 

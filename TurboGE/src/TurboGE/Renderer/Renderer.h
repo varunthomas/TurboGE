@@ -7,7 +7,7 @@ namespace TurboGE
 	class Renderer
 	{
 	public:
-		virtual ~Renderer() = default;
+		virtual ~Renderer() { std::cout << "Deleted renderer\n"; }
 		virtual void setClearColor() = 0;
 		virtual void Clear() = 0;
 		virtual void Init() = 0;
@@ -15,6 +15,6 @@ namespace TurboGE
 		virtual void StartScene(const OrthographicCamera&) = 0;
 		virtual void Submit(std::unique_ptr<Shader>&, std::unique_ptr<VertexArray>&, glm::mat4& ) = 0;
 
-		static Renderer* Create();
+		static std::unique_ptr<Renderer> Create();
 	};
 }

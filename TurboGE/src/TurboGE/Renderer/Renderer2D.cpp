@@ -14,8 +14,13 @@ namespace TurboGE
 	void Renderer2D::Init()
 	{
 
-		m_SquareVA.reset(VertexArray::Create());
-		m_SquareVB.reset(VertexBuffer::Create(maxVertices * sizeof(QuadVertices)));
+		quadVertexPos[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
+		quadVertexPos[1] = { 0.5f, -0.5f, 0.0f, 1.0f };
+		quadVertexPos[2] = { 0.5f,  0.5f, 0.0f, 1.0f };
+		quadVertexPos[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
+
+		m_SquareVA = VertexArray::Create();
+		m_SquareVB = VertexBuffer::Create(maxVertices * sizeof(QuadVertices));
 		
 		quadVerticesIndexBase.resize(maxIndices);
 
@@ -39,13 +44,13 @@ namespace TurboGE
 			offset += 4;
 		}
 
-		m_SquareIB.reset(IndexBuffer::Create(indicesSQ, maxIndices * sizeof(uint32_t)));
+		m_SquareIB = IndexBuffer::Create(indicesSQ, maxIndices * sizeof(uint32_t));
 		m_SquareVA->setIndexBuffer(m_SquareIB);
 
 		delete[] indicesSQ;
 
 		m_WhiteTexture = Texture2D::Create();
-		m_Shader.reset(Shader::Create("assets/shaders/Texture.glsl"));
+		m_Shader = Shader::Create("assets/shaders/Texture.glsl");
 		
 		//m_Shader->Bind();
 		//m_Shader->SetInt("u_Texture", 0);
@@ -124,159 +129,7 @@ namespace TurboGE
 		quadIndexCount = 0;
 		m_Index = 0;
 	}
-
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
-	{
-		DrawQuad({ position.x, position.y, 0.0f }, size, color);
-	}
-
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
-	{
-		if (quadIndexCount >= maxIndices)
-		{
-			EndScene();
-			ResetCounters();
-		}
-		const float textSlot = 0.0f;
-		const float tilingFactor = 1.0f;
-		quadVerticesIndexBase[m_Index] = {position, color, { 0.0f, 0.0f }, textSlot, tilingFactor };
-		m_Index++;
-
-		quadVerticesIndexBase[m_Index] = { { position.x + size.x, position.y, 0.0f }, color, { 1.0f, 0.0f }, textSlot, tilingFactor };
-		m_Index++;
-
-		quadVerticesIndexBase[m_Index] = { { position.x + size.x, position.y + size.y, 0.0f }, color, { 1.0f, 1.0f }, textSlot, tilingFactor };
-		m_Index++;
-
-		quadVerticesIndexBase[m_Index] = { { position.x, position.y + size.y, 0.0f }, color, { 0.0f, 1.0f }, textSlot, tilingFactor };
-		m_Index++;
-
-		quadIndexCount += 6;
-
-		stats.quadCount++;
-	}
-
-	/*void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
-	{
-		auto transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-
-		m_Shader->Bind();
-
-		m_Shader->SetFloat4("u_Color", color);
-		m_Shader->SetMat4("u_Transform", transform);
-
-		m_WhiteTexture->Bind();
-
-		m_SquareVA->Bind();
-		m_SquareVA->DrawCommand();
-
-	}*/
-
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, std::shared_ptr<Texture2D>& texture, float tilingFactor)
-	{
-		DrawQuad({ position.x, position.y, 0.0f }, size, texture, tilingFactor);
-	}
-
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, std::shared_ptr<Texture2D>& texture, float tilingFactor)
-	{
-		if (quadIndexCount >= maxIndices || textureSlot >= maxTextures)
-		{
-			EndScene();
-			ResetCounters();
-		}
-
-		/*float x = 1, y = 3;
-		float spriteHeight = 128.0f, spriteWidth = 128.0f;
-		float maxHeight = 1664.0f, maxWidth = 2560.0f;
-
-		glm::vec2 textCoor[] = { {(x * spriteWidth) / maxWidth, (y * spriteHeight) / maxHeight},
-								{((x + 1) * spriteWidth) / maxWidth, (y * spriteHeight) / maxHeight},
-								{((x + 1) * spriteWidth) / maxWidth, ((y + 1) * spriteHeight) / maxHeight},
-								{(x * spriteWidth) / maxWidth, ((y + 1) * spriteHeight) / maxHeight}, };
-		//x * spriteWidth 
-		*/
-		constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
-		//DIFFERENT LOGIC IN CHERNO
-		if (textures[textureSlot].get() == nullptr || *textures[textureSlot].get() != *texture.get())
-		{
-			textures[textureSlot] = texture;
-		}
-
-
-		quadVerticesIndexBase[m_Index] = { position, color, {0.0f, 0.0f}, (float)textureSlot, tilingFactor};
-		m_Index++;
-
-		quadVerticesIndexBase[m_Index] = { { position.x + size.x, position.y, 0.0f }, color, {1.0f, 0.0f}, (float)textureSlot, tilingFactor };
-		m_Index++;
-
-		quadVerticesIndexBase[m_Index] = { { position.x + size.x, position.y + size.y, 0.0f }, color, {1.0f, 1.0f}, (float)textureSlot, tilingFactor };
-		m_Index++;
-
-		quadVerticesIndexBase[m_Index] = { { position.x, position.y + size.y, 0.0f }, color, {0.0f, 1.0f}, (float)textureSlot, tilingFactor };
-		m_Index++;
-
-
-		textureSlot++;
-		quadIndexCount += 6;
-
-		stats.quadCount++;
-
-		/*
-		auto transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-
-		m_Shader->Bind();
-		m_Shader->SetFloat4("u_Color", glm::vec4(1.0f));
-		m_Shader->SetMat4("u_Transform", transform);
-
-		texture->Bind();
-
-		m_SquareVA->Bind();
-		m_SquareVA->DrawCommand();
-		*/
-	}
-
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, std::unique_ptr<SubTexture2D>& subtexture, float tilingFactor)
-	{
-		if (quadIndexCount >= maxIndices || textureSlot >= maxTextures)
-		{
-			EndScene();
-			ResetCounters();
-		}
-
-		constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
-
-		glm::vec2* textCoord = subtexture->getCoordinates();
-
-		std::shared_ptr<Texture2D> texture = subtexture->getTexture();
-
-		//DIFFERENT LOGIC IN CHERNO
-		if (textures[textureSlot].get() == nullptr || *textures[textureSlot].get() != *texture.get())
-		{
-			textures[textureSlot] = texture;
-		}
-
-
-		quadVerticesIndexBase[m_Index] = { position, color, textCoord[0], (float)textureSlot, tilingFactor};
-		m_Index++;
-
-		quadVerticesIndexBase[m_Index] = { { position.x + size.x, position.y, 0.0f }, color, textCoord[1], (float)textureSlot, tilingFactor };
-		m_Index++;
-
-		quadVerticesIndexBase[m_Index] = { { position.x + size.x, position.y + size.y, 0.0f }, color, textCoord[2], (float)textureSlot, tilingFactor };
-		m_Index++;
-
-		quadVerticesIndexBase[m_Index] = { { position.x, position.y + size.y, 0.0f }, color, textCoord[3], (float)textureSlot, tilingFactor };
-		m_Index++;
-
-
-		textureSlot++;
-		quadIndexCount += 6;
-
-		stats.quadCount++;
-
-	}
-
-
+	
 
 	void Renderer2D::ResetStats()
 	{
@@ -288,4 +141,8 @@ namespace TurboGE
 		return stats;
 	}
 
+	Renderer2D::~Renderer2D()
+	{
+		std::cout << "Deleted renderer2D\n";
+	}
 }

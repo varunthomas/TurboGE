@@ -4,8 +4,8 @@
 
 namespace TurboGE
 {
-	VertexArray* VertexArray::Create()
+	std::unique_ptr<VertexArray> VertexArray::Create()
 	{
-		return new OpenGLVertexArray();
+		return std::make_unique<OpenGLVertexArray>();
 	}
 }

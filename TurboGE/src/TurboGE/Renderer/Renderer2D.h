@@ -15,7 +15,7 @@ namespace TurboGE
 	class Renderer2D
 	{
 		Renderer2D() = default;
-		~Renderer2D() = default;
+		~Renderer2D();
 		std::unique_ptr<VertexArray> m_SquareVA;
 		std::unique_ptr<Shader> m_Shader;
 		std::shared_ptr<Texture2D> m_WhiteTexture;
@@ -51,6 +51,8 @@ namespace TurboGE
 		uint32_t m_Index = 0;
 		uint32_t textureSlot = 1;
 
+		std::array<glm::vec4, 4> quadVertexPos;
+
 	public:
 		Renderer2D(const Renderer2D&) = delete;
 		Renderer2D& operator=(const Renderer2D&) = delete;
@@ -66,13 +68,127 @@ namespace TurboGE
 
 		void ResetStats();
 		Statistics GetStats();
+		
+		template<class Position>
+		void DrawQuad(const Position& position, const glm::vec4& color, const glm::vec2& size = {1.0f, 1.0f})
+		{
+			if constexpr (std::is_same_v<Position, glm::vec2>)
+			{
+				DrawQuad(glm::vec3(position.x, position.y, 0.0f), color, size);
+			}
+			else
+			{
+				if (quadIndexCount >= maxIndices)
+				{
+					EndScene();
+					ResetCounters();
+				}
+				const float textSlot = 0.0f;
+				const float tilingFactor = 1.0f;
+				constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 
-		void DrawQuad(const glm::vec2&, const glm::vec2&, const glm::vec4&);
-		void DrawQuad(const glm::vec3&, const glm::vec2&, const glm::vec4&);
+				for (size_t i{}; i < 4; i++)
+				{
+					if constexpr (std::is_same_v<Position, glm::mat4>)
+					{
+						quadVerticesIndexBase[m_Index] = { position * quadVertexPos[i], color, textureCoords[i], textSlot, tilingFactor };
+					}
+					else
+					{
+						quadVerticesIndexBase[m_Index] = { position, color, textureCoords[i], textSlot, tilingFactor};
+					}
+					m_Index++;
+				}
 
-		void DrawQuad(const glm::vec2&, const glm::vec2&, std::shared_ptr<Texture2D>&, float);
-		void DrawQuad(const glm::vec3&, const glm::vec2&, std::shared_ptr<Texture2D>&, float);
+				quadIndexCount += 6;
 
-		void DrawQuad(const glm::vec3&, const glm::vec2&, std::unique_ptr<SubTexture2D>&, float);
+				stats.quadCount++;
+			}
+		}
+
+		template<class Position, class TexType>
+		void DrawQuad(const Position& position, const glm::vec2& size, TexType& textureClass, float tilingFactor)
+		{
+			if constexpr (std::is_same_v < TexType, std::unique_ptr<SubTexture2D>>)
+			{
+				if (quadIndexCount >= maxIndices || textureSlot >= maxTextures)
+				{
+					EndScene();
+					ResetCounters();
+				}
+
+				constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+				glm::vec2* textCoord = textureClass->getCoordinates();
+
+				std::shared_ptr<Texture2D> texture = textureClass->getTexture();
+
+				//DIFFERENT LOGIC IN CHERNO
+				if (textures[textureSlot].get() == nullptr || *textures[textureSlot].get() != *texture.get())
+				{
+					textures[textureSlot] = texture;
+				}
+
+
+				quadVerticesIndexBase[m_Index] = { position, color, textCoord[0], (float)textureSlot, tilingFactor };
+				m_Index++;
+
+				quadVerticesIndexBase[m_Index] = { { position.x + size.x, position.y, 0.0f }, color, textCoord[1], (float)textureSlot, tilingFactor };
+				m_Index++;
+
+				quadVerticesIndexBase[m_Index] = { { position.x + size.x, position.y + size.y, 0.0f }, color, textCoord[2], (float)textureSlot, tilingFactor };
+				m_Index++;
+
+				quadVerticesIndexBase[m_Index] = { { position.x, position.y + size.y, 0.0f }, color, textCoord[3], (float)textureSlot, tilingFactor };
+				m_Index++;
+
+
+				textureSlot++;
+				quadIndexCount += 6;
+
+				stats.quadCount++;
+			}
+			else
+			{
+				if constexpr (std::is_same_v < Position, glm::vec3>)
+				{
+					DrawQuad(glm::vec3(position.x, position.y, 0.0f), size, textureClass, tilingFactor);
+				}
+				else
+				{
+					if (quadIndexCount >= maxIndices || textureSlot >= maxTextures)
+					{
+						EndScene();
+						ResetCounters();
+					}
+
+					constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
+					//DIFFERENT LOGIC IN CHERNO
+					if (textures[textureSlot].get() == nullptr || *textures[textureSlot].get() != *textureClass.get())
+					{
+						textures[textureSlot] = textureClass;
+					}
+
+
+					quadVerticesIndexBase[m_Index] = { position, color, {0.0f, 0.0f}, (float)textureSlot, tilingFactor };
+					m_Index++;
+
+					quadVerticesIndexBase[m_Index] = { { position.x + size.x, position.y, 0.0f }, color, {1.0f, 0.0f}, (float)textureSlot, tilingFactor };
+					m_Index++;
+
+					quadVerticesIndexBase[m_Index] = { { position.x + size.x, position.y + size.y, 0.0f }, color, {1.0f, 1.0f}, (float)textureSlot, tilingFactor };
+					m_Index++;
+
+					quadVerticesIndexBase[m_Index] = { { position.x, position.y + size.y, 0.0f }, color, {0.0f, 1.0f}, (float)textureSlot, tilingFactor };
+					m_Index++;
+
+
+					textureSlot++;
+					quadIndexCount += 6;
+
+					stats.quadCount++;
+				}
+			}
+		}
 	};
 }

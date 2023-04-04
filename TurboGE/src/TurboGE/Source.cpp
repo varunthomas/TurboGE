@@ -8,7 +8,7 @@
 
 	Example::Example()
 	{
-		m_Renderer.reset(TurboGE::Renderer::Create());
+		m_Renderer = TurboGE::Renderer::Create();
 		m_Renderer->Init();
 
 		float vertices[3 * 7] =
@@ -18,19 +18,19 @@
 			0.0f, 0.5f, 0.0f, 0.8f,0.8f,0.2f,1.0f
 		};
 
-		m_VertexArray.reset(TurboGE::VertexArray::Create());
-		m_VertexBuffer.reset(TurboGE::VertexBuffer::Create(vertices, sizeof(vertices)));
+		m_VertexArray = TurboGE::VertexArray::Create();
+		m_VertexBuffer = TurboGE::VertexBuffer::Create(vertices, sizeof(vertices));
 		TurboGE::VertexLayout layout;
 		layout.m_attribVec = { {0, TurboGE::AttribType::Float3, false },{1, TurboGE::AttribType::Float4, false} };
 		layout.MakeLayout();
 		m_VertexArray->SetLayout(layout);
 		m_VertexArray->BindVertexBuffer();
 		unsigned int indices[] = { 0,1,2 };
-		m_IndexBuffer.reset(TurboGE::IndexBuffer::Create(indices, sizeof(indices)));
+		m_IndexBuffer = TurboGE::IndexBuffer::Create(indices, sizeof(indices));
 		m_VertexArray->setIndexBuffer(m_IndexBuffer);
 
 
-		m_SquareVA.reset(TurboGE::VertexArray::Create());
+		m_SquareVA = TurboGE::VertexArray::Create();
 
 		//EVERYTHING IS MADE OF TRIANGLE. SO WE NEED TO CREATE SQUARE USING 2 TRIANGLE. SO WE NEED TO SPECIFY 3+3 VERTEX POSITIONS. BUT 2 VERTICES
 		//ARE DUPLICATES. THESE DUPLICATES WILL USE MEMORY. SO IN ORDER TO SAVE MEMORY WE REMOVE THE 2 DUPLICATES AND PROVIDE THE REMAINING 4 VERTICES
@@ -42,7 +42,7 @@
 			0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
 			-0.5f, 0.5f, 0.0f, 0.0f, 1.0f
 		};
-		m_SquareVB.reset(TurboGE::VertexBuffer::Create(sqVertices, sizeof(sqVertices)));
+		m_SquareVB = TurboGE::VertexBuffer::Create(sqVertices, sizeof(sqVertices));
 		TurboGE::VertexLayout layoutsq;
 		layoutsq.m_attribVec = { {0, TurboGE::AttribType::Float3, false }, {1, TurboGE::AttribType::Float2, false} };
 		layoutsq.MakeLayout();
@@ -50,7 +50,7 @@
 		m_SquareVA->BindVertexBuffer();
 		//INDICES FOR SQUARE IS 0 1 2 FOR FIRST TRIANGLE. THEN 2 3 0 FOR SECOND TRIANGLE. INDICES ARE NUMBERED IN ANTICLOCKWISE DIR
 		unsigned int indicesSQ[] = { 0, 1, 2, 2, 3, 0 };
-		m_SquareIB.reset(TurboGE::IndexBuffer::Create(indicesSQ, sizeof(indicesSQ)));
+		m_SquareIB = TurboGE::IndexBuffer::Create(indicesSQ, sizeof(indicesSQ));
 		m_SquareVA->setIndexBuffer(m_SquareIB);
 
 		std::string vertexSrc = R"(
@@ -112,9 +112,9 @@
 			}
 		)";
 
-		m_SquareShader.reset(TurboGE::Shader::Create(blueShaderVertexSrc, blueShaderFragmentSrc));
+		m_SquareShader = TurboGE::Shader::Create(blueShaderVertexSrc, blueShaderFragmentSrc);
 
-		m_TextureShader.reset(TurboGE::Shader::Create("assets/shaders/Texture.glsl"));
+		m_TextureShader = TurboGE::Shader::Create("assets/shaders/Texture.glsl");
 
 
 		m_TextureShader->Bind();

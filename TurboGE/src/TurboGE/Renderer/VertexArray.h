@@ -17,7 +17,7 @@ namespace TurboGE
 		virtual std::shared_ptr<IndexBuffer>& getIndexBuffer() = 0;
 		virtual void setIndexBuffer(std::shared_ptr<IndexBuffer>&) = 0;
 
-		static VertexArray* Create();
+		static std::unique_ptr<VertexArray> Create();
 
 		
 	};

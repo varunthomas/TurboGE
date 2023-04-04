@@ -17,6 +17,7 @@ IncludeDir["Glad"] = "TurboGE/vendor/Glad/include"
 IncludeDir["Imgui"] = "TurboGE/vendor/imgui"
 IncludeDir["glm"] = "TurboGE/vendor/glm"
 IncludeDir["stb"] = "TurboGE/vendor/stbImage"
+IncludeDir["entt"] = "TurboGE/vendor/entt/include"
 
 group "Dependencies"
 	include "TurboGE/vendor/GLFW"
@@ -50,7 +51,8 @@ project "TurboGE"
 	}
 	defines
 	{
-		"_CRT_SECURE_NO_WARNINGS"
+		"_CRT_SECURE_NO_WARNINGS",
+		"NOMINMAX"
 	}
 	includedirs
 	{
@@ -60,7 +62,8 @@ project "TurboGE"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.Imgui}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.stb}"
+		"%{IncludeDir.stb}",
+		"%{IncludeDir.entt}"
 	}
 	
 	links
@@ -117,7 +120,8 @@ project "Sandbox"
 		"TurboGE/vendor/spdlog/include",
 		"TurboGE/src",
 		"TurboGE/vendor",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.entt}"
 	}
 
 	links
@@ -166,7 +170,8 @@ project "Editor"
 		"TurboGE/vendor/spdlog/include",
 		"TurboGE/src",
 		"TurboGE/vendor",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.entt}"
 	}
 
 	links

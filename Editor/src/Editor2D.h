@@ -7,13 +7,17 @@
 #include"TurboGE/Renderer/Renderer2D.h"
 #include"TurboGE/Renderer/Texture.h"
 #include"TurboGE/Renderer/SubTexture2D.h"
+#include"TurboGE/Scene/Scene.h"
 #include"TurboGE/Renderer/FrameBuffer.h"
+#include"TurboGE/Scene/EntityWrapper.h"
 //TEMPORARY UNTIL I UNDERSTAND WHY LAYERS ARE USED
 
 namespace TurboGE
 {
 	class Editor2D
 	{
+		std::unique_ptr<Scene> m_Scene;
+		Entity m_SquareEntity;
 
 		glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 		bool m_ViewportFocused = false;

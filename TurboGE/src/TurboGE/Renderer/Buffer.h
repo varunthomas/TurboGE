@@ -1,5 +1,6 @@
 #pragma once
 #include<vector>
+#include<memory>
 
 namespace TurboGE
 {
@@ -41,8 +42,8 @@ namespace TurboGE
 		virtual void SetBatchData(uint32_t, const void*) = 0;
 		virtual void Bind() = 0;
 		virtual void Unbind() = 0;
-		static VertexBuffer* Create(float*, uint32_t);
-		static VertexBuffer* Create(uint32_t);
+		static std::unique_ptr<VertexBuffer> Create(float*, uint32_t);
+		static std::unique_ptr<VertexBuffer> Create(uint32_t);
 	};
 
 	class IndexBuffer
@@ -53,6 +54,6 @@ namespace TurboGE
 		virtual void Unbind() = 0;
 		virtual unsigned int getCount() = 0;
 		
-		static IndexBuffer* Create(unsigned int*, uint32_t);
+		static std::shared_ptr<IndexBuffer> Create(unsigned int*, uint32_t);
 	};
 }

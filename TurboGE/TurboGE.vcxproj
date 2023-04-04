@@ -76,8 +76,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>tgepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;TGE_DLL_BUILD;TGE_WINDOWS;GLFW_INCLUDE_NONE;TGE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stbImage;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;TGE_DLL_BUILD;TGE_WINDOWS;GLFW_INCLUDE_NONE;TGE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stbImage;vendor\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -97,8 +97,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>tgepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;TGE_DLL_BUILD;TGE_WINDOWS;GLFW_INCLUDE_NONE;TGE_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stbImage;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;TGE_DLL_BUILD;TGE_WINDOWS;GLFW_INCLUDE_NONE;TGE_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stbImage;vendor\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -122,8 +122,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>tgepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;TGE_DLL_BUILD;TGE_WINDOWS;GLFW_INCLUDE_NONE;TGE_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stbImage;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;TGE_DLL_BUILD;TGE_WINDOWS;GLFW_INCLUDE_NONE;TGE_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stbImage;vendor\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -172,6 +172,9 @@
     <ClInclude Include="src\TurboGE\Renderer\SubTexture2D.h" />
     <ClInclude Include="src\TurboGE\Renderer\Texture.h" />
     <ClInclude Include="src\TurboGE\Renderer\VertexArray.h" />
+    <ClInclude Include="src\TurboGE\Scene\Components.h" />
+    <ClInclude Include="src\TurboGE\Scene\EntityWrapper.h" />
+    <ClInclude Include="src\TurboGE\Scene\Scene.h" />
     <ClInclude Include="src\TurboGE\Source.h" />
     <ClInclude Include="src\TurboGE\Test.h" />
     <ClInclude Include="src\TurboGE\Time.h" />
@@ -621,6 +624,8 @@
     <ClCompile Include="src\TurboGE\Renderer\SubTexture2D.cpp" />
     <ClCompile Include="src\TurboGE\Renderer\Texture.cpp" />
     <ClCompile Include="src\TurboGE\Renderer\VertexArray.cpp" />
+    <ClCompile Include="src\TurboGE\Scene\EntityWrapper.cpp" />
+    <ClCompile Include="src\TurboGE\Scene\Scene.cpp" />
     <ClCompile Include="src\TurboGE\Source.cpp" />
     <ClCompile Include="src\TurboGE\Test.cpp" />
     <ClCompile Include="src\tgepch.cpp">

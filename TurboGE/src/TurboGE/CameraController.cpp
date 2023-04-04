@@ -7,7 +7,7 @@ namespace TurboGE
 	OrthographicCameraController::OrthographicCameraController(float aspxRatio)
 		:m_aspxRatio{ aspxRatio }, m_Camera{ -m_aspxRatio * m_ZoomLevel, m_aspxRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel }
 	{
-		m_Input.reset(new TurboGE::Input());
+		m_Input = std::make_unique<TurboGE::Input>();
 		//std::cout << "Cons " << -m_aspxRatio * m_ZoomLevel << " " << m_aspxRatio * m_ZoomLevel << " " << -m_ZoomLevel << " " << m_ZoomLevel << std::endl;
 	}
 

@@ -9,6 +9,7 @@ namespace TurboGE
 		glm::mat4 m_viewProjectionMatrix;
 	public:
 		OpenGLRenderer();
+		~OpenGLRenderer() { std::cout << "Deleted OpenGLRenderer\n"; }
 		void setClearColor() override;
 		void setViewPort(uint32_t, uint32_t) override;
 		void Clear() override;

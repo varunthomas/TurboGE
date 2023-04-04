@@ -3,8 +3,8 @@
 #include"TurboGE/Platform/OpenGL/OpenGLRenderer.h"
 namespace TurboGE
 {
-	Renderer* Renderer::Create()
+	std::unique_ptr<Renderer> Renderer::Create()
 	{
-		return new OpenGLRenderer();
+		return std::make_unique<OpenGLRenderer>();
 	}
 }
