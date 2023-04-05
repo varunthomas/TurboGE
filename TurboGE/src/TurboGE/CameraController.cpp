@@ -16,6 +16,7 @@ namespace TurboGE
 		if (m_Input->isKeyPressed(GLFW_KEY_UP))
 		{
 			m_CameraPos.y += 5.0f * delta;
+			std::cout << m_CameraPos.y << std::endl;
 		}
 		else if (m_Input->isKeyPressed(GLFW_KEY_DOWN))
 		{
@@ -57,7 +58,7 @@ namespace TurboGE
 	{
 		m_ZoomLevel -= e.getYOffset() * 0.25f;
 		
-		//std::cout << "scroll " << -m_aspxRatio * m_ZoomLevel << " " << m_aspxRatio * m_ZoomLevel << " " << -m_ZoomLevel << " " << m_ZoomLevel << std::endl;
+		std::cout << "scroll " << -m_aspxRatio * m_ZoomLevel << " " << m_aspxRatio * m_ZoomLevel << " " << -m_ZoomLevel << " " << m_ZoomLevel << std::endl;
 		
 		if (m_ZoomLevel < 0.25f)
 		{

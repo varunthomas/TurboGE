@@ -25,13 +25,20 @@ namespace TurboGE
     {
         m_Scene = std::make_unique<Scene>();
         m_SquareEntity = m_Scene->CreateEntity("Square");
-        m_SquareEntity.AddComponent<TransformComponent>();
         m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
-        //m_Scene->Get().emplace<TransformComponent>();
-        //m_Scene->Get().emplace<SpriteRendererComponent>(m_Entity, glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
+
+        m_Camera = m_Scene->CreateEntity("Camera");
+        m_Camera.AddComponent<CameraComponent>();
+
+        m_SecCamera = m_Scene->CreateEntity("Sec camera");
+        auto& sc = m_SecCamera.AddComponent<CameraComponent>();
+        sc.primary = false;
 
 
-        m_FrameBuffer = FrameBuffer::Create(1280, 720);
+        FrameBufferSpec fbSpec;
+        fbSpec.width = 1280;
+        fbSpec.height = 720;
+        m_FrameBuffer = FrameBuffer::Create(fbSpec);
         m_CheckTexture = Texture2D::Create("assets/textures/Checkerboard.png");
         m_SpriteSheet = Texture2D::Create("assets/textures/RPGpack_sheet_2X.png");
 
@@ -42,6 +49,20 @@ namespace TurboGE
 
     void Editor2D::onUpdate(Time delta)
     {
+
+        //FOR THIS TO WORK, WE NEED TO CALL INVALIDATE() ON FRAMEBUFFER WHICH IS BASICALLY SETTING UP BUFFER AGAIN WITH NEW WIDTH AND HEIGHT. THIS CAN
+        //CAUSE LOT OF PERFORMANCE. SO I COMMENTED THIS OUT AND CALLED OnRESIZE() EVERYTIME EVEN WHEN NO RESIZE HAPPENS SO THAT I DONT HAVE TO CALL OPENGL FRAMEBUFFER
+        /*if (FrameBufferSpec spec = m_FrameBuffer->GetSpecification();
+            m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && // zero sized framebuffer is invalid
+            (spec.width != m_ViewportSize.x || spec.height != m_ViewportSize.y))
+        {
+            std::cout << "Resize " << spec.width << " " << spec.height << " " << m_ViewportSize.x  << m_ViewportSize.y<< "\n";
+            m_FrameBuffer->SetFrameSpec({ (uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y });
+            m_Scene->OnResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+        }*/
+
+        m_Scene->OnResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+
         TGE_PROFILE_FUNCTION();
         renderer2DInstance.ResetStats();
         {
@@ -87,10 +108,10 @@ namespace TurboGE
 #endif
 
 #if 1
-            renderer2DInstance.StartScene(m_CameraController.GetCamera());
+            //renderer2DInstance.StartScene(m_CameraController.GetCamera());
 
             m_Scene->onUpdate(delta);
-            renderer2DInstance.EndScene();
+            //renderer2DInstance.EndScene();
 #endif
             m_FrameBuffer->Unbind();
         }
@@ -99,8 +120,10 @@ namespace TurboGE
     void Editor2D::onEvent(Event& e)
     {
         //RENDER NEW AREAS AFTER SIZE IS INCREASED
+        
         if (e.getEventType() == EventType::WindowSizeEvent)
         {
+            std::cout << "Window resized\n";
             auto& winEvent = dynamic_cast<WindowSizeEvent&>(e);
             m_Renderer->setViewPort(winEvent.GetWidth(), winEvent.GetHeight());
         }
@@ -200,12 +223,31 @@ namespace TurboGE
         ImGui::ColorEdit4("Square color", glm::value_ptr(m_SquareColor));
         ImGui::Separator();
 
+        ImGui::DragFloat3("Camera", glm::value_ptr(m_Camera.GetComponent<TransformComponent>().transform[3]));
+
+        if (ImGui::Checkbox("Primary Camera", &m_PrimaryCamera))
+        {
+            m_Camera.GetComponent<CameraComponent>().primary = m_PrimaryCamera;
+            m_SecCamera.GetComponent<CameraComponent>().primary = !m_PrimaryCamera;
+        }
+
+        {
+            auto& secCamera = m_SecCamera.GetComponent<CameraComponent>().camera;
+            float orthoSize = secCamera.GetOrthoSize();
+            if (ImGui::DragFloat("Second Camera Ortho Size", &orthoSize))
+            {
+                secCamera.SetOrthoSize(orthoSize);
+            }
+        }
         ImGui::End();
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
         ImGui::Begin("Dockspace");
         m_ViewportFocused = ImGui::IsWindowFocused();
         m_ViewportHovered = ImGui::IsWindowHovered();
+
+        ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+        m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
         //SOME MORE CHANGES PRESENT IN CHERNO WHICH I DONT THINK IS NEEDED HERE
         ImVec2 aspx = ImGui::GetContentRegionAvail();
         m_CameraController.onResize(aspx.x, aspx.y);

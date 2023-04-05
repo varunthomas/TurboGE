@@ -3,8 +3,8 @@
 #include"TurboGE/Platform/OpenGL/OpenGLFrameBuffer.h"
 namespace TurboGE
 {
-	std::unique_ptr<FrameBuffer> FrameBuffer::Create(uint32_t width, uint32_t height)
+	std::unique_ptr<FrameBuffer> FrameBuffer::Create(FrameBufferSpec& fbSpec)
 	{
-		return std::make_unique<OpenGLFrameBuffer>(width, height);
+		return std::make_unique<OpenGLFrameBuffer>(fbSpec);
 	}
 }

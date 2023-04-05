@@ -20,4 +20,24 @@ namespace TurboGE
 		void setProjection(float, float, float, float);
 		void RecalculateMatrices();
 	};
+
+	class GameCamera
+	{
+		glm::mat4 m_Projection;
+		float m_AspectRatio{ 0.0f };
+		float m_OrthographicSize = 10.0f;
+		float m_OrthographicNear = -1.0f, m_OrthographicFar = 1.0f;
+	public:
+		GameCamera();
+		~GameCamera() = default;
+		//GameCamera(const glm::mat4& projection)
+			//: m_Projection(projection) {}
+
+		const glm::mat4& GetProjection() const { return m_Projection; }
+		void RecalculateProjection();
+		void SetViewPort(uint32_t width, uint32_t height) { m_AspectRatio = (float)width / (float)height; RecalculateProjection(); }
+		float GetOrthoSize() { return m_OrthographicSize; }
+		void SetOrthoSize(float orthoSize) { m_OrthographicSize = orthoSize; RecalculateProjection(); }
+
+	};
 }
