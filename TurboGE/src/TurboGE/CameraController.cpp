@@ -7,34 +7,33 @@ namespace TurboGE
 	OrthographicCameraController::OrthographicCameraController(float aspxRatio)
 		:m_aspxRatio{ aspxRatio }, m_Camera{ -m_aspxRatio * m_ZoomLevel, m_aspxRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel }
 	{
-		m_Input = std::make_unique<TurboGE::Input>();
 		//std::cout << "Cons " << -m_aspxRatio * m_ZoomLevel << " " << m_aspxRatio * m_ZoomLevel << " " << -m_ZoomLevel << " " << m_ZoomLevel << std::endl;
 	}
 
 	void OrthographicCameraController::OnUpdate(Time delta)
 	{
-		if (m_Input->isKeyPressed(GLFW_KEY_UP))
+		if (Input::isKeyPressed(Key::Up))
 		{
 			m_CameraPos.y += 5.0f * delta;
 			std::cout << m_CameraPos.y << std::endl;
 		}
-		else if (m_Input->isKeyPressed(GLFW_KEY_DOWN))
+		else if (Input::isKeyPressed(Key::Down))
 		{
 			m_CameraPos.y -= 5.0f * delta;
 		}
-		else if (m_Input->isKeyPressed(GLFW_KEY_LEFT))
+		else if (Input::isKeyPressed(Key::Left))
 		{
 			m_CameraPos.x -= 5.0f * delta;
 		}
-		else if (m_Input->isKeyPressed(GLFW_KEY_RIGHT))
+		else if (Input::isKeyPressed(Key::Right))
 		{
 			m_CameraPos.x += 5.0f * delta;
 		}
-		else if (m_Input->isKeyPressed(GLFW_KEY_A))
+		else if (Input::isKeyPressed(Key::A))
 		{
 			m_CameraRot -= 4.0f * delta;
 		}
-		else if (m_Input->isKeyPressed(GLFW_KEY_D))
+		else if (Input::isKeyPressed(Key::D))
 		{
 			m_CameraRot += 4.0f * delta;
 		}

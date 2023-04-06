@@ -1,11 +1,11 @@
 #pragma once
-
+#include"KeyCode.h"
 
 namespace TurboGE
 {
 	class Input
 	{
 	public:
-		bool isKeyPressed(int);
+		static bool isKeyPressed(Key);
 	};
 }

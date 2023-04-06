@@ -25,6 +25,6 @@ namespace TurboGE
 		inline glm::vec2* getCoordinates() { return textCoord; }
 		inline std::shared_ptr<Texture2D> getTexture() { return m_Texture; }
 
-		~SubTexture2D() { delete[] textCoord; std::cout << "Deleted subtext\n"; };
+		~SubTexture2D() { delete[] textCoord; };
 	};
 }

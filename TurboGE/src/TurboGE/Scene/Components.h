@@ -1,6 +1,7 @@
 #pragma once
 #include<glm/glm.hpp>
 #include"TurboGE/Renderer/Camera.h"
+#include"ScriptableEntity.h"
 
 namespace TurboGE
 {
@@ -44,5 +45,50 @@ namespace TurboGE
 		CameraComponent(const CameraComponent&) = default;
 		//CameraComponent(const glm::mat4& projection)
 			//: camera(projection) {}
+	};
+
+	template<typename T>
+	concept FunctionExists = requires(T a)
+	{
+		a.OnDestroy();
+	};
+
+	struct NativeScriptComponent
+	{
+		ScriptableEntity* scriptableEntity = {};
+		std::function<void()> OnCreateFunction;
+		std::function<void(Time)> OnUpdateFunction;
+		std::function<void()> OnDestroyFunction;
+
+		void CreateInstance()
+		{
+			scriptableEntity = new ScriptableEntity();
+		}
+
+		template<typename T>
+		void Bind()
+		{
+			OnCreateFunction = [this]()
+			{
+				((T*)scriptableEntity)->OnCreate();
+			};
+
+			OnUpdateFunction = [this](Time t)
+			{
+				((T*)scriptableEntity)->OnUpdate(t);
+			};
+
+			if constexpr (FunctionExists<T>)
+			{
+				OnDestroyFunction = [this]()
+				{
+					((T*)scriptableEntity)->OnDestroy();
+				};
+			}
+			else
+			{
+				OnDestroyFunction = [](){};
+			}
+		}
 	};
 }

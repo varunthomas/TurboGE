@@ -93,6 +93,9 @@
     <ClInclude Include="src\TurboGE\Input.h">
       <Filter>src\TurboGE</Filter>
     </ClInclude>
+    <ClInclude Include="src\TurboGE\KeyCode.h">
+      <Filter>src\TurboGE</Filter>
+    </ClInclude>
     <ClInclude Include="src\TurboGE\Logger.h">
       <Filter>src\TurboGE</Filter>
     </ClInclude>
@@ -144,14 +147,17 @@
     <ClInclude Include="src\TurboGE\Renderer\VertexArray.h">
       <Filter>src\TurboGE\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\TurboGE\Scene\Components.h">
+      <Filter>src\TurboGE\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TurboGE\Scene\EntityWrapper.h">
+      <Filter>src\TurboGE\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="src\TurboGE\Scene\Scene.h">
       <Filter>src\TurboGE\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\TurboGE\Source.h">
-      <Filter>src\TurboGE</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TurboGE\Test.h">
-      <Filter>src\TurboGE</Filter>
+    <ClInclude Include="src\TurboGE\Scene\ScriptableEntity.h">
+      <Filter>src\TurboGE\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\TurboGE\Time.h">
       <Filter>src\TurboGE</Filter>
@@ -1413,8 +1419,6 @@
     <ClInclude Include="vendor\stbImage\stb_image.h">
       <Filter>vendor\stbImage</Filter>
     </ClInclude>
-    <ClInclude Include="src\TurboGE\Scene\Components.h" />
-    <ClInclude Include="src\TurboGE\Scene\EntityWrapper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TurboGE\Application.cpp">
@@ -1492,14 +1496,11 @@
     <ClCompile Include="src\TurboGE\Renderer\VertexArray.cpp">
       <Filter>src\TurboGE\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\TurboGE\Scene\Scene.cpp">
+    <ClCompile Include="src\TurboGE\Scene\EntityWrapper.cpp">
       <Filter>src\TurboGE\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\TurboGE\Source.cpp">
-      <Filter>src\TurboGE</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TurboGE\Test.cpp">
-      <Filter>src\TurboGE</Filter>
+    <ClCompile Include="src\TurboGE\Scene\Scene.cpp">
+      <Filter>src\TurboGE\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\tgepch.cpp">
       <Filter>src</Filter>
@@ -1507,6 +1508,5 @@
     <ClCompile Include="vendor\stbImage\stb_image.cpp">
       <Filter>vendor\stbImage</Filter>
     </ClCompile>
-    <ClCompile Include="src\TurboGE\Scene\EntityWrapper.cpp" />
   </ItemGroup>
 </Project>

@@ -81,7 +81,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
@@ -105,7 +105,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
@@ -130,7 +130,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
@@ -155,6 +155,7 @@
     <ClInclude Include="src\TurboGE\Events\MouseEvent.h" />
     <ClInclude Include="src\TurboGE\Imgui\ImguiLayer.h" />
     <ClInclude Include="src\TurboGE\Input.h" />
+    <ClInclude Include="src\TurboGE\KeyCode.h" />
     <ClInclude Include="src\TurboGE\Logger.h" />
     <ClInclude Include="src\TurboGE\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\TurboGE\Platform\OpenGL\OpenGLFrameBuffer.h" />
@@ -175,8 +176,7 @@
     <ClInclude Include="src\TurboGE\Scene\Components.h" />
     <ClInclude Include="src\TurboGE\Scene\EntityWrapper.h" />
     <ClInclude Include="src\TurboGE\Scene\Scene.h" />
-    <ClInclude Include="src\TurboGE\Source.h" />
-    <ClInclude Include="src\TurboGE\Test.h" />
+    <ClInclude Include="src\TurboGE\Scene\ScriptableEntity.h" />
     <ClInclude Include="src\TurboGE\Time.h" />
     <ClInclude Include="src\TurboGE\Window.h" />
     <ClInclude Include="src\tgepch.h" />
@@ -626,8 +626,6 @@
     <ClCompile Include="src\TurboGE\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\TurboGE\Scene\EntityWrapper.cpp" />
     <ClCompile Include="src\TurboGE\Scene\Scene.cpp" />
-    <ClCompile Include="src\TurboGE\Source.cpp" />
-    <ClCompile Include="src\TurboGE\Test.cpp" />
     <ClCompile Include="src\tgepch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

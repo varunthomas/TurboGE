@@ -19,6 +19,7 @@ namespace TurboGE
 		void OnResize(uint32_t, uint32_t);
 
 		friend class Entity;
+		friend class EntityPanel;
 	};
 
 

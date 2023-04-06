@@ -23,7 +23,8 @@ namespace TurboGE
 
     void Editor2D::OnAttach()
     {
-        m_Scene = std::make_unique<Scene>();
+        m_Scene = std::make_shared<Scene>();
+        entityPanel(m_Scene);
         m_SquareEntity = m_Scene->CreateEntity("Square");
         m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
 
@@ -33,6 +34,49 @@ namespace TurboGE
         m_SecCamera = m_Scene->CreateEntity("Sec camera");
         auto& sc = m_SecCamera.AddComponent<CameraComponent>();
         sc.primary = false;
+
+
+        class CameraController : public ScriptableEntity
+        {
+        public:
+            void OnCreate()
+            {
+                auto& transform = GetComponent<TransformComponent>().transform;
+                transform[3][0] = rand() % 10 - 5.0f;
+            }
+
+            void OnUpdate(Time ts)
+            {
+                float speed = 5.0f;
+                auto& transform = GetComponent<TransformComponent>().transform;
+
+                if (Input::isKeyPressed(Key::Up))
+                {
+                    transform[3][1] += speed * ts;
+                }
+                if (Input::isKeyPressed(Key::Down))
+                {
+                    transform[3][1] -= speed * ts;
+                }
+                if (Input::isKeyPressed(Key::Left))
+                {
+                    transform[3][0] -= speed * ts;
+                }
+                if (Input::isKeyPressed(Key::Right))
+                {
+                    transform[3][0] += speed * ts;
+                }
+
+            }
+
+            void OnDestroy()
+            {
+            }
+        };
+
+        m_Camera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+        m_SecCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+
 
 
         FrameBufferSpec fbSpec;
@@ -209,6 +253,8 @@ namespace TurboGE
 
             ImGui::EndMenuBar();
         }
+
+        entityPanel.OnImGuiRender();
 
         uint32_t textureID = m_FrameBuffer->GetID();
         ImGui::Begin("Color settings");

@@ -24,5 +24,12 @@ namespace TurboGE
 		{
 			return m_Scene->m_registry.get<T>(entityID);
 		}
+
+		operator uint32_t() const
+		{
+			return (uint32_t)entityID;
+		}
+
+		auto operator<=>(const Entity&) const = default;
 	};
 }

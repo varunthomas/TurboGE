@@ -14,7 +14,6 @@ namespace TurboGE
 		float m_ZoomLevel = 1.0f;
 		float m_aspxRatio;
 		OrthographicCamera m_Camera;
-		std::unique_ptr<Input> m_Input;
 		glm::vec3 m_CameraPos = { 0.5f, 0.5f, 0.0f };
 		float m_CameraRot = 0.0f;
 	public:

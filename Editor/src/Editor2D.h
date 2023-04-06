@@ -10,19 +10,22 @@
 #include"TurboGE/Scene/Scene.h"
 #include"TurboGE/Renderer/FrameBuffer.h"
 #include"TurboGE/Scene/EntityWrapper.h"
+
+#include"Panels/EntityPanel.h"
 //TEMPORARY UNTIL I UNDERSTAND WHY LAYERS ARE USED
 
 namespace TurboGE
 {
 	class Editor2D
 	{
-		std::unique_ptr<Scene> m_Scene;
+		std::shared_ptr<Scene> m_Scene;
+		EntityPanel entityPanel;
+
 		Entity m_SquareEntity;
 		Entity m_Camera;
 		Entity m_SecCamera;
 
 		bool m_PrimaryCamera = true;
-
 
 
 		glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
