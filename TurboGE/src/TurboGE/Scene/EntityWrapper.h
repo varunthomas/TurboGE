@@ -5,7 +5,7 @@ namespace TurboGE
 {
 	class Entity
 	{
-		entt::entity entityID;
+		entt::entity entityID{ entt::null };
 		Scene* m_Scene{};
 	public:
 		Entity() = default;
@@ -20,7 +20,7 @@ namespace TurboGE
 		}
 
 		template<typename T>
-		T& GetComponent()
+		T& GetComponent() const
 		{
 			return m_Scene->m_registry.get<T>(entityID);
 		}
@@ -28,6 +28,11 @@ namespace TurboGE
 		operator uint32_t() const
 		{
 			return (uint32_t)entityID;
+		}
+
+		operator bool() const
+		{
+			return entityID != entt::null;
 		}
 
 		auto operator<=>(const Entity&) const = default;

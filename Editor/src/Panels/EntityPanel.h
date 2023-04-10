@@ -7,10 +7,12 @@ namespace TurboGE
 	class EntityPanel
 	{
 		std::shared_ptr<Scene> m_Scene;
-		Entity m_SelectionContext;
+		Entity m_SelectionContext{};
 	public:
 		EntityPanel() = default;
 		void operator()(const std::shared_ptr<Scene>&);
 		void OnImGuiRender();
+		void DrawEntityList(const Entity&);
+		void DrawPropertiesPanel(const Entity&);
 	};
 }
