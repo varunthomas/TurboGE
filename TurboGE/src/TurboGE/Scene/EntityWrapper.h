@@ -25,6 +25,13 @@ namespace TurboGE
 			return m_Scene->m_registry.get<T>(entityID);
 		}
 
+		template<typename T>
+		T* HasComponent() const
+		{
+			return m_Scene->m_registry.try_get<T>(entityID);
+			
+		}
+
 		operator uint32_t() const
 		{
 			return (uint32_t)entityID;

@@ -4,6 +4,7 @@
 #include<imgui/misc/cpp/imgui_stdlib.h>
 #include"TurboGE/Scene/Components.h"
 #include<glm/gtc/type_ptr.hpp>
+#include<iostream>
 
 namespace TurboGE
 {
@@ -82,6 +83,67 @@ namespace TurboGE
 		auto& transform = entity.GetComponent<TransformComponent>().transform;
 		ImGui::DragFloat3("Transform", glm::value_ptr(transform[3]));
 
+	
+		if (entity.HasComponent<CameraComponent>())
+		{
+			if (ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Camera"))
+			{
+				auto& camera = entity.GetComponent<CameraComponent>().camera;
+				ImGui::Checkbox("Primary", &(entity.GetComponent<CameraComponent>().primary));
+				
+				std::array<const char*, 2> cameraType {"Perspective", "Orthographic"};
+				const char* currentProjection = cameraType[static_cast<size_t>(camera.GetProjectionType())];
+				if (ImGui::BeginCombo("Projection", currentProjection))
+				{
+					for (int i = 0; i < 2; i++)
+					{
+						bool isSelected = currentProjection == cameraType[i];
+						if (ImGui::Selectable(cameraType[i], isSelected))
+						{
+							std::cout << "Selectable\n";
+							currentProjection = cameraType[i];
+							camera.SetProjectionType((Projection)i);
+						}
+						if (isSelected)
+						{
+							ImGui::SetItemDefaultFocus();
+						}
+						
+					}
+					ImGui::EndCombo();
+				}
+
+				if (camera.GetProjectionType() == Projection::Perspective)
+				{
+					float verticalFov = glm::degrees(camera.GetPerspectiveVerticalFOV());
+					if (ImGui::DragFloat("Vertical FOV", &verticalFov))
+						camera.SetPerspectiveVerticalFOV(glm::radians(verticalFov));
+
+					float orthoNear = camera.GetPerspectiveNearClip();
+					if (ImGui::DragFloat("Near", &orthoNear))
+						camera.SetPerspectiveNearClip(orthoNear);
+
+					float orthoFar = camera.GetPerspectiveFarClip();
+					if (ImGui::DragFloat("Far", &orthoFar))
+						camera.SetPerspectiveFarClip(orthoFar);
+				}
+				else if (camera.GetProjectionType() == Projection::Orthographic)
+				{
+					float orthoSize = camera.GetOrthoSize();
+					if (ImGui::DragFloat("Size", &orthoSize))
+						camera.SetOrthoSize(orthoSize);
+
+					float orthoNear = camera.GetOrthographicNearClip();
+					if (ImGui::DragFloat("Near", &orthoNear))
+						camera.SetOrthographicNearClip(orthoNear);
+
+					float orthoFar = camera.GetOrthographicFarClip();
+					if (ImGui::DragFloat("Far", &orthoFar))
+						camera.SetOrthographicFarClip(orthoFar);
+				}
+				ImGui::TreePop();
+			}
+		}
 
 	}
 }

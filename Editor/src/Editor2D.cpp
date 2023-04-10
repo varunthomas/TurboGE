@@ -28,6 +28,9 @@ namespace TurboGE
         m_SquareEntity = m_Scene->CreateEntity("Square");
         m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
 
+        auto redSquare = m_Scene->CreateEntity("Red Square");
+        redSquare.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 0.0f, 0.0f, 1.0f });
+
         m_Camera = m_Scene->CreateEntity("Camera");
         m_Camera.AddComponent<CameraComponent>();
 
