@@ -265,7 +265,7 @@ namespace TurboGE
         ImGui::Text("Quad count: %d", renderer2DInstance.GetStats().quadCount);
 
         ImGui::Separator();
-        auto& tag = m_SquareEntity.GetComponent<TagComponent>().tag;
+        /*auto& tag = m_SquareEntity.GetComponent<TagComponent>().tag;
         ImGui::Text("%s", tag.c_str());
 
         auto& m_SquareColor = m_SquareEntity.GetComponent<SpriteRendererComponent>().color;
@@ -288,6 +288,7 @@ namespace TurboGE
                 secCamera.SetOrthoSize(orthoSize);
             }
         }
+        */
         ImGui::End();
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });

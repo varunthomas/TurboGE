@@ -74,7 +74,6 @@ namespace TurboGE
 		auto& tag = entity.GetComponent<TagComponent>().tag;
 
 		std::string buffer = tag;
-		//char buffer[256];
 		if (ImGui::InputText("Tag", &buffer))
 		{
 			tag = buffer;
@@ -88,8 +87,18 @@ namespace TurboGE
 		{
 			if (ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Camera"))
 			{
-				auto& camera = entity.GetComponent<CameraComponent>().camera;
-				ImGui::Checkbox("Primary", &(entity.GetComponent<CameraComponent>().primary));
+				auto& cameraComponent = entity.GetComponent<CameraComponent>();
+				auto& camera = cameraComponent.camera;
+				if (ImGui::Checkbox("Primary", &(entity.GetComponent<CameraComponent>().primary)))
+				{
+					entity.CheckEach<CameraComponent>([&](auto& component, auto id)
+						{
+							if (entity.GetID() != id && component.primary == true)
+							{
+								component.primary = false;
+							}
+						});
+				}
 				
 				std::array<const char*, 2> cameraType {"Perspective", "Orthographic"};
 				const char* currentProjection = cameraType[static_cast<size_t>(camera.GetProjectionType())];
@@ -100,7 +109,6 @@ namespace TurboGE
 						bool isSelected = currentProjection == cameraType[i];
 						if (ImGui::Selectable(cameraType[i], isSelected))
 						{
-							std::cout << "Selectable\n";
 							currentProjection = cameraType[i];
 							camera.SetProjectionType((Projection)i);
 						}
@@ -119,13 +127,13 @@ namespace TurboGE
 					if (ImGui::DragFloat("Vertical FOV", &verticalFov))
 						camera.SetPerspectiveVerticalFOV(glm::radians(verticalFov));
 
-					float orthoNear = camera.GetPerspectiveNearClip();
-					if (ImGui::DragFloat("Near", &orthoNear))
-						camera.SetPerspectiveNearClip(orthoNear);
+					float perspectiveNear = camera.GetPerspectiveNearClip();
+					if (ImGui::DragFloat("Near", &perspectiveNear))
+						camera.SetPerspectiveNearClip(perspectiveNear);
 
-					float orthoFar = camera.GetPerspectiveFarClip();
-					if (ImGui::DragFloat("Far", &orthoFar))
-						camera.SetPerspectiveFarClip(orthoFar);
+					float perspectiveFar = camera.GetPerspectiveFarClip();
+					if (ImGui::DragFloat("Far", &perspectiveFar))
+						camera.SetPerspectiveFarClip(perspectiveFar);
 				}
 				else if (camera.GetProjectionType() == Projection::Orthographic)
 				{
@@ -143,6 +151,12 @@ namespace TurboGE
 				}
 				ImGui::TreePop();
 			}
+		}
+
+		if (entity.HasComponent<SpriteRendererComponent>())
+		{
+			auto& m_Color = entity.GetComponent<SpriteRendererComponent>().color;
+			ImGui::ColorEdit4("Square color", glm::value_ptr(m_Color));
 		}
 
 	}

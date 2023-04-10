@@ -13,6 +13,11 @@ namespace TurboGE
 			:entityID{ entity }, m_Scene{ scene } {}
 		~Entity() = default;
 
+		entt::entity GetID() const
+		{
+			return entityID;
+		}
+
 		template<typename T, typename... Args>
 		T& AddComponent(Args&&... args)
 		{
@@ -32,6 +37,16 @@ namespace TurboGE
 			
 		}
 
+		template<typename T>
+		void CheckEach(std::function<void(T&, entt::entity)> modifier) const
+		{
+			auto group = m_Scene->m_registry.view<T>();
+			for (auto entity : group)
+			{
+				auto& component = group.get<T>(entity);
+				modifier(component, entity);
+			}
+		}
 		operator uint32_t() const
 		{
 			return (uint32_t)entityID;
