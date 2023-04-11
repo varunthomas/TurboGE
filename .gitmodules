@@ -10,3 +10,6 @@
 [submodule "TurboGE/vendor/glm"]
 	path = TurboGE/vendor/glm
 	url = https://github.com/g-truc/glm
+[submodule "TurboGE/vendor/yaml-cpp"]
+	path = TurboGE/vendor/yaml-cpp
+	url = https://github.com/jbeder/yaml-cpp

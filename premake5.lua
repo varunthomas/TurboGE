@@ -18,12 +18,15 @@ IncludeDir["Imgui"] = "TurboGE/vendor/imgui"
 IncludeDir["glm"] = "TurboGE/vendor/glm"
 IncludeDir["stb"] = "TurboGE/vendor/stbImage"
 IncludeDir["entt"] = "TurboGE/vendor/entt/include"
+IncludeDir["yaml_cpp"] = "TurboGE/vendor/yamlcpp/include"
+
+
 
 group "Dependencies"
 	include "TurboGE/vendor/GLFW"
 	include "TurboGE/vendor/Glad"
 	include "TurboGE/vendor/imgui"
-	
+	include "TurboGE/vendor/yamlcpp"
 	
 group ""
 
@@ -63,7 +66,8 @@ project "TurboGE"
 		"%{IncludeDir.Imgui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb}",
-		"%{IncludeDir.entt}"
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.yaml_cpp}"
 	}
 	
 	links
@@ -71,7 +75,8 @@ project "TurboGE"
 		"GLFW",
 		"Glad",
 		"Imgui",
-		"opengl32.lib"
+		"opengl32.lib",
+		"yamlcpp"
 	}
 
 	filter "system:windows"
