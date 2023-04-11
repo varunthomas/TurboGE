@@ -89,6 +89,8 @@ namespace TurboGE
 
 	void Renderer2D::EndScene()
 	{
+		if (quadIndexCount == 0)
+			return;
 		uint32_t size = m_Index * sizeof(QuadVertices);
 		m_SquareVB->SetBatchData(size, &quadVerticesIndexBase[0]);
 		

@@ -15,6 +15,7 @@ namespace TurboGE
 		Scene() = default;
 		~Scene();
 		Entity CreateEntity(std::string_view str = "");
+		void DestroyEntity(entt::entity);
 		void onUpdate(Time& t);
 		void OnResize(uint32_t, uint32_t);
 

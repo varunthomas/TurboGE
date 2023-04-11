@@ -1,6 +1,7 @@
 #pragma once
 #include"entt.hpp"
 #include"Scene.h"
+#include<iostream>
 namespace TurboGE
 {
 	class Entity
@@ -22,6 +23,12 @@ namespace TurboGE
 		T& AddComponent(Args&&... args)
 		{
 			return m_Scene->m_registry.emplace<T>(entityID, std::forward<Args>(args)...);
+		}
+
+		template<typename T>
+		void RemoveComponent() const
+		{
+			m_Scene->m_registry.remove<T>(entityID);
 		}
 
 		template<typename T>
@@ -49,7 +56,14 @@ namespace TurboGE
 		}
 		operator uint32_t() const
 		{
+			//std::cout << "uint32 typecast\n";
 			return (uint32_t)entityID;
+		}
+
+		operator entt::entity() const 
+		{
+			std::cout << "entt::entity typecast\n";
+			return entityID;
 		}
 
 		operator bool() const

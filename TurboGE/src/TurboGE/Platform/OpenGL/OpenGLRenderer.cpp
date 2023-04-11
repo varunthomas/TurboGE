@@ -47,6 +47,8 @@ namespace TurboGE
 
 		va->Bind();
 		glDrawElements(GL_TRIANGLES, va->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, nullptr);
+		//PRESENT IN CHERNO CODE
+		//glBindTexture(GL_TEXTURE_2D, 0);
 
 	}
 }

@@ -2,18 +2,29 @@
 #include<glm/glm.hpp>
 #include"TurboGE/Renderer/Camera.h"
 #include"ScriptableEntity.h"
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace TurboGE
 {
 	struct TransformComponent
 	{
-		glm::mat4 transform{ 1.0f };
-		TransformComponent() = default;
-		TransformComponent(const glm::mat4& t)
-			:transform{ t } {}
+		//glm::mat4 transform{ 1.0f };
+		glm::vec3 translate{ 0.0f, 0.0f, 0.0f };
+		glm::vec3 rotate{ 0.0f, 0.0f, 0.0f };
+		glm::vec3 scale{ 1.0f, 1.0f, 1.0f };
 
-		operator glm::mat4& () { return transform; }
-		operator const glm::mat4& () const { return transform; }
+		TransformComponent() = default;
+		TransformComponent(const glm::vec3& t)
+			:translate{ t } {}
+
+		glm::mat4 operator()() const
+		{
+			glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), rotate.x, { 1,0,0 })
+				* glm::rotate(glm::mat4(1.0f), rotate.y, { 0,1,0 })
+				* glm::rotate(glm::mat4(1.0f), rotate.z, { 0,0,1 });
+			glm::mat4 transform = glm::translate(glm::mat4(1.0f), translate) * rotation * glm::scale(glm::mat4(1.0f), scale);
+			return transform;
+		}
 	};
 
 	struct SpriteRendererComponent

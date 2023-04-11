@@ -7,6 +7,7 @@ namespace TurboGE
 	OpenGLFrameBuffer::OpenGLFrameBuffer(FrameBufferSpec& fbSpec)
 		:m_Specification{fbSpec}
 	{
+
 		glCreateFramebuffers(1, &m_RendererID);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
 

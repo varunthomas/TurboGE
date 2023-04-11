@@ -3,6 +3,7 @@
 #include"Components.h"
 
 #include"EntityWrapper.h"
+#include <glm/gtx/string_cast.hpp> //TO DELETE
 
 namespace TurboGE
 {
@@ -13,6 +14,11 @@ namespace TurboGE
 		auto& tagComponent = e.AddComponent<TagComponent>();
 		tagComponent.tag = tag.empty() ? "Entity" : tag;
 		return e;
+	}
+
+	void Scene::DestroyEntity(entt::entity e)
+	{
+		m_registry.destroy(e);
 	}
 
 	void Scene::onUpdate(Time& t)
@@ -32,7 +38,7 @@ namespace TurboGE
 			});
 
 		GameCamera* mainCamera{};
-		glm::mat4* cameraTransform;
+		glm::mat4 cameraTransform;
 		{
 			auto group = m_registry.view<TransformComponent, CameraComponent>();
 			for (auto entity : group)
@@ -41,7 +47,7 @@ namespace TurboGE
 				if (camera.primary)
 				{
 					mainCamera = &camera.camera;
-					cameraTransform = &transform.transform;
+					cameraTransform = transform();
 				}
 			}
 			
@@ -49,14 +55,15 @@ namespace TurboGE
 
 		if (mainCamera)
 		{
-			renderer2DInstance.StartScene(*mainCamera, *cameraTransform);
+			renderer2DInstance.StartScene(*mainCamera, cameraTransform);
 
 			auto group = m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 			Renderer2D& rendererInstance = Renderer2D::getInstance();
 			for (auto entity : group)
 			{
 				auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-				rendererInstance.DrawQuad<glm::mat4>(transform, sprite.color);
+				//std::cout << "Color of entity " << (uint32_t)entity << " " << glm::to_string(sprite.color) << std::endl;
+				rendererInstance.DrawQuad<glm::mat4>(transform(), sprite.color);
 			}
 
 			renderer2DInstance.EndScene();

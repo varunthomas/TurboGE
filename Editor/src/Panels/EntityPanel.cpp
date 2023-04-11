@@ -5,6 +5,7 @@
 #include"TurboGE/Scene/Components.h"
 #include<glm/gtc/type_ptr.hpp>
 #include<iostream>
+#include<imgui/imgui_internal.h>
 
 namespace TurboGE
 {
@@ -13,6 +14,64 @@ namespace TurboGE
 	{
 		m_Scene = scene;
 	}
+
+	static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f)
+	{
+		ImGui::PushID(label.c_str());
+
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(0, columnWidth);
+		ImGui::Text(label.c_str());
+		ImGui::NextColumn();
+
+		ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
+
+		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+		ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
+
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.9f, 0.2f, 0.2f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+		if (ImGui::Button("X", buttonSize))
+			values.x = resetValue;
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine();
+		ImGui::DragFloat("##X", &values.x, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.3f, 0.8f, 0.3f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
+		if (ImGui::Button("Y", buttonSize))
+			values.y = resetValue;
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine();
+		ImGui::DragFloat("##Y", &values.y, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.2f, 0.35f, 0.9f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
+		if (ImGui::Button("Z", buttonSize))
+			values.z = resetValue;
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine();
+		ImGui::DragFloat("##Z", &values.z, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+
+		ImGui::PopStyleVar();
+
+		ImGui::Columns(1);
+
+		ImGui::PopID();
+	}
+
 	void EntityPanel::OnImGuiRender()
 	{
 		ImGui::Begin("Entity Panel");
@@ -22,12 +81,33 @@ namespace TurboGE
 				
 				Entity entity{ entityID, m_Scene.get() };
 				DrawEntityList(entity);
+				if (ImGui::BeginPopupContextItem())
+				{
+					if (ImGui::MenuItem("Delete entity"))
+					{
+						m_Scene->DestroyEntity(entity);
+						if(m_SelectionContext == entity)
+							m_SelectionContext = {};
+					}
+					ImGui::EndPopup();
+				}
 
 			});
 		
 		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
 		{
 			m_SelectionContext = {};
+		}
+
+		
+
+		if (ImGui::BeginPopupContextWindow(0, 1, false))
+		{
+			if (ImGui::MenuItem("Create new entity"))
+			{
+				m_Scene->CreateEntity("Empty entity");
+			}
+			ImGui::EndPopup();
 		}
 
 		ImGui::End();
@@ -37,9 +117,24 @@ namespace TurboGE
 		if (m_SelectionContext)
 		{
 			DrawPropertiesPanel(m_SelectionContext);
-		}
+			if (ImGui::Button("Add Component"))
+				ImGui::OpenPopup("Add Component");
+			if (ImGui::BeginPopup("Add Component"))
+			{
+				if (ImGui::MenuItem("Camera"))
+				{
+					m_SelectionContext.AddComponent<CameraComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+				if (ImGui::MenuItem("Sprite Renderer"))
+				{
+					m_SelectionContext.AddComponent<SpriteRendererComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::EndPopup();
+			}
 
-		
+		}
 
 		ImGui::End();
 	}
@@ -55,6 +150,8 @@ namespace TurboGE
 			m_SelectionContext = entity;
 		}
 
+		
+
 		if (opened)
 		{
 			ImGui::TreePop();
@@ -67,6 +164,8 @@ namespace TurboGE
 				ImGui::TreePop();
 			ImGui::TreePop();
 		}*/
+
+		
 	}
 
 	void EntityPanel::DrawPropertiesPanel(const Entity& entity)
@@ -79,8 +178,12 @@ namespace TurboGE
 			tag = buffer;
 		}
 
-		auto& transform = entity.GetComponent<TransformComponent>().transform;
-		ImGui::DragFloat3("Transform", glm::value_ptr(transform[3]));
+		auto& tc = entity.GetComponent<TransformComponent>();
+		DrawVec3Control("Translation", tc.translate);
+		glm::vec3 rotation = glm::degrees(tc.rotate);
+		DrawVec3Control("Rotation", rotation);
+		tc.rotate = glm::radians(rotation);
+		DrawVec3Control("Scale", tc.rotate, 1.0f);
 
 	
 		if (entity.HasComponent<CameraComponent>())
@@ -157,7 +260,14 @@ namespace TurboGE
 		{
 			auto& m_Color = entity.GetComponent<SpriteRendererComponent>().color;
 			ImGui::ColorEdit4("Square color", glm::value_ptr(m_Color));
+
+			if (ImGui::Button("-"))
+			{
+				entity.RemoveComponent<SpriteRendererComponent>();
+			}
 		}
 
+
+		
 	}
 }

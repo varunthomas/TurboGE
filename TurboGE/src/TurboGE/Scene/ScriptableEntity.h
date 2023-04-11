@@ -9,7 +9,7 @@ namespace TurboGE
 
 	public:
 		template<typename T>
-		T& GetComponent()
+		T& GetComponent() const
 		{
 			return m_Entity.GetComponent<T>();
 		}

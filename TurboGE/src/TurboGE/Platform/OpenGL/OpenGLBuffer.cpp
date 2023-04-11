@@ -55,10 +55,13 @@ namespace TurboGE
 
 	void OpenGLIndexBuffer::Bind()
 	{
+		std::cout << "Bind ib\n";
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
 	}
 	void OpenGLIndexBuffer::Unbind()
 	{
-
+		std::cout << "unbind ib\n";
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 
 }

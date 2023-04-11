@@ -44,30 +44,30 @@ namespace TurboGE
         public:
             void OnCreate()
             {
-                auto& transform = GetComponent<TransformComponent>().transform;
-                transform[3][0] = rand() % 10 - 5.0f;
+                auto& translate = GetComponent<TransformComponent>().translate;
+                translate.x = rand() % 10 - 5.0f;
             }
 
             void OnUpdate(Time ts)
             {
                 float speed = 5.0f;
-                auto& transform = GetComponent<TransformComponent>().transform;
+                auto& translate = GetComponent<TransformComponent>().translate;
 
                 if (Input::isKeyPressed(Key::Up))
                 {
-                    transform[3][1] += speed * ts;
+                    translate.y += speed * ts;
                 }
                 if (Input::isKeyPressed(Key::Down))
                 {
-                    transform[3][1] -= speed * ts;
+                    translate.y -= speed * ts;
                 }
                 if (Input::isKeyPressed(Key::Left))
                 {
-                    transform[3][0] -= speed * ts;
+                    translate.x -= speed * ts;
                 }
                 if (Input::isKeyPressed(Key::Right))
                 {
-                    transform[3][0] += speed * ts;
+                    translate.x += speed * ts;
                 }
 
             }
@@ -265,30 +265,6 @@ namespace TurboGE
         ImGui::Text("Quad count: %d", renderer2DInstance.GetStats().quadCount);
 
         ImGui::Separator();
-        /*auto& tag = m_SquareEntity.GetComponent<TagComponent>().tag;
-        ImGui::Text("%s", tag.c_str());
-
-        auto& m_SquareColor = m_SquareEntity.GetComponent<SpriteRendererComponent>().color;
-        ImGui::ColorEdit4("Square color", glm::value_ptr(m_SquareColor));
-        ImGui::Separator();
-
-        ImGui::DragFloat3("Camera", glm::value_ptr(m_Camera.GetComponent<TransformComponent>().transform[3]));
-
-        if (ImGui::Checkbox("Primary Camera", &m_PrimaryCamera))
-        {
-            m_Camera.GetComponent<CameraComponent>().primary = m_PrimaryCamera;
-            m_SecCamera.GetComponent<CameraComponent>().primary = !m_PrimaryCamera;
-        }
-
-        {
-            auto& secCamera = m_SecCamera.GetComponent<CameraComponent>().camera;
-            float orthoSize = secCamera.GetOrthoSize();
-            if (ImGui::DragFloat("Second Camera Ortho Size", &orthoSize))
-            {
-                secCamera.SetOrthoSize(orthoSize);
-            }
-        }
-        */
         ImGui::End();
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });

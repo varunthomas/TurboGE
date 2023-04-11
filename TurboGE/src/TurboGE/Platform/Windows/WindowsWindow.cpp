@@ -151,7 +151,6 @@ namespace TurboGE
 	{
 		/* Poll for and process events */
 		glfwPollEvents();
-		
 		/* Swap front and back buffers */
 		glfwSwapBuffers(m_window);
 
