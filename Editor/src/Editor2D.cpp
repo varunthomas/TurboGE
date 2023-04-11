@@ -230,6 +230,9 @@ namespace TurboGE
 
         // Submit the DockSpace
         ImGuiIO& io = ImGui::GetIO();
+        ImGuiStyle& style = ImGui::GetStyle();
+        float minWinSizeX = style.WindowMinSize.x;
+        style.WindowMinSize.x = 370.0f;
         if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
         {
             ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
@@ -239,7 +242,7 @@ namespace TurboGE
         {
             std::cout << "Docking not enabled\n";
         }
-
+        style.WindowMinSize.x = minWinSizeX;
         if (ImGui::BeginMenuBar())
         {
             if (ImGui::BeginMenu("Options"))

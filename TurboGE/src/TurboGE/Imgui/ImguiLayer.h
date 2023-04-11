@@ -19,6 +19,8 @@ namespace TurboGE
 		void End();
 		inline void onEvent(Event& e) {};
 
+		void SetDarkThemeColors();
+
 
 
 		~ImguiLayer();
