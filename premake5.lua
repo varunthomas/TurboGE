@@ -67,7 +67,7 @@ project "TurboGE"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb}",
 		"%{IncludeDir.entt}",
-		"%{IncludeDir.yamlcpp}",
+		"%{IncludeDir.yamlcpp}"
 	}
 	
 	links
@@ -86,7 +86,8 @@ project "TurboGE"
 		{
 			"TGE_DLL_BUILD",
 			"TGE_WINDOWS",
-			"GLFW_INCLUDE_NONE"
+			"GLFW_INCLUDE_NONE",
+			"YAML_CPP_STATIC_DEFINE"
 		}
 
 	filter "configurations:Debug"
@@ -189,7 +190,8 @@ project "Editor"
 
 		defines
 		{
-			"TGE_WINDOWS"
+			"TGE_WINDOWS",
+			"YAML_CPP_STATIC_DEFINE"
 		}
 
 	filter "configurations:Debug"

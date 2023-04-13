@@ -21,6 +21,7 @@ namespace TurboGE
 
 		friend class Entity;
 		friend class EntityPanel;
+		friend class SceneSerializer;
 	};
 
 

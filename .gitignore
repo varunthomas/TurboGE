@@ -3,6 +3,7 @@
 
 bin/
 bin-int/
+Editor/saves
 
 #Files
 **.json

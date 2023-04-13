@@ -6,6 +6,7 @@
 #include"TurboGE/Renderer/Renderer2D.h"
 #include"TurboGE/Application.h"
 #include"TurboGE/Scene/Components.h"
+#include"TurboGE/Scene/SceneSerializer.h"
 #include<chrono>
 
 namespace TurboGE
@@ -25,6 +26,7 @@ namespace TurboGE
     {
         m_Scene = std::make_shared<Scene>();
         entityPanel(m_Scene);
+#if 0
         m_SquareEntity = m_Scene->CreateEntity("Square");
         m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
 
@@ -79,7 +81,7 @@ namespace TurboGE
 
         m_Camera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
         m_SecCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
-
+#endif
 
 
         FrameBufferSpec fbSpec;
@@ -254,7 +256,17 @@ namespace TurboGE
                     Application::Get().Close();
                     *p_open = false;
                 }
-                ImGui::EndMenu();
+                if (ImGui::MenuItem("Save"))
+                {
+                    SceneSerializer serializer(m_Scene);
+                    serializer.Save("Example.turbo");
+                }
+                if (ImGui::MenuItem("Load"))
+                {
+                    SceneSerializer deserializer(m_Scene);
+                    deserializer.Load("Example.turbo");
+                }
+            ImGui::EndMenu();
             }
 
             ImGui::EndMenuBar();
