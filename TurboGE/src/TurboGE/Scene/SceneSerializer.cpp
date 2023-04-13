@@ -66,44 +66,54 @@ namespace TurboGE
 		return out;
 	}
 
-	 void SceneSerializer::SerializeEntities(YAML::Emitter& out, Entity& entity)
+	template<typename T>
+	void SceneSerializer::ConstructSave(YAML::Emitter& out, Entity& entity)
+	{
+		auto component = entity.HasComponent<T>();
+		if (component)
+		{
+			auto name = entity.GetName<T>();
+			out << YAML::Key << name.c_str();
+			out << YAML::BeginMap;
+
+			if constexpr (std::is_same_v<T, TagComponent>)
+			{
+				out << YAML::Key << "Tag" << YAML::Value << component->tag;
+			}
+			else if constexpr (std::is_same_v<T, TransformComponent>)
+			{
+				out << YAML::Key << "Rotation" << YAML::Value << component->rotate;
+				out << YAML::Key << "Translation" << YAML::Value << component->translate;
+				out << YAML::Key << "Scale" << YAML::Value << component->scale;
+			}
+			else if constexpr (std::is_same_v<T, CameraComponent>)
+			{
+				out << YAML::Key << "ProjectionType" << YAML::Value << (int)component->camera.GetProjectionType();
+				out << YAML::Key << "Primary" << YAML::Value << component->primary;
+				out << YAML::Key << "Orthographic far clip" << YAML::Value << component->camera.GetOrthographicFarClip();
+				out << YAML::Key << "Orthographic near clip" << YAML::Value << component->camera.GetOrthographicNearClip();
+				out << YAML::Key << "Orthographic Size" << YAML::Value << component->camera.GetOrthoSize();
+				out << YAML::Key << "Perspective FOV" << YAML::Value << component->camera.GetPerspectiveVerticalFOV();
+				out << YAML::Key << "Perspective Far clip" << YAML::Value << component->camera.GetPerspectiveFarClip();
+				out << YAML::Key << "Perspective near clip" << YAML::Value << component->camera.GetPerspectiveNearClip();
+			}
+			else if constexpr (std::is_same_v<T, SpriteRendererComponent>)
+			{
+				out << YAML::Key << "Color" << YAML::Value << component->color;
+			}
+			out << YAML::EndMap;
+		}
+	}
+
+	void SceneSerializer::SerializeEntities(YAML::Emitter& out, Entity& entity)
 	{
 		out << YAML::BeginMap;
 		out << YAML::Key << "Entity" << YAML::Value << "123456";
-		
-		out << YAML::Key << "TagComponent";
-		out << YAML::BeginMap;
-		out << YAML::Key << "Tag" << YAML::Value << entity.GetComponent<TagComponent>().tag;
-		out << YAML::EndMap;
 
-		out << YAML::Key << "TransformComponent";
-		out << YAML::BeginMap;
-		out << YAML::Key << "Rotation" << YAML::Value << entity.GetComponent<TransformComponent>().rotate;
-		out << YAML::Key << "Translation" << YAML::Value << entity.GetComponent<TransformComponent>().translate;
-		out << YAML::Key << "Scale" << YAML::Value << entity.GetComponent<TransformComponent>().scale;
-		out << YAML::EndMap;
-
-		if (entity.HasComponent<CameraComponent>())
-		{
-			out << YAML::Key << "CameraComponent";
-			out << YAML::BeginMap;
-			out << YAML::Key << "ProjectionType" << YAML::Value << (int)entity.GetComponent<CameraComponent>().camera.GetProjectionType();
-			out << YAML::Key << "Primary" << YAML::Value << entity.GetComponent<CameraComponent>().primary;
-			out << YAML::Key << "Orthographic far clip" << YAML::Value << entity.GetComponent<CameraComponent>().camera.GetOrthographicFarClip();
-			out << YAML::Key << "Orthographic near clip" << YAML::Value << entity.GetComponent<CameraComponent>().camera.GetOrthographicNearClip();
-			out << YAML::Key << "Orthographic Size" << YAML::Value << entity.GetComponent<CameraComponent>().camera.GetOrthoSize();
-			out << YAML::Key << "Perspective FOV" << YAML::Value << entity.GetComponent<CameraComponent>().camera.GetPerspectiveVerticalFOV();
-			out << YAML::Key << "Perspective Far clip" << YAML::Value << entity.GetComponent<CameraComponent>().camera.GetPerspectiveFarClip();
-			out << YAML::Key << "Perspective near clip" << YAML::Value << entity.GetComponent<CameraComponent>().camera.GetPerspectiveNearClip();
-			out << YAML::EndMap;
-		}
-		if (entity.HasComponent<SpriteRendererComponent>())
-		{
-			out << YAML::Key << "Sprite Renderer";
-			out << YAML::BeginMap;
-			out << YAML::Key << "Color" << YAML::Value << entity.GetComponent<SpriteRendererComponent>().color;
-			out << YAML::EndMap;
-		}
+		ConstructSave<TagComponent>(out, entity);
+		ConstructSave<TransformComponent>(out, entity);
+		ConstructSave<CameraComponent>(out, entity);
+		ConstructSave<SpriteRendererComponent>(out, entity);
 
 		out << YAML::EndMap;
 	}
@@ -127,30 +137,14 @@ namespace TurboGE
 		out << YAML::EndSeq;
 		out << YAML::EndMap;
 
-		const std::string save_dir = "saves";
-		std::filesystem::path fp{ save_dir };
-		std::filesystem::create_directory(fp);
-		std::ofstream fout(save_dir + "/" + filePath);
+		std::ofstream fout(filePath);
 		fout << out.c_str();
 	}
 
 	void SceneSerializer::Load(const std::string& filePath)
 	{
-		std::filesystem::path fp{ "saves" };
-		if (!std::filesystem::exists(fp))
-		{
-			std::cout << "No Saves found\n";
-			return;
-		}
 
-
-
-		std::ifstream in("saves/" + filePath);
-		std::stringstream buffer;
-		buffer << in.rdbuf();
-		std::string content(buffer.str());
-
-		YAML::Node node = YAML::Load(content);
+		YAML::Node node = YAML::LoadFile(filePath);
 		if (!node["Scene"])
 		{
 			std::cout << "Corrupt file\n";
@@ -189,9 +183,9 @@ namespace TurboGE
 					cc.camera.SetPerspectiveNearClip(cameraComponent["Perspective near clip"].as<float>());
 				}
 
-				if (entity["Sprite Renderer"])
+				if (entity["SpriteRendererComponent"])
 				{
-					auto spriteRendererComponent = entity["Sprite Renderer"];
+					auto spriteRendererComponent = entity["SpriteRendererComponent"];
 					auto& src = deserializedEntity.AddComponent<SpriteRendererComponent>();
 					src.color = spriteRendererComponent["Color"].as<glm::vec4>();
 				}

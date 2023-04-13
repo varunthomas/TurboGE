@@ -13,6 +13,7 @@ namespace TurboGE
 	void EntityPanel::operator()(const std::shared_ptr<Scene>& scene)
 	{
 		m_Scene = scene;
+		m_SelectionContext = {};
 	}
 
 	template<typename T>

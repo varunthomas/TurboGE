@@ -21,6 +21,10 @@ namespace TurboGE
 		std::shared_ptr<Scene> m_Scene;
 		EntityPanel entityPanel;
 
+		void LoadScene();
+		void NewScene();
+		void SaveScene();
+
 		Entity m_SquareEntity;
 		Entity m_Camera;
 		Entity m_SecCamera;

@@ -20,6 +20,9 @@ namespace TurboGE
 		void Save(const std::string&);
 		void Load(const std::string&);
 		void SerializeEntities(YAML::Emitter& out, Entity& entity);
+
+		template<typename T>
+		void ConstructSave(YAML::Emitter& out, Entity& entity);
 		
 	};
 }

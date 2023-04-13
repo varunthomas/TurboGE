@@ -7,6 +7,7 @@
 #include"TurboGE/Application.h"
 #include"TurboGE/Scene/Components.h"
 #include"TurboGE/Scene/SceneSerializer.h"
+#include"TurboGE/Utils/PlatformUtils.h"
 #include<chrono>
 
 namespace TurboGE
@@ -179,6 +180,25 @@ namespace TurboGE
 
         if(m_ViewportHovered)
             m_CameraController.onEvent(e);
+
+
+        //KEY PRESS
+        if (Input::isKeyPressed(Key::O) && Input::isKeyPressed(Key::LeftControl))
+        {
+            LoadScene();
+            
+        }
+        if (Input::isKeyPressed(Key::N) && Input::isKeyPressed(Key::LeftControl))
+        {
+            NewScene();
+
+        }
+        if (Input::isKeyPressed(Key::S) && Input::isKeyPressed(Key::LeftControl))
+        {
+            SaveScene();
+
+        }
+
     }
 
     void Editor2D::renderCustom()
@@ -249,22 +269,22 @@ namespace TurboGE
         {
             if (ImGui::BeginMenu("Options"))
             {
-
-
+                if (ImGui::MenuItem("New", "ctrl+N"))
+                {
+                    NewScene();
+                }
+                if (ImGui::MenuItem("Save as...", "ctrl+S"))
+                {
+                    SaveScene();
+                }
+                if (ImGui::MenuItem("Open..", "ctrl+O"))
+                {
+                    LoadScene();
+                }
                 if (ImGui::MenuItem("Close", NULL, false, p_open != NULL))
                 {
                     Application::Get().Close();
                     *p_open = false;
-                }
-                if (ImGui::MenuItem("Save"))
-                {
-                    SceneSerializer serializer(m_Scene);
-                    serializer.Save("Example.turbo");
-                }
-                if (ImGui::MenuItem("Load"))
-                {
-                    SceneSerializer deserializer(m_Scene);
-                    deserializer.Load("Example.turbo");
                 }
             ImGui::EndMenu();
             }
@@ -297,6 +317,35 @@ namespace TurboGE
         ImGui::PopStyleVar();
 
         ImGui::End();
+    }
+
+    void Editor2D::LoadScene()
+    {
+        std::string filepath = FileDialogs::OpenFile("Turbo Scene (*.turbo)\0*.turbo\0");
+        if (!filepath.empty())
+        {
+            m_Scene = std::make_shared<Scene>();
+            entityPanel(m_Scene);
+            SceneSerializer deserializer(m_Scene);
+            deserializer.Load(filepath);
+        }
+    }
+
+    void Editor2D::SaveScene()
+    {
+
+        std::string filepath = FileDialogs::SaveFile("Turbo Scene (*.turbo)\0*.turbo\0");
+        if (!filepath.empty())
+        {
+            SceneSerializer serializer(m_Scene);
+            serializer.Save(filepath);
+        }
+    }
+
+    void Editor2D::NewScene()
+    {
+        m_Scene = std::make_shared<Scene>();
+        entityPanel(m_Scene);
     }
 
     Editor2D* Editor2D::getLayer()

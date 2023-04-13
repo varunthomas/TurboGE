@@ -8,7 +8,8 @@ namespace TurboGE
 {
 	struct TransformComponent
 	{
-		//glm::mat4 transform{ 1.0f };
+		std::string name = "TransformComponent";
+
 		glm::vec3 translate{ 0.0f, 0.0f, 0.0f };
 		glm::vec3 rotate{ 0.0f, 0.0f, 0.0f };
 		glm::vec3 scale{ 1.0f, 1.0f, 1.0f };
@@ -29,6 +30,8 @@ namespace TurboGE
 
 	struct SpriteRendererComponent
 	{
+		std::string name = "SpriteRendererComponent";
+
 		glm::vec4 color{ 1.0f, 1.0f, 1.0f, 1.0f };
 
 		SpriteRendererComponent() = default;
@@ -39,7 +42,14 @@ namespace TurboGE
 
 	struct TagComponent
 	{
+		std::string name = "TagComponent";
+
 		std::string tag = "Untagged Entity";
+
+		void serialize(std::function<void(const std::string& key, std::string value)> Fn)
+		{
+
+		}
 
 		TagComponent() = default;
 		TagComponent(const TagComponent&) = default;
@@ -49,6 +59,8 @@ namespace TurboGE
 
 	struct CameraComponent
 	{
+		std::string name = "CameraComponent";
+
 		GameCamera camera;
 		bool primary = true;
 
@@ -56,6 +68,7 @@ namespace TurboGE
 		CameraComponent(const CameraComponent&) = default;
 		//CameraComponent(const glm::mat4& projection)
 			//: camera(projection) {}
+
 	};
 
 	template<typename T>
@@ -66,6 +79,8 @@ namespace TurboGE
 
 	struct NativeScriptComponent
 	{
+		std::string name = "NativeScriptComponent";
+
 		ScriptableEntity* scriptableEntity = {};
 		std::function<void()> OnCreateFunction;
 		std::function<void(Time)> OnUpdateFunction;
