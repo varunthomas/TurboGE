@@ -217,7 +217,7 @@ namespace TurboGE
 			glm::vec3 rotation = glm::degrees(component.rotate);
 			DrawVec3Control("Rotation", rotation);
 			component.rotate = glm::radians(rotation);
-			DrawVec3Control("Scale", component.rotate, 1.0f);
+			DrawVec3Control("Scale", component.scale, 1.0f);
 
 			});
 		DrawComponentPanel<CameraComponent>("Camera", entity, [&](auto& component) {

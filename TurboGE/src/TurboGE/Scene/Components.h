@@ -24,6 +24,7 @@ namespace TurboGE
 				* glm::rotate(glm::mat4(1.0f), rotate.y, { 0,1,0 })
 				* glm::rotate(glm::mat4(1.0f), rotate.z, { 0,0,1 });
 			glm::mat4 transform = glm::translate(glm::mat4(1.0f), translate) * rotation * glm::scale(glm::mat4(1.0f), scale);
+			
 			return transform;
 		}
 	};

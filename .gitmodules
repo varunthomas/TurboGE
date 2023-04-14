@@ -13,3 +13,6 @@
 [submodule "TurboGE/vendor/yaml-cpp"]
 	path = TurboGE/vendor/yaml-cpp
 	url = https://github.com/jbeder/yaml-cpp
+[submodule "TurboGE/vendor/ImGuizmo"]
+	path = TurboGE/vendor/ImGuizmo
+	url = https://github.com/CedricGuillemet/ImGuizmo

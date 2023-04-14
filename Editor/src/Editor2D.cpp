@@ -321,24 +321,24 @@ namespace TurboGE
 
     void Editor2D::LoadScene()
     {
-        std::string filepath = FileDialogs::OpenFile("Turbo Scene (*.turbo)\0*.turbo\0");
-        if (!filepath.empty())
+        std::optional<std::string> filepath = FileDialogs::OpenFile("Turbo Scene (*.turbo)\0*.turbo\0");
+        if (filepath)
         {
             m_Scene = std::make_shared<Scene>();
             entityPanel(m_Scene);
             SceneSerializer deserializer(m_Scene);
-            deserializer.Load(filepath);
+            deserializer.Load(*filepath);
         }
     }
 
     void Editor2D::SaveScene()
     {
 
-        std::string filepath = FileDialogs::SaveFile("Turbo Scene (*.turbo)\0*.turbo\0");
-        if (!filepath.empty())
+        std::optional<std::string> filepath = FileDialogs::SaveFile("Turbo Scene (*.turbo)\0*.turbo\0");
+        if (filepath)
         {
             SceneSerializer serializer(m_Scene);
-            serializer.Save(filepath);
+            serializer.Save(*filepath);
         }
     }
 

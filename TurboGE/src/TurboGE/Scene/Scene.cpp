@@ -63,6 +63,7 @@ namespace TurboGE
 			{
 				auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 				//std::cout << "Color of entity " << (uint32_t)entity << " " << glm::to_string(sprite.color) << std::endl;
+				std::cout << transform.scale.x << " " << transform.scale.y << " " << transform.scale.z << std::endl;
 				rendererInstance.DrawQuad<glm::mat4>(transform(), sprite.color);
 			}
 
