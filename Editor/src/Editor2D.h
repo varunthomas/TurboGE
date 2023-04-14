@@ -25,6 +25,9 @@ namespace TurboGE
 		void NewScene();
 		void SaveScene();
 
+		int m_TransformGizmo{ -1 };
+		bool m_Snap = false;
+
 		Entity m_SquareEntity;
 		Entity m_Camera;
 		Entity m_SecCamera;

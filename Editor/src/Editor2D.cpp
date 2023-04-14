@@ -8,6 +8,7 @@
 #include"TurboGE/Scene/Components.h"
 #include"TurboGE/Scene/SceneSerializer.h"
 #include"TurboGE/Utils/PlatformUtils.h"
+#include"ImGuizmo.h"
 #include<chrono>
 
 namespace TurboGE
@@ -183,20 +184,42 @@ namespace TurboGE
 
 
         //KEY PRESS
-        if (Input::isKeyPressed(Key::O) && Input::isKeyPressed(Key::LeftControl))
+
+        //SHORTCUTS
+        if (Input::isKeyPressed(Key::LeftControl) && Input::isKeyPressed(Key::O))
         {
             LoadScene();
             
         }
-        if (Input::isKeyPressed(Key::N) && Input::isKeyPressed(Key::LeftControl))
+        if (Input::isKeyPressed(Key::LeftControl) && Input::isKeyPressed(Key::N))
         {
             NewScene();
 
         }
-        if (Input::isKeyPressed(Key::S) && Input::isKeyPressed(Key::LeftControl))
+        if (Input::isKeyPressed(Key::LeftControl) && Input::isKeyPressed(Key::S))
         {
             SaveScene();
 
+        }
+
+        //GIZMOS
+        if (Input::isKeyPressed(Key::G))
+        {
+            m_TransformGizmo = (int)ImGuizmo::OPERATION::TRANSLATE;
+        }
+        else if (Input::isKeyPressed(Key::R))
+        {
+            m_TransformGizmo = (int)ImGuizmo::OPERATION::ROTATE;
+        }
+        else if (Input::isKeyPressed(Key::S))
+        {
+            m_TransformGizmo = (int)ImGuizmo::OPERATION::SCALE;
+        }
+
+        //SNAP
+        if (Input::isKeyPressed(Key::LeftControl))
+        {
+            m_Snap = true;
         }
 
     }
@@ -313,6 +336,59 @@ namespace TurboGE
         ImVec2 aspx = ImGui::GetContentRegionAvail();
         m_CameraController.onResize(aspx.x, aspx.y);
         ImGui::Image((void*)textureID, aspx, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+
+        //GIZMOS
+
+        auto selectedEntity = entityPanel.GetSelectedEntity();
+        if (selectedEntity && m_TransformGizmo != -1)
+        {
+            ImGuizmo::SetOrthographic(false);
+			ImGuizmo::SetDrawlist();
+
+            float windowWidth = (float)ImGui::GetWindowWidth();
+            float windowHeight = (float)ImGui::GetWindowHeight();
+            ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+
+            auto cameraEntity = m_Scene->GetPrimaryCameraEntity();
+            const auto& camera = cameraEntity.GetComponent<CameraComponent>().camera;
+            const glm::mat4& cameraProjection = camera.GetProjection();
+            glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>()());
+
+            //ENTITY
+
+            auto& tc = selectedEntity.GetComponent<TransformComponent>();
+            glm::mat4 transform = tc();
+
+            //SNAPPING
+            if (m_Snap)
+            {
+                float snapValue = 0.5f;
+                if (ImGuizmo::OPERATION::ROTATE == (ImGuizmo::OPERATION)m_TransformGizmo)
+                {
+                    snapValue = 45.0f;
+                }
+
+                float snapValues[3] = { snapValue, snapValue, snapValue };
+                ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+                    (ImGuizmo::OPERATION)m_TransformGizmo, ImGuizmo::LOCAL, glm::value_ptr(transform), nullptr, m_Snap ? snapValues : nullptr);
+            }
+            else //NO SNAPPING
+            {
+                ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+                    (ImGuizmo::OPERATION)m_TransformGizmo, ImGuizmo::LOCAL, glm::value_ptr(transform));
+            }
+
+            if (ImGuizmo::IsUsing())
+            {
+                glm::vec3 translation, rotation, scale;
+                ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(transform), glm::value_ptr(translation), glm::value_ptr(rotation), glm::value_ptr(scale));
+
+                tc.translate = translation;
+                tc.rotate = rotation;
+                tc.scale = scale;
+            }
+        }
+
         ImGui::End();
         ImGui::PopStyleVar();
 
@@ -352,7 +428,6 @@ namespace TurboGE
     {
         return this;
     }
-
 
     Editor2D::~Editor2D()
     {

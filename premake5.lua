@@ -19,6 +19,7 @@ IncludeDir["glm"] = "TurboGE/vendor/glm"
 IncludeDir["stb"] = "TurboGE/vendor/stbImage"
 IncludeDir["entt"] = "TurboGE/vendor/entt/include"
 IncludeDir["yamlcpp"] = "TurboGE/vendor/yaml-cpp/include"
+IncludeDir["ImGuizmo"] = "TurboGE/vendor/ImGuizmo"
 
 
 
@@ -50,7 +51,10 @@ project "TurboGE"
 		"%{prj.name}/vendor/stbImage/**.cpp",
 		"%{prj.name}/vendor/stbImage/**.h",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
-		"%{prj.name}/vendor/glm/glm/**.inl"
+		"%{prj.name}/vendor/glm/glm/**.inl",
+		"%{prj.name}/vendor/ImGuizmo/ImGuizmo.h",
+		"%{prj.name}/vendor/ImGuizmo/ImGuizmo.cpp"
+		
 	}
 	defines
 	{
@@ -67,7 +71,8 @@ project "TurboGE"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb}",
 		"%{IncludeDir.entt}",
-		"%{IncludeDir.yamlcpp}"
+		"%{IncludeDir.yamlcpp}",
+		"%{IncludeDir.ImGuizmo}"
 	}
 	
 	links
@@ -78,7 +83,10 @@ project "TurboGE"
 		"yaml-cpp",
 		"opengl32.lib"
 	}
-
+	
+	filter "files:TurboGE/vendor/ImGuizmo/**.cpp"
+		flags { "NoPCH" }
+		
 	filter "system:windows"
 		systemversion "latest"
 
@@ -177,7 +185,8 @@ project "Editor"
 		"TurboGE/src",
 		"TurboGE/vendor",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.entt}"
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.ImGuizmo}"
 	}
 
 	links

@@ -1,10 +1,9 @@
 #include"tgepch.h"
 #include "ImguiLayer.h"
 #include "imgui.h"
-//#include "TurboGE/Platform/OpenGL/ImguiOpenGLRenderer.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
-//#include "backends/imgui_impl_opengl3_loader.h"
+#include"ImGuizmo.h"
 
 #include"TurboGE/Application.h"
 #include<glad/glad.h>
@@ -22,6 +21,7 @@ namespace TurboGE
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+        ImGuizmo::BeginFrame();
         const ImGuiViewport* viewport = ImGui::GetMainViewport();
     }
 

@@ -18,6 +18,7 @@ namespace TurboGE
 		void DestroyEntity(entt::entity);
 		void onUpdate(Time& t);
 		void OnResize(uint32_t, uint32_t);
+		Entity GetPrimaryCameraEntity();
 
 		friend class Entity;
 		friend class EntityPanel;
