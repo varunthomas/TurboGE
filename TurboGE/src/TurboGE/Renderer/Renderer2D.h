@@ -60,7 +60,8 @@ namespace TurboGE
 
 		
 		void Init();
-		void StartScene(const OrthographicCamera&);
+		void StartScene(EditorCamera&);
+		void StartScene(const Camera&);
 		void StartScene(const GameCamera&, const glm::mat4&);
 		void EndScene();
 		void ShutDown();

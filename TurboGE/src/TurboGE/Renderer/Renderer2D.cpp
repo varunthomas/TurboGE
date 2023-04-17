@@ -67,7 +67,16 @@ namespace TurboGE
 		textures[0] = m_WhiteTexture;
 
 	}
-	void Renderer2D::StartScene(const OrthographicCamera& camera)
+
+	void Renderer2D::StartScene(EditorCamera& camera)
+	{
+		textureSlot = 1;
+		quadIndexCount = 0;
+		m_Index = 0;
+		m_Shader->Bind();
+		m_Shader->SetMat4("u_ViewProjection", camera.GetViewProjection());
+	}
+	void Renderer2D::StartScene(const Camera& camera)
 	{
 		textureSlot = 1;
 		quadIndexCount = 0;

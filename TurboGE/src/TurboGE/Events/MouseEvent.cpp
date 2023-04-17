@@ -5,7 +5,9 @@
 namespace TurboGE
 {
 	MousePressEvent::MousePressEvent(int button)
-		:m_button{ button } {};
+		:m_button{ button } {
+		std::cout << "Mouse pressed\n";
+	};
 
 	std::string MousePressEvent::getString()
 	{

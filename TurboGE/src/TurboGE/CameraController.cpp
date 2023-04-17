@@ -5,7 +5,7 @@
 namespace TurboGE
 {
 	OrthographicCameraController::OrthographicCameraController(float aspxRatio)
-		:m_aspxRatio{ aspxRatio }, m_Camera{ -m_aspxRatio * m_ZoomLevel, m_aspxRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel }
+		:m_aspxRatio{ aspxRatio }//, m_Camera{ -m_aspxRatio * m_ZoomLevel, m_aspxRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel }
 	{
 		//std::cout << "Cons " << -m_aspxRatio * m_ZoomLevel << " " << m_aspxRatio * m_ZoomLevel << " " << -m_ZoomLevel << " " << m_ZoomLevel << std::endl;
 	}
@@ -57,7 +57,7 @@ namespace TurboGE
 	{
 		m_ZoomLevel -= e.getYOffset() * 0.25f;
 		
-		std::cout << "scroll " << -m_aspxRatio * m_ZoomLevel << " " << m_aspxRatio * m_ZoomLevel << " " << -m_ZoomLevel << " " << m_ZoomLevel << std::endl;
+		//std::cout << "scroll " << -m_aspxRatio * m_ZoomLevel << " " << m_aspxRatio * m_ZoomLevel << " " << -m_ZoomLevel << " " << m_ZoomLevel << std::endl;
 		
 		if (m_ZoomLevel < 0.25f)
 		{
@@ -67,7 +67,7 @@ namespace TurboGE
 		{
 			m_ZoomLevel = 3.0f;
 		}
-		std::cout << "ZOOM " << m_ZoomLevel << std::endl;
+		//std::cout << "ZOOM " << m_ZoomLevel << std::endl;
 		//m_ZoomLevel = std::max(m_ZoomLevel, 0.25f);
 		m_Camera.setProjection(-m_aspxRatio * m_ZoomLevel, m_aspxRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 	}

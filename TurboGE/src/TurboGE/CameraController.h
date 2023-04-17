@@ -13,7 +13,7 @@ namespace TurboGE
 	{
 		float m_ZoomLevel = 1.0f;
 		float m_aspxRatio;
-		OrthographicCamera m_Camera;
+		Camera m_Camera;
 		glm::vec3 m_CameraPos = { 0.5f, 0.5f, 0.0f };
 		float m_CameraRot = 0.0f;
 	public:
@@ -21,7 +21,7 @@ namespace TurboGE
 
 		void OnUpdate(Time);
 		void onEvent(Event&);
-		inline OrthographicCamera GetCamera() { return m_Camera; }
+		inline Camera GetCamera() { return m_Camera; }
 		void onWindowResize(WindowSizeEvent&);
 		void onMouseScrollEvent(MouseScrollEvent&);
 		void onResize(float, float);

@@ -113,6 +113,8 @@ namespace TurboGE
         }*/
 
         m_Scene->OnResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+        if(m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f)
+            m_EditorCamera.SetViewportSize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 
         TGE_PROFILE_FUNCTION();
         renderer2DInstance.ResetStats();
@@ -122,11 +124,13 @@ namespace TurboGE
             m_Renderer->setClearColor();
             m_Renderer->Clear();
         }
+#if 0
         {
             TGE_PROFILE_SCOPE("Camera Controller");
             if(m_ViewportFocused)
                 m_CameraController.OnUpdate(delta);
         }
+#endif
         {
             TGE_PROFILE_SCOPE("Draw Render");
 #if 0
@@ -160,8 +164,10 @@ namespace TurboGE
 
 #if 1
             //renderer2DInstance.StartScene(m_CameraController.GetCamera());
+            m_EditorCamera.OnUpdate(delta);
 
-            m_Scene->onUpdate(delta);
+            //m_Scene->onUpdate(delta);
+            m_Scene->onUpdateEditor(delta, m_EditorCamera);
             //renderer2DInstance.EndScene();
 #endif
             m_FrameBuffer->Unbind();
@@ -179,9 +185,14 @@ namespace TurboGE
             m_Renderer->setViewPort(winEvent.GetWidth(), winEvent.GetHeight());
         }
 
+        if (e.getEventType() == EventType::MouseScrollEvent)
+        {
+            m_EditorCamera.OnEvent(e);
+        }
+#if 0
         if(m_ViewportHovered)
             m_CameraController.onEvent(e);
-
+#endif
 
         //KEY PRESS
 
@@ -334,7 +345,7 @@ namespace TurboGE
         m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
         //SOME MORE CHANGES PRESENT IN CHERNO WHICH I DONT THINK IS NEEDED HERE
         ImVec2 aspx = ImGui::GetContentRegionAvail();
-        m_CameraController.onResize(aspx.x, aspx.y);
+        //m_CameraController.onResize(aspx.x, aspx.y);
         ImGui::Image((void*)textureID, aspx, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 
         //GIZMOS

@@ -34,7 +34,7 @@ namespace TurboGE
 		glEnable(GL_DEPTH_TEST);
 	}
 
-	void OpenGLRenderer::StartScene(const OrthographicCamera& camera)
+	void OpenGLRenderer::StartScene(const Camera& camera)
 	{
 		m_viewProjectionMatrix = camera.getViewProjectionMatrix();
 	}

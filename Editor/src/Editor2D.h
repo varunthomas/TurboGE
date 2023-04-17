@@ -33,6 +33,7 @@ namespace TurboGE
 		Entity m_SecCamera;
 
 		bool m_PrimaryCamera = true;
+		EditorCamera m_EditorCamera{1280.0f/720.0f};
 
 
 		glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
@@ -45,7 +46,7 @@ namespace TurboGE
 		std::unique_ptr<Renderer> m_Renderer;
 		std::unique_ptr<FrameBuffer> m_FrameBuffer;
 
-		OrthographicCameraController m_CameraController{ 1280.0f / 720.0f };
+		//OrthographicCameraController m_CameraController{ 1280.0f / 720.0f };
 		std::shared_ptr<Texture2D> m_CheckTexture;
 		std::shared_ptr<Texture2D> m_SpriteSheet;
 		std::unique_ptr<SubTexture2D> m_SpriteStairs;

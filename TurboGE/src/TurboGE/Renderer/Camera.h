@@ -1,9 +1,11 @@
 #pragma once
 #include<glm/glm.hpp>
+#include"TurboGE/Events/Event.h"
+#include"TurboGE/Time.h"
 
 namespace TurboGE
 {
-	class OrthographicCamera
+	class Camera
 	{
 		glm::mat4 m_ProjectionMatrix;
 		glm::mat4 m_ViewMatrix;
@@ -11,8 +13,9 @@ namespace TurboGE
 		glm::vec3 m_Position = {0.0f, 0.0f, 0.0f};
 		float m_Rotation = 0.0f;
 	public:
-		OrthographicCamera(float, float, float, float);
-		~OrthographicCamera() = default;
+		//Camera(const glm::mat4& projection)
+			//:m_ProjectionMatrix{ projection } {};
+		~Camera() = default;
 
 		void setPosition(const glm::vec3&);
 		void setRotation(float);
@@ -22,6 +25,8 @@ namespace TurboGE
 	};
 
 	
+	//GAME CAMERA
+
 	enum class Projection
 	{
 		Perspective,
@@ -40,7 +45,7 @@ namespace TurboGE
 		float m_PerspectiveFOV = glm::radians(45.0f);
 		float m_PerspectiveNear = 0.01f, m_PerspectiveFar = 1000.0f;
 
-		Projection m_ProjectionType = Projection::Orthographic;
+		Projection m_ProjectionType = Projection::Perspective;
 
 	public:
 		
@@ -70,5 +75,44 @@ namespace TurboGE
 		Projection GetProjectionType() { return m_ProjectionType; }
 		void SetProjectionType(Projection projection) { m_ProjectionType = projection; RecalculateProjection(); }
 
+	};
+
+
+
+	//EDITOR CAMERA
+
+	class EditorCamera
+	{
+		
+		glm::mat4 m_View = glm::mat4(1.0f);
+		glm::mat4 m_Projection;
+		float m_AspectRatio;
+
+		glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+		glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+		glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+		float cameraSpeed = 2.0f; // adjust accordingly
+
+		bool firstMouse = true;
+		float yaw = -90.0f;	// yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right so we initially rotate a bit to the left.
+		float pitch = 0.0f;
+		float lastX = 1280.0f / 2.0f; //MIDDLE OF SCREEN
+		float lastY = 720.0f / 2.0f;
+		float m_Fov = 45.0f;
+		bool m_MousePressed = false;
+		float xpos, ypos;
+		float xoffset, yoffset;
+
+	public:
+
+		EditorCamera(float);
+		void OnEvent(Event&);
+		void OnUpdate(Time&);
+		void SetZoomFoV(float);
+		void UpdateDirection();
+		void SetViewportSize(uint32_t, uint32_t);
+		glm::mat4 GetViewProjection() { return m_Projection * m_View; }
+		void RecalculateProjection();
+		~EditorCamera();
 	};
 }

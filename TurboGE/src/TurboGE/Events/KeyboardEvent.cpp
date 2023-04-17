@@ -45,7 +45,7 @@ namespace TurboGE
 	{
 		m_key = key;
 		m_repeat = repeat;
-		TURBO_CORE_ERR("Key Repeat");
+		//TURBO_CORE_ERR("Key Repeat");
 	}
 
 	EventType KeyboardRepeatEvent::getEventType()

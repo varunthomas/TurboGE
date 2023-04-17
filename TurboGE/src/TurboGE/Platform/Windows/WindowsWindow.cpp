@@ -112,6 +112,7 @@ namespace TurboGE
 				{
 					case GLFW_PRESS:
 					{
+						std::cout << "Mouse pressed glfw\n";
 						MousePressEvent event(button);
 						data.callbackFn(event);
 						break;
