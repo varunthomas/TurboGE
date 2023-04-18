@@ -87,6 +87,7 @@ namespace TurboGE
 
 
         FrameBufferSpec fbSpec;
+        fbSpec.formats = { FrameBufferFormat::RGBA8, FrameBufferFormat::RED_INT, FrameBufferFormat::DEPTH24_STENCIL8 };
         fbSpec.width = 1280;
         fbSpec.height = 720;
         m_FrameBuffer = FrameBuffer::Create(fbSpec);
@@ -103,14 +104,14 @@ namespace TurboGE
 
         //FOR THIS TO WORK, WE NEED TO CALL INVALIDATE() ON FRAMEBUFFER WHICH IS BASICALLY SETTING UP BUFFER AGAIN WITH NEW WIDTH AND HEIGHT. THIS CAN
         //CAUSE LOT OF PERFORMANCE. SO I COMMENTED THIS OUT AND CALLED OnRESIZE() EVERYTIME EVEN WHEN NO RESIZE HAPPENS SO THAT I DONT HAVE TO CALL OPENGL FRAMEBUFFER
-        /*if (FrameBufferSpec spec = m_FrameBuffer->GetSpecification();
+        if (FrameBufferSpec spec = m_FrameBuffer->GetSpecification();
             m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && // zero sized framebuffer is invalid
             (spec.width != m_ViewportSize.x || spec.height != m_ViewportSize.y))
         {
             std::cout << "Resize " << spec.width << " " << spec.height << " " << m_ViewportSize.x  << m_ViewportSize.y<< "\n";
-            m_FrameBuffer->SetFrameSpec({ (uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y });
-            m_Scene->OnResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-        }*/
+            //m_FrameBuffer->SetFrameSpec({ (uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y });
+            //m_Scene->OnResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+        }
 
         m_Scene->OnResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
         if(m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f)
@@ -163,12 +164,41 @@ namespace TurboGE
 #endif
 
 #if 1
-            //renderer2DInstance.StartScene(m_CameraController.GetCamera());
+
             m_EditorCamera.OnUpdate(delta);
 
             //m_Scene->onUpdate(delta);
             m_Scene->onUpdateEditor(delta, m_EditorCamera);
-            //renderer2DInstance.EndScene();
+
+            auto [mx, my] = ImGui::GetMousePos();
+            mx -= m_BoundsArray[0].x;
+            my -= m_BoundsArray[0].y;
+
+            glm::vec2 viewportSize = m_BoundsArray[1] - m_BoundsArray[0];
+            my = viewportSize.y - my;
+            int mouseX = (int)mx;
+            int mouseY = (int)my;
+            //std::cout << "mousex " << mouseX << "mousey " << mouseY << std::endl;
+            //std::cout << "viewportx " << viewportSize.x << "viewporty " << viewportSize.y << std::endl;
+            if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
+            {
+                int pixelData = m_FrameBuffer->GetPixelData(1, mouseX, mouseY);
+                //std::cout << pixelData << std::endl;
+                //HZ_CORE_WARN("Pixel data = {0}", pixelData);
+            }
+
+            //glm::vec2 viewPortSize = { m_BoundsArray[1].x - m_BoundsArray[0].x , m_BoundsArray[1].y - m_BoundsArray[0].y };
+            //my = viewPortSize.y - my;
+
+            //if (my >= 0 && my <= viewPortSize.y && mx >= 0 && mx <= viewPortSize.x)
+            //{
+                
+                //int pixelData = m_FrameBuffer->GetPixelData(1, (int)mx, (int)my);
+                //std::cout << pixelData << std::endl;
+            //}
+
+
+            //std::cout << mx << " " << my << std::endl;
 #endif
             m_FrameBuffer->Unbind();
         }
@@ -320,7 +350,7 @@ namespace TurboGE
                     Application::Get().Close();
                     *p_open = false;
                 }
-            ImGui::EndMenu();
+                ImGui::EndMenu();
             }
 
             ImGui::EndMenuBar();
@@ -337,12 +367,26 @@ namespace TurboGE
         ImGui::End();
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-        ImGui::Begin("Dockspace");
+        ImGui::Begin("Editor View");
+
+        //READ PIXEL
+        auto viewportMinBound = ImGui::GetWindowContentRegionMin();
+        auto viewportMaxBound = ImGui::GetWindowContentRegionMax();
+        //auto cursor = ImGui::GetCursorPos(); //THIS IS NOT THE MOUSE CURSOR POSITION
+
+
         m_ViewportFocused = ImGui::IsWindowFocused();
         m_ViewportHovered = ImGui::IsWindowHovered();
 
-        ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+        ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail(); //PIXEL WIDTH AND HEIGHT OF VIEWPORT
+        auto viewportOffset = ImGui::GetWindowPos(); //TOPLEFT PIXEL CORDINATE WHERE THE VIEWPORT START
         m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+        //minBound.x += cursor.x;
+        //minBound.y += cursor.y;
+        //ImVec2 maxBound = { minBound.x + m_ViewportSize.x, minBound.y + m_ViewportSize.y };
+        m_BoundsArray[0] = { viewportMinBound.x + viewportOffset.x, viewportMinBound.y + viewportOffset.y };
+        m_BoundsArray[1] = { viewportMaxBound.x + viewportOffset.x, viewportMaxBound.y + viewportOffset.y };
+        //std::cout << m_ViewportSize.x << " and " << m_ViewportSize.y << std::endl;
         //SOME MORE CHANGES PRESENT IN CHERNO WHICH I DONT THINK IS NEEDED HERE
         ImVec2 aspx = ImGui::GetContentRegionAvail();
         //m_CameraController.onResize(aspx.x, aspx.y);
@@ -356,14 +400,16 @@ namespace TurboGE
             ImGuizmo::SetOrthographic(false);
 			ImGuizmo::SetDrawlist();
 
-            float windowWidth = (float)ImGui::GetWindowWidth();
-            float windowHeight = (float)ImGui::GetWindowHeight();
-            ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+            //float windowWidth = (float)ImGui::GetWindowWidth();
+            //float windowHeight = (float)ImGui::GetWindowHeight();
+            //ImGuizmo::SetRect(ImGui::GetCursorPos().x, ImGui::GetCursorPos().y, windowWidth, windowHeight);
+            ImGuizmo::SetRect(m_BoundsArray[0].x, m_BoundsArray[0].y, m_BoundsArray[1].x - m_BoundsArray[0].x, m_BoundsArray[1].y - m_BoundsArray[0].y);
 
             //auto cameraEntity = m_Scene->GetPrimaryCameraEntity();
             //const auto& camera = cameraEntity.GetComponent<CameraComponent>().camera;
             //const glm::mat4& cameraProjection = camera.GetProjection();
             //glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>()());
+            
             glm::mat4 cameraProjection = m_EditorCamera.GetProjection();
             glm::mat4 cameraView = m_EditorCamera.GetView();
 

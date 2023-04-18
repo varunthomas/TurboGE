@@ -22,7 +22,7 @@ namespace TurboGE
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         ImGuizmo::BeginFrame();
-        const ImGuiViewport* viewport = ImGui::GetMainViewport();
+        const ImGuiViewport* viewport = ImGui::GetMainViewport(); //TODO: Remove 
     }
 
     void ImguiLayer::End()
