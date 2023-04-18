@@ -27,3 +27,8 @@ Start by cloning the repository with `git clone --recursive https://github.com/v
 - Editor App to change the transforms, sprite and camera at runtime.
 - Orthographic and Perspective camera
 - Free moving camera for editor.
+
+**References:**
+
+- Cherno Game Engine
+- learnopengl.com
