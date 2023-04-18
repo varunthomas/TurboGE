@@ -222,7 +222,7 @@ namespace TurboGE
         {
             m_TransformGizmo = (int)ImGuizmo::OPERATION::ROTATE;
         }
-        else if (Input::isKeyPressed(Key::S))
+        else if (Input::isKeyPressed(Key::S)) //TODO::Change S in Zoom
         {
             m_TransformGizmo = (int)ImGuizmo::OPERATION::SCALE;
         }
@@ -230,7 +230,7 @@ namespace TurboGE
         //SNAP
         if (Input::isKeyPressed(Key::LeftControl))
         {
-            m_Snap = true;
+            m_Snap = !m_Snap; //TODO:: Disable snap when ctrl+O for opening file
         }
 
     }
@@ -360,10 +360,12 @@ namespace TurboGE
             float windowHeight = (float)ImGui::GetWindowHeight();
             ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
 
-            auto cameraEntity = m_Scene->GetPrimaryCameraEntity();
-            const auto& camera = cameraEntity.GetComponent<CameraComponent>().camera;
-            const glm::mat4& cameraProjection = camera.GetProjection();
-            glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>()());
+            //auto cameraEntity = m_Scene->GetPrimaryCameraEntity();
+            //const auto& camera = cameraEntity.GetComponent<CameraComponent>().camera;
+            //const glm::mat4& cameraProjection = camera.GetProjection();
+            //glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>()());
+            glm::mat4 cameraProjection = m_EditorCamera.GetProjection();
+            glm::mat4 cameraView = m_EditorCamera.GetView();
 
             //ENTITY
 
