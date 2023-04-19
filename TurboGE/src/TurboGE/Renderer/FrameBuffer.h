@@ -7,9 +7,7 @@ namespace TurboGE
 		RGBA8 = 1,
 		RED_INT,
 
-		DEPTH24_STENCIL8,
-
-		DEPTH = DEPTH24_STENCIL8
+		DEPTH24_STENCIL8
 	};
 
 

@@ -181,8 +181,6 @@ namespace TurboGE
             my = viewportSize.y - my;
             int mouseX = (int)mx;
             int mouseY = (int)my;
-            //std::cout << "mousex " << mouseX << "mousey " << mouseY << std::endl;
-            //std::cout << "viewportx " << viewportSize.x << "viewporty " << viewportSize.y << std::endl;
             if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
             {
                 int pixelData = m_FrameBuffer->GetPixelData(1, mouseX, mouseY);
@@ -194,7 +192,6 @@ namespace TurboGE
                 {
                     m_ClickedEntity = Entity{ (entt::entity)pixelData, m_Scene.get()};
                 }
-                std::cout << pixelData << std::endl;
             }
 
 #endif
@@ -220,11 +217,9 @@ namespace TurboGE
 
         if (e.getEventType() == EventType::MousePressEvent)
         {
-            //std::cout << "crashing1\n";
             auto& mousePressEvent = dynamic_cast<MousePressEvent&>(e);
             if (mousePressEvent.getMouseButton() == (int)MouseCode::ButtonLeft && m_ViewportHovered && !Input::isKeyPressed(Key::LeftAlt) && !ImGuizmo::IsOver())
             {
-                //std::cout << "crashing\n";
                 entityPanel.SetSelectedEntity(m_ClickedEntity);
             }
         }
@@ -388,15 +383,11 @@ namespace TurboGE
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail(); //PIXEL WIDTH AND HEIGHT OF VIEWPORT EXCLUDING HEIGHT OF option BAR
         auto viewportOffset = ImGui::GetWindowPos(); //GET OFFSET FROM ACTUAL SCREEN COORD TO VIEWPORT COORD TOP LEFT
         m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-        //minBound.x += cursor.x;
-        //minBound.y += cursor.y;
-        //ImVec2 maxBound = { minBound.x + m_ViewportSize.x, minBound.y + m_ViewportSize.y };
 
         //BELOW WILL CONVERT VIEWPORT COORD TO FULL SCREEN COORD
         m_BoundsArray[0] = { viewportMinBound.x + viewportOffset.x, viewportMinBound.y + viewportOffset.y };
         m_BoundsArray[1] = { viewportMaxBound.x + viewportOffset.x, viewportMaxBound.y + viewportOffset.y };
 
-        //std::cout << viewportOffset.x << " mand " << viewportOffset.y << std::endl;
 
 
         //SOME MORE CHANGES PRESENT IN CHERNO WHICH I DONT THINK IS NEEDED HERE
@@ -411,9 +402,6 @@ namespace TurboGE
             ImGuizmo::SetOrthographic(false);
 			ImGuizmo::SetDrawlist();
 
-            //float windowWidth = (float)ImGui::GetWindowWidth();
-            //float windowHeight = (float)ImGui::GetWindowHeight();
-            //ImGuizmo::SetRect(ImGui::GetCursorPos().x, ImGui::GetCursorPos().y, windowWidth, windowHeight);
             ImGuizmo::SetRect(m_BoundsArray[0].x, m_BoundsArray[0].y, m_BoundsArray[1].x - m_BoundsArray[0].x, m_BoundsArray[1].y - m_BoundsArray[0].y);
 
             //auto cameraEntity = m_Scene->GetPrimaryCameraEntity();

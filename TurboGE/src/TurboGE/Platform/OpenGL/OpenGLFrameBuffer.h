@@ -5,8 +5,7 @@ namespace TurboGE
 {
 	class OpenGLFrameBuffer : public FrameBuffer
 	{
-		//uint32_t m_width, m_height;
-		uint32_t m_RendererID;//, m_DepthAttachment, m_ColorAttachment;
+		uint32_t m_RendererID;
 		uint32_t m_DepthAttachment;
 		std::vector<uint32_t> m_ColorAttachment;
 
