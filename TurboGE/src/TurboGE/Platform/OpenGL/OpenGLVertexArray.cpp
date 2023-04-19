@@ -15,6 +15,7 @@ namespace TurboGE
 		case AttribType::Float2:	return GL_FLOAT;
 		case AttribType::Float3:	return GL_FLOAT;
 		case AttribType::Float4:	return GL_FLOAT;
+		case AttribType::Int:		return GL_INT;
 		}
 		return 0;
 	}
@@ -30,8 +31,17 @@ namespace TurboGE
 		VertexLayout& layout = GetLayout();
 		for (auto& attrib : layout.m_attribVec)
 		{
-			glEnableVertexAttribArray(attrib.m_index);
-			glVertexAttribPointer(attrib.m_index, attrib.m_size, typeToEnum(attrib.m_type), attrib.m_normalized, layout.getStride(), (const void*)attrib.m_offset);
+			if (attrib.m_entityID)
+			{
+				glEnableVertexAttribArray(attrib.m_index);
+				glVertexAttribIPointer(attrib.m_index, attrib.m_size, typeToEnum(attrib.m_type), layout.getStride(), (const void*)attrib.m_offset);
+
+			}
+			else
+			{
+				glEnableVertexAttribArray(attrib.m_index);
+				glVertexAttribPointer(attrib.m_index, attrib.m_size, typeToEnum(attrib.m_type), attrib.m_normalized, layout.getStride(), (const void*)attrib.m_offset);
+			}
 		}
 	}
 

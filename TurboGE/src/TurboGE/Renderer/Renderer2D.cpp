@@ -24,8 +24,14 @@ namespace TurboGE
 		
 		quadVerticesIndexBase.resize(maxIndices);
 
-		VertexLayout layoutsq;
-		layoutsq.m_attribVec = { {0, AttribType::Float3, false }, {1, AttribType::Float4, false}, {2, AttribType::Float2, false}, {3, AttribType::Float, false },  {4, AttribType::Float, false } };
+		VertexLayout layoutsq;		//LAYOUT, DATATYPE, NORMALIZED, ENTITYID
+		layoutsq.m_attribVec = {	{0, AttribType::Float3, false, false	},
+									{1, AttribType::Float4, false, false	},
+									{2, AttribType::Float2, false, false	},
+									{3, AttribType::Float,  false, false	},
+									{4, AttribType::Float,  false, false	},
+									{5, AttribType::Int,    false, true		}
+								};
 		layoutsq.MakeLayout();
 		m_SquareVA->SetLayout(layoutsq);
 		m_SquareVA->BindVertexBuffer();

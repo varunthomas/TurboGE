@@ -109,13 +109,15 @@ namespace TurboGE
             (spec.width != m_ViewportSize.x || spec.height != m_ViewportSize.y))
         {
             std::cout << "Resize " << spec.width << " " << spec.height << " " << m_ViewportSize.x  << m_ViewportSize.y<< "\n";
-            //m_FrameBuffer->SetFrameSpec({ (uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y });
-            //m_Scene->OnResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+            m_FrameBuffer->SetFrameSpec({ (uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y });
+            m_EditorCamera.SetViewportSize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+            m_Scene->OnResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+
         }
 
-        m_Scene->OnResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-        if(m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f)
-            m_EditorCamera.SetViewportSize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+        //m_Scene->OnResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+        //if(m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f)
+            //m_EditorCamera.SetViewportSize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 
         TGE_PROFILE_FUNCTION();
         renderer2DInstance.ResetStats();
@@ -124,6 +126,7 @@ namespace TurboGE
             m_FrameBuffer->Bind();
             m_Renderer->setClearColor();
             m_Renderer->Clear();
+            m_FrameBuffer->ClearEntityAttachment(1, -1);
         }
 #if 0
         {
@@ -183,22 +186,17 @@ namespace TurboGE
             if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
             {
                 int pixelData = m_FrameBuffer->GetPixelData(1, mouseX, mouseY);
-                //std::cout << pixelData << std::endl;
-                //HZ_CORE_WARN("Pixel data = {0}", pixelData);
+                if (pixelData == -1)
+                {
+                    m_ClickedEntity = Entity{};
+                }
+                else
+                {
+                    m_ClickedEntity = Entity{ (entt::entity)pixelData, m_Scene.get()};
+                }
+                std::cout << pixelData << std::endl;
             }
 
-            //glm::vec2 viewPortSize = { m_BoundsArray[1].x - m_BoundsArray[0].x , m_BoundsArray[1].y - m_BoundsArray[0].y };
-            //my = viewPortSize.y - my;
-
-            //if (my >= 0 && my <= viewPortSize.y && mx >= 0 && mx <= viewPortSize.x)
-            //{
-                
-                //int pixelData = m_FrameBuffer->GetPixelData(1, (int)mx, (int)my);
-                //std::cout << pixelData << std::endl;
-            //}
-
-
-            //std::cout << mx << " " << my << std::endl;
 #endif
             m_FrameBuffer->Unbind();
         }
@@ -218,6 +216,17 @@ namespace TurboGE
         if (e.getEventType() == EventType::MouseScrollEvent)
         {
             m_EditorCamera.OnEvent(e);
+        }
+
+        if (e.getEventType() == EventType::MousePressEvent)
+        {
+            //std::cout << "crashing1\n";
+            auto& mousePressEvent = dynamic_cast<MousePressEvent&>(e);
+            if (mousePressEvent.getMouseButton() == (int)MouseCode::ButtonLeft && m_ViewportHovered && !Input::isKeyPressed(Key::LeftAlt) && !ImGuizmo::IsOver())
+            {
+                //std::cout << "crashing\n";
+                entityPanel.SetSelectedEntity(m_ClickedEntity);
+            }
         }
 #if 0
         if(m_ViewportHovered)
@@ -370,27 +379,29 @@ namespace TurboGE
         ImGui::Begin("Editor View");
 
         //READ PIXEL
-        auto viewportMinBound = ImGui::GetWindowContentRegionMin();
-        auto viewportMaxBound = ImGui::GetWindowContentRegionMax();
-        //auto cursor = ImGui::GetCursorPos(); //THIS IS NOT THE MOUSE CURSOR POSITION
-
+        auto viewportMinBound = ImGui::GetWindowContentRegionMin(); //GET LOWEST VIEWPORT PIXEL X AND Y (0 for x and an offset for y because of the option bar
+        auto viewportMaxBound = ImGui::GetWindowContentRegionMax(); //GET HIGHEST VIEWPORT PIXEL OF X AND Y (Y will also include the pixel height of option bar
 
         m_ViewportFocused = ImGui::IsWindowFocused();
         m_ViewportHovered = ImGui::IsWindowHovered();
 
-        ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail(); //PIXEL WIDTH AND HEIGHT OF VIEWPORT
-        auto viewportOffset = ImGui::GetWindowPos(); //TOPLEFT PIXEL CORDINATE WHERE THE VIEWPORT START
+        ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail(); //PIXEL WIDTH AND HEIGHT OF VIEWPORT EXCLUDING HEIGHT OF option BAR
+        auto viewportOffset = ImGui::GetWindowPos(); //GET OFFSET FROM ACTUAL SCREEN COORD TO VIEWPORT COORD TOP LEFT
         m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
         //minBound.x += cursor.x;
         //minBound.y += cursor.y;
         //ImVec2 maxBound = { minBound.x + m_ViewportSize.x, minBound.y + m_ViewportSize.y };
+
+        //BELOW WILL CONVERT VIEWPORT COORD TO FULL SCREEN COORD
         m_BoundsArray[0] = { viewportMinBound.x + viewportOffset.x, viewportMinBound.y + viewportOffset.y };
         m_BoundsArray[1] = { viewportMaxBound.x + viewportOffset.x, viewportMaxBound.y + viewportOffset.y };
-        //std::cout << m_ViewportSize.x << " and " << m_ViewportSize.y << std::endl;
+
+        //std::cout << viewportOffset.x << " mand " << viewportOffset.y << std::endl;
+
+
         //SOME MORE CHANGES PRESENT IN CHERNO WHICH I DONT THINK IS NEEDED HERE
-        ImVec2 aspx = ImGui::GetContentRegionAvail();
         //m_CameraController.onResize(aspx.x, aspx.y);
-        ImGui::Image((void*)textureID, aspx, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+        ImGui::Image((void*)textureID, viewportPanelSize, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 
         //GIZMOS
 

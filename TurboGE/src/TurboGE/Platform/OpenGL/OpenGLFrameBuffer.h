@@ -24,9 +24,12 @@ namespace TurboGE
 		void Unbind() override;
 
 		//void Resize(uint32_t width, uint32_t height) override;
-		void SetFrameSpec(const FrameBufferSpec& fbSpec) override { m_Specification = fbSpec; }
+		void SetFrameSpec(const FrameBufferSpec fbSpec) override;
 		const FrameBufferSpec& GetSpecification() const override { return m_Specification; }
 		uint32_t GetID(uint32_t index = 0) override { return m_ColorAttachment[index]; }
 		int GetPixelData(uint32_t, int, int) override;
+		void ClearEntityAttachment(uint32_t, int) override;
+		void Invalidate();
+		
 	};
 }
