@@ -15,5 +15,6 @@ namespace TurboGE
 		void DrawEntityList(const Entity&);
 		void DrawPropertiesPanel(const Entity&);
 		Entity GetSelectedEntity() { return m_SelectionContext; }
+		void SetSelectedEntity(Entity e) { m_SelectionContext = e; }
 	};
 }

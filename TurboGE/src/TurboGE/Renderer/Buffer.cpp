@@ -32,6 +32,9 @@ namespace TurboGE
 		case AttribType::Float4:
 			size = 4;
 			return 4 * sizeof(float);
+		case AttribType::Int:
+			size = 1;
+			return 1 * sizeof(int);
 		}
 		return 0;
 	}

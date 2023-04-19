@@ -34,6 +34,7 @@ namespace TurboGE
 			glm::vec2 textCoord;
 			float textIndex;
 			float tilingFactor;
+			int entityID;
 		};
 
 		struct Statistics
@@ -72,11 +73,11 @@ namespace TurboGE
 		Statistics GetStats();
 		
 		template<class Position>
-		void DrawQuad(const Position& position, const glm::vec4& color, const glm::vec2& size = {1.0f, 1.0f})
+		void DrawQuad(const Position& position, const glm::vec4& color, const int entityID = -1, const glm::vec2& size = {1.0f, 1.0f})
 		{
 			if constexpr (std::is_same_v<Position, glm::vec2>)
 			{
-				DrawQuad(glm::vec3(position.x, position.y, 0.0f), color, size);
+				DrawQuad(glm::vec3(position.x, position.y, 0.0f), color, entityID, size);
 			}
 			else
 			{
@@ -93,11 +94,11 @@ namespace TurboGE
 				{
 					if constexpr (std::is_same_v<Position, glm::mat4>)
 					{
-						quadVerticesIndexBase[m_Index] = { position * quadVertexPos[i], color, textureCoords[i], textSlot, tilingFactor };
+						quadVerticesIndexBase.at(m_Index) = { position * quadVertexPos[i], color, textureCoords[i], textSlot, tilingFactor, entityID };
 					}
 					else
 					{
-						quadVerticesIndexBase[m_Index] = { position, color, textureCoords[i], textSlot, tilingFactor};
+						quadVerticesIndexBase.at(m_Index) = { position, color, textureCoords[i], textSlot, tilingFactor};
 					}
 					m_Index++;
 				}

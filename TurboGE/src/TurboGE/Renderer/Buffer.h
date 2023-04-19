@@ -4,7 +4,7 @@
 
 namespace TurboGE
 {
-	enum class AttribType { None = 0, Float, Float2, Float3, Float4, vec2, vec3, vec4 };
+	enum class AttribType { None = 0, Float, Float2, Float3, Float4, vec2, vec3, vec4, Int };
 
 	struct VertexAttrib
 	{
@@ -13,10 +13,11 @@ namespace TurboGE
 		int m_size;
 		bool m_normalized;
 		int m_offset = 0; //This is the offset for start of the vertex attribute in bytes
+		bool m_entityID = false;
 
 	public:
-		VertexAttrib(unsigned int index, AttribType type, bool normalized)
-			:m_index{ index }, m_type{ type }, m_normalized{ normalized }
+		VertexAttrib(unsigned int index, AttribType type, bool normalized, bool entityID)
+			:m_index{ index }, m_type{ type }, m_normalized{ normalized }, m_entityID{ entityID }
 		{
 		}
 	};
