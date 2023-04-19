@@ -13,7 +13,6 @@ namespace TurboGE
 
 	void Renderer2D::Init()
 	{
-
 		quadVertexPos[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
 		quadVertexPos[1] = { 0.5f, -0.5f, 0.0f, 1.0f };
 		quadVertexPos[2] = { 0.5f,  0.5f, 0.0f, 1.0f };

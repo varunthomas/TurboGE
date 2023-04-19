@@ -12,7 +12,9 @@
 #include<sstream>
 #include<algorithm>
 #include<memory>
-#include <filesystem>
+#include<filesystem>
+#include<cassert>
 
-#include "TurboGE/Debug/Instrumentor.h"
+#include"TurboGE/Logger.h"
+#include"TurboGE/Debug/Instrumentor.h"
 

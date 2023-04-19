@@ -18,6 +18,7 @@
 #define TURBO_CLIENT_TRC(...) TurboGE::Logger::GetClientLogger()->trace(__VA_ARGS__)
 #define TURBO_CLIENT_INF(...) TurboGE::Logger::GetClientLogger()->info(__VA_ARGS__)
 
+#define TURBO_ASSERT(...) assert((__VA_ARGS__))
 namespace TurboGE
 {
 	class TGE_API Logger

@@ -36,6 +36,7 @@ namespace TurboGE
 			size = 1;
 			return 1 * sizeof(int);
 		}
+		TURBO_ASSERT("Invalid value", 0);
 		return 0;
 	}
 

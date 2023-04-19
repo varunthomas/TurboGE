@@ -17,6 +17,7 @@ namespace TurboGE
 		case AttribType::Float4:	return GL_FLOAT;
 		case AttribType::Int:		return GL_INT;
 		}
+		TURBO_ASSERT("Invalid Attrib type", 0);
 		return 0;
 	}
 
