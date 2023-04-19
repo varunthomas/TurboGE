@@ -2,8 +2,6 @@
 
 #ifdef TGE_WINDOWS
 
-//extern TurboGE::Application* TurboGE::CreateApplication();
-
 int main(int argc, char** argv)
 {
 	TurboGE::Logger::Init();

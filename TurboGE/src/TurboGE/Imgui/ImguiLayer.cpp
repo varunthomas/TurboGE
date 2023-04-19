@@ -11,10 +11,6 @@
 
 namespace TurboGE
 {
-	ImguiLayer::ImguiLayer()
-	{
-        TURBO_CORE_ERR("Constructed\n");
-	}
 
     void ImguiLayer::Begin()
     {
@@ -39,11 +35,6 @@ namespace TurboGE
             glfwMakeContextCurrent(backup_current_context);
         }
     }
-
-	//void ImguiLayer::onUpdate()
-	//{
-		
-	//}
 
 	void ImguiLayer::onAttach()
 	{
@@ -81,11 +72,6 @@ namespace TurboGE
         ImGui_ImplOpenGL3_Init("#version 410");
 	}
 
-	//void ImguiLayer::onEvent(Event& e)
-	//{
-        
-	//}
-
     void ImguiLayer::SetDarkThemeColors()
     {
         auto& colors = ImGui::GetStyle().Colors;
@@ -118,11 +104,4 @@ namespace TurboGE
         colors[ImGuiCol_TitleBgActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
         colors[ImGuiCol_TitleBgCollapsed] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
     }
-
-    ImguiLayer::~ImguiLayer()
-    {
-        TURBO_CORE_ERR("Destroyed\n");
-    }
-
-    
 }

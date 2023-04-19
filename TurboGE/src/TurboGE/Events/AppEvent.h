@@ -7,7 +7,6 @@ namespace TurboGE
 	{
 	public:
 		WindowCloseEvent();
-		//void dispatchEvent(WindowCloseEvent& e, std::function<void(WindowCloseEvent&)>) override;
 		EventType getEventType() override;
 		std::string getString() override;
 

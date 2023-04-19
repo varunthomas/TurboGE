@@ -8,7 +8,6 @@ namespace TurboGE
 	{
 		m_key = key;
 		m_repeat = repeat;
-		TURBO_CORE_ERR("Key pressed");
 	}
 
 	EventType KeyboardPressEvent::getEventType()
@@ -26,7 +25,6 @@ namespace TurboGE
 	KeyboardReleaseEvent::KeyboardReleaseEvent(int key)
 	{
 		m_key = key;
-		TURBO_CORE_ERR("Key Release");
 	}
 
 	EventType KeyboardReleaseEvent::getEventType()
@@ -45,7 +43,6 @@ namespace TurboGE
 	{
 		m_key = key;
 		m_repeat = repeat;
-		//TURBO_CORE_ERR("Key Repeat");
 	}
 
 	EventType KeyboardRepeatEvent::getEventType()
@@ -63,7 +60,6 @@ namespace TurboGE
 	KeyboardTypedEvent::KeyboardTypedEvent(unsigned int key)
 	{
 		m_key = key;
-		TURBO_CORE_ERR("Key Typed");
 	}
 
 	EventType KeyboardTypedEvent::getEventType()

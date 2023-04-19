@@ -13,8 +13,6 @@ namespace TurboGE
 		glm::vec3 m_Position = {0.0f, 0.0f, 0.0f};
 		float m_Rotation = 0.0f;
 	public:
-		//Camera(const glm::mat4& projection)
-			//:m_ProjectionMatrix{ projection } {};
 		~Camera() = default;
 
 		void setPosition(const glm::vec3&);
@@ -34,7 +32,6 @@ namespace TurboGE
 	};
 	class GameCamera
 	{
-	//public:
 		
 	private:
 		glm::mat4 m_Projection;
@@ -51,8 +48,6 @@ namespace TurboGE
 		
 		GameCamera();
 		~GameCamera() = default;
-		//GameCamera(const glm::mat4& projection)
-			//: m_Projection(projection) {}
 
 		const glm::mat4& GetProjection() const { return m_Projection; }
 		void RecalculateProjection();
@@ -76,8 +71,6 @@ namespace TurboGE
 		void SetProjectionType(Projection projection) { m_ProjectionType = projection; RecalculateProjection(); }
 
 	};
-
-
 
 	//EDITOR CAMERA
 
@@ -115,6 +108,6 @@ namespace TurboGE
 		glm::mat4 GetView() { return m_View; }
 		glm::mat4 GetProjection() { return m_Projection; }
 		void RecalculateProjection();
-		~EditorCamera();
+		~EditorCamera() = default;
 	};
 }

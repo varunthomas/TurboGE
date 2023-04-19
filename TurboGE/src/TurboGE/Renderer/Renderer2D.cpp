@@ -56,9 +56,6 @@ namespace TurboGE
 
 		m_WhiteTexture = Texture2D::Create();
 		m_Shader = Shader::Create("assets/shaders/Texture.glsl");
-		
-		//m_Shader->Bind();
-		//m_Shader->SetInt("u_Texture", 0);
 
 		int slots[maxTextures];
 
@@ -93,7 +90,6 @@ namespace TurboGE
 	void Renderer2D::StartScene(const GameCamera& camera, const glm::mat4& transform)
 	{
 		glm::mat4 viewproj = camera.GetProjection() * glm::inverse(transform);
-		//std::cout << glm::to_string(camera.GetProjection()) << std::endl;
 		textureSlot = 1;
 		quadIndexCount = 0;
 		m_Index = 0;
@@ -133,10 +129,5 @@ namespace TurboGE
 	Renderer2D::Statistics Renderer2D::GetStats()
 	{
 		return stats;
-	}
-
-	Renderer2D::~Renderer2D()
-	{
-		std::cout << "Deleted renderer2D\n";
 	}
 }

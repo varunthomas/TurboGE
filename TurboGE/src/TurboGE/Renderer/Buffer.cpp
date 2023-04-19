@@ -44,7 +44,6 @@ namespace TurboGE
 	std::unique_ptr<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
 	{
 		return std::make_unique<OpenGLVertexBuffer>(vertices, size);
-		//return new OpenGLVertexBuffer(vertices, size);
 	}
 
 	std::unique_ptr<VertexBuffer> VertexBuffer::Create(uint32_t size)

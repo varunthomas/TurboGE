@@ -14,7 +14,7 @@ namespace TurboGE
 		Renderer2D& renderer2DInstance = Renderer2D::getInstance();
 	public:
 		Scene() = default;
-		~Scene();
+		~Scene() = default;
 		Entity CreateEntity(std::string_view str = "");
 		void DestroyEntity(entt::entity);
 		void onUpdate(Time& t);

@@ -130,9 +130,7 @@ namespace TurboGE
 		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
 		{
 			m_SelectionContext = {};
-		}
-
-		
+		}	
 
 		if (ImGui::BeginPopupContextWindow(0, 1, false))
 		{
@@ -183,22 +181,10 @@ namespace TurboGE
 			m_SelectionContext = entity;
 		}
 
-		
-
 		if (opened)
 		{
 			ImGui::TreePop();
 		}
-		/*if (opened)
-		{
-			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow;
-			bool opened = ImGui::TreeNodeEx((void*)9817239, flags, tag.c_str());
-			if (opened)
-				ImGui::TreePop();
-			ImGui::TreePop();
-		}*/
-
-		
 	}
 
 	void EntityPanel::DrawPropertiesPanel(const Entity& entity)

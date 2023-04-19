@@ -1,5 +1,4 @@
 #pragma once
-#include<array>
 #include"TurboGE/Renderer/Camera.h"
 #include"TurboGE/Renderer/VertexArray.h"
 #include"TurboGE/Renderer/Buffer.h"
@@ -7,15 +6,13 @@
 #include"TurboGE/Renderer/Texture.h"
 #include"TurboGE/Renderer/SubTexture2D.h"
 
-//WE ARE CREATING STATIC CLASS BECAUSE RENDERERS WILL ONLY HAVE 1 INSTANCE. WE CAN USE OBJECT TO INSTANTIATE RENDERER CLASS BUT WE DONT NEED
-//DIFFERENT INSTANCES
 namespace TurboGE
 {
 
 	class Renderer2D
 	{
 		Renderer2D() = default;
-		~Renderer2D();
+		~Renderer2D() = default;
 		std::unique_ptr<VertexArray> m_SquareVA;
 		std::unique_ptr<Shader> m_Shader;
 		std::shared_ptr<Texture2D> m_WhiteTexture;
@@ -102,9 +99,7 @@ namespace TurboGE
 					}
 					m_Index++;
 				}
-
 				quadIndexCount += 6;
-
 				stats.quadCount++;
 			}
 		}
@@ -126,7 +121,6 @@ namespace TurboGE
 
 				std::shared_ptr<Texture2D> texture = textureClass->getTexture();
 
-				//DIFFERENT LOGIC IN CHERNO
 				if (textures[textureSlot].get() == nullptr || *textures[textureSlot].get() != *texture.get())
 				{
 					textures[textureSlot] = texture;
@@ -166,7 +160,6 @@ namespace TurboGE
 					}
 
 					constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
-					//DIFFERENT LOGIC IN CHERNO
 					if (textures[textureSlot].get() == nullptr || *textures[textureSlot].get() != *textureClass.get())
 					{
 						textures[textureSlot] = textureClass;

@@ -1,5 +1,4 @@
 #pragma once
-#include<memory>
 namespace TurboGE
 {
 	enum class FrameBufferFormat
@@ -24,7 +23,6 @@ namespace TurboGE
 		virtual ~FrameBuffer() = default;
 		virtual void Bind() = 0;
 		virtual void Unbind() = 0;
-		//virtual void Resize(uint32_t width, uint32_t height) = 0;
 		virtual const FrameBufferSpec& GetSpecification() const = 0;
 		virtual void SetFrameSpec(const FrameBufferSpec) = 0;
 		virtual uint32_t GetID(uint32_t index = 0) = 0;

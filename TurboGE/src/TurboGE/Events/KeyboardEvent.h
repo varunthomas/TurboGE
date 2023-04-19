@@ -9,7 +9,6 @@ namespace TurboGE
 		int m_repeat;
 	public:
 		KeyboardPressEvent(int key, int repeat);
-		//void dispatchEvent(KeyboardPressEvent& e, std::function<void(KeyboardPressEvent&)>) override;
 		EventType getEventType() override;
 		std::string getString() override;
 
@@ -22,7 +21,6 @@ namespace TurboGE
 		int m_key;
 	public:
 		KeyboardReleaseEvent(int key);
-		//void dispatchEvent(KeyboardReleaseEvent& e, std::function<void(KeyboardReleaseEvent&)>) override;
 		EventType getEventType() override;
 		inline int getKey() { return m_key; }
 		std::string getString() override;
@@ -34,7 +32,6 @@ namespace TurboGE
 		int m_repeat;
 	public:
 		KeyboardRepeatEvent(int key, int repeat);
-		//void dispatchEvent(KeyboardRepeatEvent& e, std::function<void(KeyboardRepeatEvent&)>) override;
 		EventType getEventType() override;
 		std::string getString() override;
 	};
@@ -44,7 +41,6 @@ namespace TurboGE
 		unsigned int m_key;
 	public:
 		KeyboardTypedEvent(unsigned int key);
-		//void dispatchEvent(KeyboardPressEvent& e, std::function<void(KeyboardPressEvent&)>) override;
 		EventType getEventType() override;
 		inline int getKey() { return m_key; }
 		std::string getString() override;
