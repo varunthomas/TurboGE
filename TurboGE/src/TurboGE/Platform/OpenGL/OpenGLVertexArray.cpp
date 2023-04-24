@@ -2,7 +2,6 @@
 #include"OpenGLVertexArray.h"
 #include"TurboGE/Renderer/Buffer.h"
 #include<glad/glad.h>
-#include"TurboGE/Logger.h"
 
 namespace TurboGE
 {
@@ -17,6 +16,7 @@ namespace TurboGE
 		case AttribType::Float4:	return GL_FLOAT;
 		case AttribType::Int:		return GL_INT;
 		}
+		TURBO_ASSERT("Invalid Attrib type", 0);
 		return 0;
 	}
 
@@ -55,8 +55,6 @@ namespace TurboGE
 		{
 			glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 		}
-		//THIS IS PRESENT IN CHERNO
-		//glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	void OpenGLVertexArray::Bind()

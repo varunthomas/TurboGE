@@ -7,7 +7,7 @@ namespace TurboGE
 	class Renderer
 	{
 	public:
-		virtual ~Renderer() { std::cout << "Deleted renderer\n"; }
+		virtual ~Renderer() = default;
 		virtual void setClearColor() = 0;
 		virtual void Clear() = 0;
 		virtual void Init() = 0;

@@ -20,7 +20,6 @@ namespace TurboGE
 	OpenGLVertexBuffer::~OpenGLVertexBuffer()
 	{
 		glDeleteBuffers(1, &m_RendererID);
-		std::cout << "Deleted vb\n";
 	}
 
 	void OpenGLVertexBuffer::SetBatchData(uint32_t size, const void* data)
@@ -49,18 +48,15 @@ namespace TurboGE
 
 	OpenGLIndexBuffer::~OpenGLIndexBuffer()
 	{
-		std::cout << "Deleted ib\n";
 		glDeleteBuffers(1, &m_RendererID);
 	}
 
 	void OpenGLIndexBuffer::Bind()
 	{
-		std::cout << "Bind ib\n";
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
 	}
 	void OpenGLIndexBuffer::Unbind()
 	{
-		std::cout << "unbind ib\n";
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 

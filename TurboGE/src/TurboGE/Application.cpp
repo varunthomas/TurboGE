@@ -15,10 +15,7 @@ namespace TurboGE
 		m_window = Window::Create();
 		layer = new ImguiLayer() ;
 		layer->onAttach();
-		TURBO_CORE_ERR("Setting callback");
 		m_window->setCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
-		//s = new Example(); //TEMP
-		//s = new Sandbox2D(); //TEMP
 		s = new Editor2D();
 
 	}
@@ -47,7 +44,6 @@ namespace TurboGE
 	}
 	Application::~Application()
 	{
-		std::cout << "Delete application\n";
 		delete s;
 	}
 	void Application::Run()

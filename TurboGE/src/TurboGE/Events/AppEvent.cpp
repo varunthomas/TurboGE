@@ -6,7 +6,6 @@ namespace TurboGE
 {
 	WindowCloseEvent::WindowCloseEvent()
 	{
-		TURBO_CORE_ERR("Closed Window");
 	};
 
 	EventType WindowCloseEvent::getEventType()

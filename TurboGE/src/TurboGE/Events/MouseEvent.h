@@ -8,7 +8,6 @@ namespace TurboGE
 		int m_button;
 	public:
 		MousePressEvent(int);
-		//void dispatchEvent(MousePressEvent& e, std::function<void(MousePressEvent&)>) override;
 		EventType getEventType() override;
 		std::string getString() override;
 		int getMouseButton();
@@ -20,7 +19,6 @@ namespace TurboGE
 		int m_button;
 	public:
 		MouseReleaseEvent(int);
-		//void dispatchEvent(MouseReleaseEvent& e, std::function<void(MouseReleaseEvent&)>) override;
 		EventType getEventType() override;
 		int getMouseButton();
 		std::string getString() override;
@@ -32,7 +30,6 @@ namespace TurboGE
 		float m_yOffset;
 	public:
 		MouseScrollEvent(float, float);
-		//void dispatchEvent(MouseScrollEvent& e, std::function<void(MouseScrollEvent&)>) override;
 		EventType getEventType() override;
 		std::string getString() override;
 		float getXOffset();
@@ -48,7 +45,6 @@ namespace TurboGE
 		MouseMoveEvent(float, float);
 		float getX();
 		float getY();
-		//void dispatchEvent(MouseMoveEvent& e, std::function<void(MouseMoveEvent&)>) override;
 		EventType getEventType() override;
 		std::string getString() override;
 	};

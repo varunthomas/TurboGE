@@ -147,7 +147,7 @@ namespace TurboGE
 		YAML::Node node = YAML::LoadFile(filePath);
 		if (!node["Scene"])
 		{
-			std::cout << "Corrupt file\n";
+			TURBO_ASSERT("Corrupt file",0);
 			return;
 		}
 
@@ -171,7 +171,6 @@ namespace TurboGE
 				if (entity["CameraComponent"])
 				{
 					auto cameraComponent = entity["CameraComponent"];
-					std::cout << "Tag " << tag << std::endl;
 					auto& cc = deserializedEntity.AddComponent<CameraComponent>();
 					cc.primary = cameraComponent["Primary"].as<bool>();
 					cc.camera.SetProjectionType((Projection)cameraComponent["ProjectionType"].as<int>());

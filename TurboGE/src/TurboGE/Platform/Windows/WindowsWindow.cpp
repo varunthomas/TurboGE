@@ -14,27 +14,23 @@ namespace TurboGE
 	std::unique_ptr<Window> TurboGE::Window::Create(WindowProp props)
 	{
 		return std::unique_ptr<Window>{new WindowsWindow(props)};
-		//return new WindowsWindow(props);
 	}
 
 	WindowsWindow::~WindowsWindow()
 	{
-		TURBO_CORE_ERR("Shutting down");
 		shutDown();
 	}
 	void TurboGE::WindowsWindow::Init(WindowProp props)
 	{
-		//m_title = props.title;
 		m_data.height = props.height;
 		m_data.width = props.width;
 		if (!m_Glfw_init)
 		{
 			int success = glfwInit();
-			TURBO_CORE_INF("Value of success is {0} ", success);
 			glfwSetErrorCallback(GLFWErrorCallback);
 			m_Glfw_init = true;
 		}
-		m_window = glfwCreateWindow((int)props.width, (int)props.height, "ABC", nullptr, nullptr);
+		m_window = glfwCreateWindow((int)props.width, (int)props.height, "TURBOGE", nullptr, nullptr);
 		
 		glfwMakeContextCurrent(m_window);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
@@ -49,7 +45,6 @@ namespace TurboGE
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 				WindowCloseEvent event;
 				data.callbackFn(event);
-				TURBO_CORE_ERR("Closed\n");
 			});
 
 		glfwSetWindowSizeCallback(m_window, [](GLFWwindow* window, int width, int height)
@@ -72,9 +67,7 @@ namespace TurboGE
 					case GLFW_PRESS:
 					{
 						KeyboardPressEvent event(key, 0);
-						TURBO_CORE_ERR("Calling callback");
 						data.callbackFn(event);
-						TURBO_CORE_ERR("{0}", key);
 					
 						break;
 					
@@ -101,7 +94,6 @@ namespace TurboGE
 			{
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 				KeyboardTypedEvent event(keycode);
-				TURBO_CORE_ERR("Calling callback");
 				data.callbackFn(event);
 			});
 
@@ -112,7 +104,6 @@ namespace TurboGE
 				{
 					case GLFW_PRESS:
 					{
-						std::cout << "Mouse pressed glfw\n";
 						MousePressEvent event(button);
 						data.callbackFn(event);
 						break;

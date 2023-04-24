@@ -13,7 +13,6 @@ namespace TurboGE
 
 	void Renderer2D::Init()
 	{
-
 		quadVertexPos[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
 		quadVertexPos[1] = { 0.5f, -0.5f, 0.0f, 1.0f };
 		quadVertexPos[2] = { 0.5f,  0.5f, 0.0f, 1.0f };
@@ -84,7 +83,6 @@ namespace TurboGE
 	void Renderer2D::StartScene(const GameCamera& camera, const glm::mat4& transform)
 	{
 		glm::mat4 viewproj = camera.GetProjection() * glm::inverse(transform);
-		//std::cout << glm::to_string(camera.GetProjection()) << std::endl;
 		textureSlot = 1;
 		quadIndexCount = 0;
 		m_Index = 0;
@@ -125,10 +123,5 @@ namespace TurboGE
 	Renderer2D::Statistics Renderer2D::GetStats()
 	{
 		return stats;
-	}
-
-	Renderer2D::~Renderer2D()
-	{
-		std::cout << "Deleted renderer2D\n";
 	}
 }

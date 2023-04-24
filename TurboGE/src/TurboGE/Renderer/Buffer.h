@@ -12,7 +12,7 @@ namespace TurboGE
 		AttribType m_type;
 		int m_size;
 		bool m_normalized;
-		int m_offset = 0; //This is the offset for start of the vertex attribute in bytes
+		int m_offset = 0;
 		bool m_entityID = false;
 
 	public:
@@ -22,11 +22,9 @@ namespace TurboGE
 		}
 	};
 
-	// USED attribVec IN CLASS BECAUSE IF I USE OUTSIDE IN THIS FILE, LINKER ERROR DUE TO ALREADY DEFINED IN .OBJ
-	// WHY NOT DIRECTLY DECLARE IN APPLICATION.CPP? MAYBE VECTOR IS REQUIRED OUTSIDE SCOPE OF APPLICATION.CPP LATER
 	class VertexLayout
 	{
-		int m_stride = 0; //This is the number of bytes for each vertex
+		int m_stride = 0;
 	public:
 		std::vector<VertexAttrib> m_attribVec;
 		int typeToStride(AttribType, int&);

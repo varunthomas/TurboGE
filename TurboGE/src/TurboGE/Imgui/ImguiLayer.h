@@ -3,17 +3,15 @@
 #include"TurboGE/Events/MouseEvent.h"
 #include"TurboGE/Events/KeyboardEvent.h"
 #include"TurboGE/Events/AppEvent.h"
-#include"TurboGE/Logger.h"
 
 namespace TurboGE
 {
 
-	class TGE_API ImguiLayer
+	class ImguiLayer
 	{
 		float m_Time = 0.0f;
 	public:
-		ImguiLayer();
-		//void onUpdate();
+		ImguiLayer() = default;
 		void onAttach();
 		void Begin();
 		void End();
@@ -23,7 +21,7 @@ namespace TurboGE
 
 
 
-		~ImguiLayer();
+		~ImguiLayer() = default;
 	};
 
 }

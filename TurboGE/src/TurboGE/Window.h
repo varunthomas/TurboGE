@@ -1,7 +1,6 @@
 #pragma once
 #include"tgepch.h"
 #include"Core.h"
-//#include<GLFW/glfw3.h>
 #include"Logger.h"
 #include"Events/Event.h"
 namespace TurboGE
@@ -18,7 +17,7 @@ namespace TurboGE
 		}
 	};
 
-	class TGE_API Window
+	class Window
 	{
 	protected:
 		std::string m_title;
@@ -30,7 +29,6 @@ namespace TurboGE
 		}
 		Window(const Window& ref)
 		{
-			TURBO_CORE_TRC("Copy cons called\n");
 		}
 		using CallBackFn = std::function<void(Event&)>;
 		static std::unique_ptr<Window> Create(WindowProp props = WindowProp());

@@ -12,7 +12,6 @@
 #include"TurboGE/Scene/EntityWrapper.h"
 
 #include"Panels/EntityPanel.h"
-//TEMPORARY UNTIL I UNDERSTAND WHY LAYERS ARE USED
 
 namespace TurboGE
 {
@@ -37,10 +36,6 @@ namespace TurboGE
 		bool m_PrimaryCamera = true;
 		EditorCamera m_EditorCamera{1280.0f/720.0f};
 
-
-
-		glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
-
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
 		bool m_ViewportFocused = false;
 		bool m_ViewportHovered = false;
@@ -50,13 +45,6 @@ namespace TurboGE
 		std::unique_ptr<Renderer> m_Renderer;
 		std::unique_ptr<FrameBuffer> m_FrameBuffer;
 
-		//OrthographicCameraController m_CameraController{ 1280.0f / 720.0f };
-		std::shared_ptr<Texture2D> m_CheckTexture;
-		std::shared_ptr<Texture2D> m_SpriteSheet;
-		std::unique_ptr<SubTexture2D> m_SpriteStairs;
-		std::unique_ptr<SubTexture2D> m_SpriteBarrel;
-		std::unique_ptr<SubTexture2D> m_SpriteTree;
-
 	public:
 		Editor2D();
 		void OnAttach();
@@ -64,7 +52,7 @@ namespace TurboGE
 		void renderCustom();
 		void onEvent(Event&);
 		Editor2D* getLayer();
-		~Editor2D();
+		~Editor2D() = default;
 	};
 
 }

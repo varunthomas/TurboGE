@@ -36,6 +36,7 @@ namespace TurboGE
 			size = 1;
 			return 1 * sizeof(int);
 		}
+		TURBO_ASSERT("Invalid value", 0);
 		return 0;
 	}
 
@@ -43,7 +44,6 @@ namespace TurboGE
 	std::unique_ptr<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
 	{
 		return std::make_unique<OpenGLVertexBuffer>(vertices, size);
-		//return new OpenGLVertexBuffer(vertices, size);
 	}
 
 	std::unique_ptr<VertexBuffer> VertexBuffer::Create(uint32_t size)

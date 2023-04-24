@@ -9,7 +9,6 @@
 #include"TurboGE/Scene/SceneSerializer.h"
 #include"TurboGE/Utils/PlatformUtils.h"
 #include"ImGuizmo.h"
-#include<chrono>
 
 namespace TurboGE
 {
@@ -21,103 +20,31 @@ namespace TurboGE
         renderer2DInstance.Init();
 
         OnAttach();
-
     }
 
     void Editor2D::OnAttach()
     {
         m_Scene = std::make_shared<Scene>();
         entityPanel(m_Scene);
-#if 0
-        m_SquareEntity = m_Scene->CreateEntity("Square");
-        m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
-
-        auto redSquare = m_Scene->CreateEntity("Red Square");
-        redSquare.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 0.0f, 0.0f, 1.0f });
-
-        m_Camera = m_Scene->CreateEntity("Camera");
-        m_Camera.AddComponent<CameraComponent>();
-
-        m_SecCamera = m_Scene->CreateEntity("Sec camera");
-        auto& sc = m_SecCamera.AddComponent<CameraComponent>();
-        sc.primary = false;
-
-
-        class CameraController : public ScriptableEntity
-        {
-        public:
-            void OnCreate()
-            {
-                auto& translate = GetComponent<TransformComponent>().translate;
-                translate.x = rand() % 10 - 5.0f;
-            }
-
-            void OnUpdate(Time ts)
-            {
-                float speed = 5.0f;
-                auto& translate = GetComponent<TransformComponent>().translate;
-
-                if (Input::isKeyPressed(Key::Up))
-                {
-                    translate.y += speed * ts;
-                }
-                if (Input::isKeyPressed(Key::Down))
-                {
-                    translate.y -= speed * ts;
-                }
-                if (Input::isKeyPressed(Key::Left))
-                {
-                    translate.x -= speed * ts;
-                }
-                if (Input::isKeyPressed(Key::Right))
-                {
-                    translate.x += speed * ts;
-                }
-
-            }
-
-            void OnDestroy()
-            {
-            }
-        };
-
-        m_Camera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
-        m_SecCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
-#endif
-
 
         FrameBufferSpec fbSpec;
         fbSpec.formats = { FrameBufferFormat::RGBA8, FrameBufferFormat::RED_INT, FrameBufferFormat::DEPTH24_STENCIL8 };
         fbSpec.width = 1280;
         fbSpec.height = 720;
         m_FrameBuffer = FrameBuffer::Create(fbSpec);
-        m_CheckTexture = Texture2D::Create("assets/textures/Checkerboard.png");
-        m_SpriteSheet = Texture2D::Create("assets/textures/RPGpack_sheet_2X.png");
-
-        m_SpriteStairs = SubTexture2D::Create(m_SpriteSheet, { 7,6 }, { 128, 128 }, { 1,1 });
-        m_SpriteBarrel = SubTexture2D::Create(m_SpriteSheet, { 8,2 }, { 128, 128 }, { 1,1 });
-        m_SpriteTree = SubTexture2D::Create(m_SpriteSheet, { 2,1 }, { 128, 128 }, { 1,2 });
     }
 
     void Editor2D::onUpdate(Time delta)
     {
-
-        //FOR THIS TO WORK, WE NEED TO CALL INVALIDATE() ON FRAMEBUFFER WHICH IS BASICALLY SETTING UP BUFFER AGAIN WITH NEW WIDTH AND HEIGHT. THIS CAN
-        //CAUSE LOT OF PERFORMANCE. SO I COMMENTED THIS OUT AND CALLED OnRESIZE() EVERYTIME EVEN WHEN NO RESIZE HAPPENS SO THAT I DONT HAVE TO CALL OPENGL FRAMEBUFFER
         if (FrameBufferSpec spec = m_FrameBuffer->GetSpecification();
             m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && // zero sized framebuffer is invalid
             (spec.width != m_ViewportSize.x || spec.height != m_ViewportSize.y))
         {
-            std::cout << "Resize " << spec.width << " " << spec.height << " " << m_ViewportSize.x  << m_ViewportSize.y<< "\n";
             m_FrameBuffer->SetFrameSpec({ (uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y });
             m_EditorCamera.SetViewportSize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
             m_Scene->OnResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 
         }
-
-        //m_Scene->OnResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-        //if(m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f)
-            //m_EditorCamera.SetViewportSize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 
         TGE_PROFILE_FUNCTION();
         renderer2DInstance.ResetStats();
@@ -128,49 +55,11 @@ namespace TurboGE
             m_Renderer->Clear();
             m_FrameBuffer->ClearEntityAttachment(1, -1);
         }
-#if 0
-        {
-            TGE_PROFILE_SCOPE("Camera Controller");
-            if(m_ViewportFocused)
-                m_CameraController.OnUpdate(delta);
-        }
-#endif
+
         {
             TGE_PROFILE_SCOPE("Draw Render");
-#if 0
-            renderer2DInstance.StartScene(m_CameraController.GetCamera());
-            renderer2DInstance.DrawQuad(glm::vec2(-1.0f, 0.0f), {0.8f, 0.2f, 0.3f, 1.0f}, { 0.8f, 0.8f });
-            renderer2DInstance.DrawQuad(glm::vec2(0.5f, -0.5f), { 0.2f, 0.3f, 0.8f, 1.0f }, { 0.5f, 0.75f });
-            //renderer2DInstance.DrawQuad(glm::vec3(-5.0f, -5.0f, -0.1f), { 20.0f, 20.0f }, m_CheckTexture, 10.0f);
-            //renderer2DInstance.DrawQuad({ 2.0f, 2.0f }, { 10.0f, 10.0f }, m_CheckTexture);
-
-            for (float y = -5.0f; y < 5.0f; y += 0.5f)
-            {
-                for (float x = -5.0f; x < 5.0f; x += 0.5f)
-                {
-                    glm::vec4 color = { (x + 5.0f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f, 0.7f };
-                    renderer2DInstance.DrawQuad(glm::vec2(x, y), color, { 0.45f, 0.45f });
-                }
-            }
-            renderer2DInstance.EndScene();
-#endif
-
-#if 0
-            renderer2DInstance.StartScene(m_CameraController.GetCamera());
-            //renderer2DInstance.DrawQuad({ 0.0f, 0.0f, 0.2f}, { 1.0f, 1.0f }, m_SpriteSheet, 1.0f);
-
-            renderer2DInstance.DrawQuad(glm::vec3( 0.0f, 0.0f, 0.2f), { 1.0f, 1.0f }, m_SpriteStairs, 1.0f);
-            renderer2DInstance.DrawQuad(glm::vec3(1.0f, 0.0f, 0.2f), { 1.0f, 1.0f }, m_SpriteBarrel, 1.0f);
-            renderer2DInstance.DrawQuad(glm::vec3(2.0f, 0.0f, 0.2f), { 1.0f, 2.0f }, m_SpriteTree, 1.0f);
-            renderer2DInstance.EndScene();
-            
-#endif
-
-#if 1
 
             m_EditorCamera.OnUpdate(delta);
-
-            //m_Scene->onUpdate(delta);
             m_Scene->onUpdateEditor(delta, m_EditorCamera);
 
             auto [mx, my] = ImGui::GetMousePos();
@@ -187,7 +76,6 @@ namespace TurboGE
                 m_ClickedEntity = pixelData == -1 ? Entity{} : Entity{ (entt::entity)pixelData, m_Scene.get() };
             }
 
-#endif
             m_FrameBuffer->Unbind();
         }
     }
@@ -198,7 +86,6 @@ namespace TurboGE
         
         if (e.getEventType() == EventType::WindowSizeEvent)
         {
-            std::cout << "Window resized\n";
             auto& winEvent = dynamic_cast<WindowSizeEvent&>(e);
             m_Renderer->setViewPort(winEvent.GetWidth(), winEvent.GetHeight());
         }
@@ -216,10 +103,6 @@ namespace TurboGE
                 entityPanel.SetSelectedEntity(m_ClickedEntity);
             }
         }
-#if 0
-        if(m_ViewportHovered)
-            m_CameraController.onEvent(e);
-#endif
 
         //KEY PRESS
 
@@ -381,10 +264,6 @@ namespace TurboGE
         m_BoundsArray[0] = { viewportMinBound.x + viewportOffset.x, viewportMinBound.y + viewportOffset.y };
         m_BoundsArray[1] = { viewportMaxBound.x + viewportOffset.x, viewportMaxBound.y + viewportOffset.y };
 
-
-
-        //SOME MORE CHANGES PRESENT IN CHERNO WHICH I DONT THINK IS NEEDED HERE
-        //m_CameraController.onResize(aspx.x, aspx.y);
         ImGui::Image((void*)textureID, viewportPanelSize, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 
         //GIZMOS
@@ -396,11 +275,6 @@ namespace TurboGE
 			ImGuizmo::SetDrawlist();
 
             ImGuizmo::SetRect(m_BoundsArray[0].x, m_BoundsArray[0].y, m_BoundsArray[1].x - m_BoundsArray[0].x, m_BoundsArray[1].y - m_BoundsArray[0].y);
-
-            //auto cameraEntity = m_Scene->GetPrimaryCameraEntity();
-            //const auto& camera = cameraEntity.GetComponent<CameraComponent>().camera;
-            //const glm::mat4& cameraProjection = camera.GetProjection();
-            //glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>()());
             
             glm::mat4 cameraProjection = m_EditorCamera.GetProjection();
             glm::mat4 cameraView = m_EditorCamera.GetView();
@@ -479,10 +353,4 @@ namespace TurboGE
     {
         return this;
     }
-
-    Editor2D::~Editor2D()
-    {
-        std::cout << "Dlete Editor2D\n";
-    }
-
 }

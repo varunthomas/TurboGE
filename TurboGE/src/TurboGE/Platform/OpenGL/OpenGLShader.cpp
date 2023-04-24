@@ -97,7 +97,7 @@ namespace TurboGE
 		std::ifstream inf{ path };
 		if (!inf)
 		{
-			TURBO_CORE_ERR("No file found");
+			TURBO_ASSERT("No file found", 0);
 		}
 
 		while (inf)
@@ -133,10 +133,6 @@ namespace TurboGE
 				}
 			}
 		}
-
-
-		std::cout << "V " << vertexSrc << std::endl;
-		std::cout << "f " << fragmentSrc << std::endl;
 	}
 
 	void OpenGLShader::CompileVulkan(const std::vector<std::string>& src)
