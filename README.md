@@ -12,6 +12,12 @@ Recommended version of Visual Studio: 2022
 
 Start by cloning the repository with `git clone --recursive https://github.com/varunthomas/TurboGE`.
 
+<ins>**2. Download and Install Vulkan:**</ins>
+
+Go to Vulkan and download the windows SDK: <br/>
+https://sdk.lunarg.com/sdk/download/latest/windows/vulkan-sdk.exe <br/>
+Install the Vulkan SDK.<br/>
+
 <ins>**2. Generate the solution:**</ins>
 
 1. Run the [GenerateProjects.bat](https://github.com/varunthomas/TurboGE/blob/main/GenerateProjects.bat) file in the root directory. This will run the premake required to build the project. This will also create the Visual Studio solutions file.
