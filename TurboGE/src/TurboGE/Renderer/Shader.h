@@ -11,7 +11,6 @@ namespace TurboGE
 		virtual void Bind() = 0;
 		virtual void Unbind() = 0;
 		static std::unique_ptr<Shader> Create(const std::string&);
-		static std::unique_ptr<Shader> Create(const std::string&, const std::string&);
 
 		virtual void SetMat4(const std::string&, glm::mat4) = 0;
 		virtual void SetFloat4(const std::string&, glm::vec4) = 0;

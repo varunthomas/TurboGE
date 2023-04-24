@@ -36,4 +36,14 @@ namespace TurboGE
 
 	};
 
+	class OpenGLUniformBuffer : public UniformBuffer
+	{
+		uint32_t m_RendererID;
+	public:
+		OpenGLUniformBuffer(uint32_t, uint32_t);
+		~OpenGLUniformBuffer();
+
+		void SetData(const void*, uint32_t, uint32_t offset = 0) override;
+	};
+
 }

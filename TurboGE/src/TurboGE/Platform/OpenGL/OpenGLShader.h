@@ -1,18 +1,34 @@
 #pragma once
 #include"TurboGE/Renderer/Shader.h"
 #include<glm/glm.hpp>
+#include<array>
 
 namespace TurboGE
 {
+	constexpr uint8_t shaderNum = 2; //VERTEX, FRAGMENT
+
 	class OpenGLShader : public Shader
 	{
 		uint32_t m_RendererID;
+		std::string m_Path;
+		
+		std::array < std::vector<uint32_t>, 2> openGLShaderBin;
+		std::array < std::vector<uint32_t>, 2> vulkanShaderBin;
+		std::array<std::string, 2> openGLText;
+
+		std::array<std::string, 2> binFileVulkan{ ".vulkan.vert.bin", ".vulkan.frag.bin" };
+		std::array<std::string, 2> binFileOpenGL{ ".openGL.vert.bin", ".openGL.frag.bin" };
+
+		bool isContentSame(std::ifstream&, std::ifstream&);
+		void parseFile(const std::string&, std::string&, std::string&);
+		bool isBinariesPresent();
+		void CompileVulkan(const std::vector<std::string>&);
+		void CompileOpenGL();
+		void CreateProgram();
 	public:
-		OpenGLShader(const std::string&, const std::string&);
 		OpenGLShader(const std::string&);
 		~OpenGLShader();
-		void parseFile(const std::string&, std::string&, std::string&);
-		void CompileProgram(const std::string&, const std::string&);
+
 		void Bind() override;
 		void Unbind() override;
 

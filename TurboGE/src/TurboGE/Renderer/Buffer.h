@@ -57,4 +57,12 @@ namespace TurboGE
 		
 		static std::shared_ptr<IndexBuffer> Create(unsigned int*, uint32_t);
 	};
+
+	class UniformBuffer
+	{
+	public:
+		virtual ~UniformBuffer() = default;
+		static std::unique_ptr<UniformBuffer> Create(uint32_t, uint32_t);
+		virtual void SetData(const void*, uint32_t, uint32_t offset = 0) = 0;
+	};
 }

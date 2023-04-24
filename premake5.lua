@@ -1,3 +1,5 @@
+include "Deps.lua"
+
 workspace "TurboGE"
 	architecture "x64"
 	startproject "Sandbox"
@@ -8,18 +10,11 @@ workspace "TurboGE"
 		"Release",
 		"Dist"
 	}
+	
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
-IncludeDir = {}
-IncludeDir["GLFW"] = "TurboGE/vendor/GLFW/include"
-IncludeDir["Glad"] = "TurboGE/vendor/Glad/include"
-IncludeDir["Imgui"] = "TurboGE/vendor/imgui"
-IncludeDir["glm"] = "TurboGE/vendor/glm"
-IncludeDir["stb"] = "TurboGE/vendor/stbImage"
-IncludeDir["entt"] = "TurboGE/vendor/entt/include"
-IncludeDir["yamlcpp"] = "TurboGE/vendor/yaml-cpp/include"
-IncludeDir["ImGuizmo"] = "TurboGE/vendor/ImGuizmo"
+
 
 
 
@@ -36,7 +31,7 @@ project "TurboGE"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++20"
-	staticruntime "on"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -72,7 +67,8 @@ project "TurboGE"
 		"%{IncludeDir.stb}",
 		"%{IncludeDir.entt}",
 		"%{IncludeDir.yamlcpp}",
-		"%{IncludeDir.ImGuizmo}"
+		"%{IncludeDir.ImGuizmo}",
+		"%{IncludeDir.VulkanSDK}"
 	}
 	
 	links
@@ -102,16 +98,37 @@ project "TurboGE"
 		defines "TGE_DEBUG"
 		runtime "Debug"
 		symbols "on"
+		
+		links
+		{
+			"%{Lib.ShaderC_Debug}",
+			"%{Lib.SPIRV_Cross_Debug}",
+			"%{Lib.SPIRV_Cross_GLSL_Debug}"
+		}
 
 	filter "configurations:Release"
 		defines "TGE_RELEASE"
 		runtime "Release"
 		optimize "on"
 
+		links
+		{
+			"%{Lib.ShaderC_Release}",
+			"%{Lib.SPIRV_Cross_Release}",
+			"%{Lib.SPIRV_Cross_GLSL_Release}"
+		}
+		
 	filter "configurations:Dist"
 		defines "TGE_DIST"
 		runtime "Release"
 		optimize "on"
+		
+		links
+		{
+			"%{Lib.ShaderC_Release}",
+			"%{Lib.SPIRV_Cross_Release}",
+			"%{Lib.SPIRV_Cross_GLSL_Release}"
+		}
 
 project "Sandbox"
 	location "Sandbox"
@@ -168,7 +185,7 @@ project "Editor"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++20"
-	staticruntime "on"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
