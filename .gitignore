@@ -4,6 +4,8 @@
 bin/
 bin-int/
 Editor/saves
+Editor/assets/shaders/bin
+Editor/assets/shaders/temp
 
 #Files
 **.json

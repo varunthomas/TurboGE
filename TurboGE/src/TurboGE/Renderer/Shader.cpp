@@ -8,10 +8,4 @@ namespace TurboGE
 	{
 		return std::make_unique<OpenGLShader>(path);
 	}
-
-	std::unique_ptr<Shader> Shader::Create(const std::string& vertexSrc, const std::string& fragmentSrc)
-	{
-		return std::make_unique<OpenGLShader>(vertexSrc, fragmentSrc);
-	}
-
 }

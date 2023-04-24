@@ -42,6 +42,14 @@ namespace TurboGE
 
 		Statistics stats;
 
+		struct CameraData
+		{
+			glm::mat4 ViewProjection;
+		};
+
+		CameraData cameraData;
+		std::unique_ptr<UniformBuffer> cameraUB;
+
 		std::vector<QuadVertices> quadVerticesIndexBase;
 		std::array<std::shared_ptr<Texture2D>, maxTextures> textures;
 
