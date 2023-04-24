@@ -156,9 +156,8 @@ namespace TurboGE
 
 			if (result.GetCompilationStatus() != shaderc_compilation_status_success)
 			{
-				std::cout << "Failed to compile\n";
-				std::cout << result.GetErrorMessage() << std::endl;
-				assert(0);
+				std::cout << result.GetErrorMessage() << '\n';
+				TURBO_ASSERT("Failed to compile", 0);
 			}
 
 			vulkanShaderBin[i] = std::vector<uint32_t>(result.cbegin(), result.cend());
@@ -198,8 +197,7 @@ namespace TurboGE
 			shaderc::SpvCompilationResult module = compiler.CompileGlslToSpv(source, (shaderc_shader_kind)i, m_Path.c_str());
 			if (module.GetCompilationStatus() != shaderc_compilation_status_success)
 			{
-				std::cout << "Failed\n";
-				assert(0);
+				TURBO_ASSERT("Failed to compile", 0);
 			}
 
 			openGLShaderBin[i] = std::vector<uint32_t>(module.cbegin(), module.cend());
