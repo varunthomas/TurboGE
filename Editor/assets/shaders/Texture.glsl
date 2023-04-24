@@ -40,7 +40,7 @@ void main()
 layout(location = 0) out vec4 color;
 layout(location = 1) out int color2;
 
-struct VertexOutput
+struct VertexInput
 {
 	vec4 Color;
 	vec2 TextCoord;
@@ -48,7 +48,7 @@ struct VertexOutput
 	float TilingFactor;
 };
 
-layout (location = 0) in VertexOutput Input;
+layout (location = 0) in VertexInput Input;
 layout (location = 4) in flat int v_entityID;
 
 

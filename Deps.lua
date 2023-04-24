@@ -14,7 +14,6 @@ IncludeDir["VulkanSDK"] = "%{VULKAN_SDK}/Include"
 LibDir = {}
 
 LibDir["VulkanSDK"] = "%{VULKAN_SDK}/Lib"
--- LibDir["VulkanSDK_Debug"] = "%{wks.location}/Hazel/vendor/VulkanSDK/Lib"
 
 Lib = {}
 Lib["Vulkan"] = "%{LibDir.VulkanSDK}/vulkan-1.lib"

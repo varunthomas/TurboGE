@@ -57,18 +57,6 @@ namespace TurboGE
 
 		m_WhiteTexture = Texture2D::Create();
 		m_Shader = Shader::Create("assets/shaders/Texture.glsl");
-		
-		//m_Shader->Bind();
-		//m_Shader->SetInt("u_Texture", 0);
-
-		int slots[maxTextures];
-
-		for (uint32_t i = 0; i < maxTextures; i++)
-		{
-			slots[i] = i;
-		}
-		//m_Shader->Bind();
-		//m_Shader->SetIntArray("u_Texture", slots, maxTextures);
 
 		cameraUB = UniformBuffer::Create(sizeof(CameraData), 0);
 
@@ -83,8 +71,6 @@ namespace TurboGE
 		m_Index = 0;
 		cameraData.ViewProjection = camera.GetViewProjection();
 		cameraUB->SetData(&cameraData, sizeof(CameraData));
-		//m_Shader->Bind();
-		//m_Shader->SetMat4("u_ViewProjection", camera.GetViewProjection());
 	}
 	void Renderer2D::StartScene(const Camera& camera)
 	{
@@ -93,8 +79,6 @@ namespace TurboGE
 		m_Index = 0;
 		cameraData.ViewProjection = camera.getViewProjectionMatrix();
 		cameraUB->SetData(&cameraData, sizeof(CameraData));
-		//m_Shader->Bind();
-		//m_Shader->SetMat4("u_ViewProjection", camera.getViewProjectionMatrix());
 	}
 
 	void Renderer2D::StartScene(const GameCamera& camera, const glm::mat4& transform)
