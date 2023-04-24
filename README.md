@@ -18,7 +18,7 @@ Go to Vulkan and download the windows SDK: <br/>
 https://sdk.lunarg.com/sdk/download/latest/windows/vulkan-sdk.exe <br/>
 Install the Vulkan SDK.<br/>
 
-<ins>**2. Generate the solution:**</ins>
+<ins>**3. Generate the solution:**</ins>
 
 1. Run the [GenerateProjects.bat](https://github.com/varunthomas/TurboGE/blob/main/GenerateProjects.bat) file in the root directory. This will run the premake required to build the project. This will also create the Visual Studio solutions file.
 
@@ -33,6 +33,7 @@ Install the Vulkan SDK.<br/>
 - Editor App to change the transforms, sprite and camera at runtime.
 - Orthographic and Perspective camera
 - Free moving camera for editor.
+- Vulkan support using SPIRV
 
 **References:**
 
