@@ -59,8 +59,15 @@ namespace TurboGE
         {
             TGE_PROFILE_SCOPE("Draw Render");
 
-            m_EditorCamera.OnUpdate(delta);
-            m_Scene->onUpdateEditor(delta, m_EditorCamera);
+            if (playPanel.isPlay)
+            {
+                m_EditorCamera.OnUpdate(delta);
+                m_Scene->onUpdateEditor(delta, m_EditorCamera);
+            }
+            else
+            {
+                m_Scene->onUpdatePlay(delta);
+            }
 
             auto [mx, my] = ImGui::GetMousePos();
             mx -= m_BoundsArray[0].x;
@@ -238,6 +245,7 @@ namespace TurboGE
 
         entityPanel.OnImGuiRender();
         browserPanel.OnImGuiRender();
+        playPanel.OnImGuiRender();
 
         uint32_t textureID = m_FrameBuffer->GetID();
         ImGui::Begin("Color settings");

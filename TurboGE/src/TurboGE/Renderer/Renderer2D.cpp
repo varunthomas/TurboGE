@@ -86,8 +86,10 @@ namespace TurboGE
 		textureSlot = 1;
 		quadIndexCount = 0;
 		m_Index = 0;
-		m_Shader->Bind();
-		m_Shader->SetMat4("u_ViewProjection",viewproj);
+		cameraData.ViewProjection = viewproj;
+		cameraUB->SetData(&cameraData, sizeof(CameraData));
+		//m_Shader->Bind();
+		//m_Shader->SetMat4("u_ViewProjection",viewproj);
 	}
 
 	void Renderer2D::EndScene()

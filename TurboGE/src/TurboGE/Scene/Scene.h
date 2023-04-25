@@ -17,7 +17,7 @@ namespace TurboGE
 		~Scene() = default;
 		Entity CreateEntity(std::string_view str = "");
 		void DestroyEntity(entt::entity);
-		void onUpdate(Time& t);
+		void onUpdatePlay(Time& t);
 		void onUpdateEditor(Time&, EditorCamera&);
 		void OnResize(uint32_t, uint32_t);
 		Entity GetPrimaryCameraEntity();

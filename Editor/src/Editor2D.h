@@ -13,6 +13,7 @@
 
 #include"Panels/BrowserPanel.h"
 #include"Panels/EntityPanel.h"
+#include"Panels/PlayPanel.h"
 
 namespace TurboGE
 {
@@ -21,6 +22,7 @@ namespace TurboGE
 		std::shared_ptr<Scene> m_Scene;
 		EntityPanel entityPanel;
 		BrowserPanel browserPanel;
+		PlayPanel playPanel;
 
 		Entity m_ClickedEntity;
 
