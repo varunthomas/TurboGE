@@ -237,6 +237,7 @@ namespace TurboGE
         }
 
         entityPanel.OnImGuiRender();
+        browserPanel.OnImGuiRender();
 
         uint32_t textureID = m_FrameBuffer->GetID();
         ImGui::Begin("Color settings");
@@ -265,6 +266,18 @@ namespace TurboGE
         m_BoundsArray[1] = { viewportMaxBound.x + viewportOffset.x, viewportMaxBound.y + viewportOffset.y };
 
         ImGui::Image((void*)textureID, viewportPanelSize, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+
+        if (ImGui::BeginDragDropTarget())
+        {
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DRAG_DROP"))
+            {
+                
+                const char* path = (const char*)payload->Data;
+                std::string loadFile(path);
+                LoadScene(loadFile);
+            }
+            ImGui::EndDragDropTarget();
+        }
 
         //GIZMOS
 
@@ -325,11 +338,16 @@ namespace TurboGE
         std::optional<std::string> filepath = FileDialogs::OpenFile("Turbo Scene (*.turbo)\0*.turbo\0");
         if (filepath)
         {
-            m_Scene = std::make_shared<Scene>();
-            entityPanel(m_Scene);
-            SceneSerializer deserializer(m_Scene);
-            deserializer.Load(*filepath);
+            LoadScene(*filepath);
         }
+    }
+
+    void Editor2D::LoadScene(const std::string& filePath)
+    {
+        m_Scene = std::make_shared<Scene>();
+        entityPanel(m_Scene);
+        SceneSerializer deserializer(m_Scene);
+        deserializer.Load(filePath);
     }
 
     void Editor2D::SaveScene()

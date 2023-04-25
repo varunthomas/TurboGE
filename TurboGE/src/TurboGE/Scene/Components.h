@@ -1,6 +1,7 @@
 #pragma once
 #include<glm/glm.hpp>
 #include"TurboGE/Renderer/Camera.h"
+#include"TurboGE/Renderer/Texture.h"
 #include"ScriptableEntity.h"
 #include<glm/gtc/matrix_transform.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
@@ -34,6 +35,7 @@ namespace TurboGE
 		std::string name = "SpriteRendererComponent";
 
 		glm::vec4 color{ 1.0f, 1.0f, 1.0f, 1.0f };
+		std::shared_ptr<Texture2D> texture;
 
 		SpriteRendererComponent() = default;
 		SpriteRendererComponent(const SpriteRendererComponent&) = default;

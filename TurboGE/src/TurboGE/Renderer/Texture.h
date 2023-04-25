@@ -19,6 +19,7 @@ namespace TurboGE
 		static std::shared_ptr<Texture2D> Create(const std::string&);
 		static std::shared_ptr<Texture2D> Create();
 		virtual bool operator!=(const Texture2D&) = 0;
+		virtual uint32_t GetID() = 0;
 		virtual uint32_t getHeight() = 0;
 		virtual uint32_t getWidth() = 0;
 	};

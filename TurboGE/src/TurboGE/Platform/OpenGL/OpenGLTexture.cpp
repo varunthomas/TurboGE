@@ -10,7 +10,7 @@ namespace TurboGE
 	{
 		int height, width, channels;
 		GLenum inputFormat = 0, outputFormat = 0;
-		stbi_set_flip_vertically_on_load(1);
+		stbi_set_flip_vertically_on_load(0); //NO FLIPPING AS OPPOSED TO CHERNO
 		stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
 		if (data == nullptr)
 		{
