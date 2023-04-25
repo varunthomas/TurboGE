@@ -80,7 +80,6 @@ namespace TurboGE
 			for (auto entity : group)
 			{
 				auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-				//rendererInstance.DrawQuad<glm::mat4>(transform(), sprite.color);
 				if (sprite.texture == nullptr)
 				{
 					rendererInstance.DrawQuad<glm::mat4>(transform(), sprite.color, (int)entity);

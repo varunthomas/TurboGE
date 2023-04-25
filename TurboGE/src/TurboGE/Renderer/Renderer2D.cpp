@@ -88,8 +88,6 @@ namespace TurboGE
 		m_Index = 0;
 		cameraData.ViewProjection = viewproj;
 		cameraUB->SetData(&cameraData, sizeof(CameraData));
-		//m_Shader->Bind();
-		//m_Shader->SetMat4("u_ViewProjection",viewproj);
 	}
 
 	void Renderer2D::EndScene()
