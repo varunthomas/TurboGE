@@ -27,7 +27,7 @@ namespace TurboGE
 		layoutsq.m_attribVec = {	{0, AttribType::Float3, false, false	},
 									{1, AttribType::Float4, false, false	},
 									{2, AttribType::Float2, false, false	},
-									{3, AttribType::Float,  false, false	},
+									{3, AttribType::Float,	false, false	},
 									{4, AttribType::Float,  false, false	},
 									{5, AttribType::Int,    false, true		}
 								};
@@ -97,7 +97,7 @@ namespace TurboGE
 		uint32_t size = m_Index * sizeof(QuadVertices);
 		m_SquareVB->SetBatchData(size, &quadVerticesIndexBase[0]);
 		
-		for (uint32_t i = 0; i < textureSlot; i++)
+		for (int i = 0; i < textureSlot; i++)
 		{
 			textures[i]->Bind(i);
 		}

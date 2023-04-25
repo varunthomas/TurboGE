@@ -11,6 +11,7 @@
 #include"TurboGE/Renderer/FrameBuffer.h"
 #include"TurboGE/Scene/EntityWrapper.h"
 
+#include"Panels/BrowserPanel.h"
 #include"Panels/EntityPanel.h"
 
 namespace TurboGE
@@ -19,10 +20,12 @@ namespace TurboGE
 	{
 		std::shared_ptr<Scene> m_Scene;
 		EntityPanel entityPanel;
+		BrowserPanel browserPanel;
 
 		Entity m_ClickedEntity;
 
 		void LoadScene();
+		void LoadScene(const std::string&);
 		void NewScene();
 		void SaveScene();
 

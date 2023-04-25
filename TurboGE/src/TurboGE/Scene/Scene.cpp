@@ -31,7 +31,14 @@ namespace TurboGE
 		for (auto entity : group)
 		{
 			auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-			rendererInstance.DrawQuad<glm::mat4>(transform(), sprite.color, (int)entity);
+			if (sprite.texture == nullptr)
+			{
+				rendererInstance.DrawQuad<glm::mat4>(transform(), sprite.color, (int)entity);
+			}
+			else
+			{
+				rendererInstance.DrawQuad<glm::mat4, std::shared_ptr<Texture2D>>(transform(), { transform.scale.x, transform.scale.y }, sprite.texture, 1.0f, (int)entity);
+			}
 		}
 
 		renderer2DInstance.EndScene();

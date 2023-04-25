@@ -273,6 +273,20 @@ namespace TurboGE
 
 		DrawComponentPanel<SpriteRendererComponent>("Sprite renderer", entity, [](auto& component) {
 			ImGui::ColorEdit4("Square color", glm::value_ptr(component.color));
+
+			ImGui::Button("Texture", ImVec2(100.0f, 0.0f));
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DRAG_DROP"))
+				{
+
+					const char* path = (const char*)payload->Data;
+					std::string loadFile(path);
+					component.texture = Texture2D::Create(loadFile);
+
+				}
+				ImGui::EndDragDropTarget();
+			}
 		});
 	}
 }
