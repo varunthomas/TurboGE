@@ -8,6 +8,11 @@
 
 namespace TurboGE
 {
+	Scene::Scene(glm::vec2& viewPortSize)
+	{
+		m_ViewportSize = viewPortSize;
+	}
+
 	Entity Scene::CreateEntity(std::string_view tag)
 	{
 		Entity e{ m_registry.create(), this };
@@ -95,6 +100,8 @@ namespace TurboGE
 
 	void Scene::OnResize(uint32_t width, uint32_t height)
 	{
+		m_ViewportSize.x = width;
+		m_ViewportSize.y = height;
 		auto view = m_registry.view<CameraComponent>();
 		for (auto entity : view)
 		{
@@ -116,4 +123,16 @@ namespace TurboGE
 		}
 		return {};
 	}
+
+	template<typename T>
+	void Scene::OnComponentAdded(T& component)
+	{
+		if constexpr (std::is_same_v<T, CameraComponent>)
+		{
+			component.camera.SetViewPort((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+		}
+	}
+
+	template void Scene::OnComponentAdded<CameraComponent>(CameraComponent& component);
+	template void Scene::OnComponentAdded<SpriteRendererComponent>(SpriteRendererComponent& component);
 }

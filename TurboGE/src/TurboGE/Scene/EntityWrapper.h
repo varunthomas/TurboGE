@@ -28,7 +28,9 @@ namespace TurboGE
 		template<typename T, typename... Args>
 		T& AddComponent(Args&&... args)
 		{
-			return m_Scene->m_registry.emplace<T>(entityID, std::forward<Args>(args)...);
+			T& component = m_Scene->m_registry.emplace<T>(entityID, std::forward<Args>(args)...);
+			m_Scene->OnComponentAdded<T>(component);
+			return component;
 		}
 
 		template<typename T>

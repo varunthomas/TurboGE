@@ -24,7 +24,7 @@ namespace TurboGE
 
     void Editor2D::OnAttach()
     {
-        m_Scene = std::make_shared<Scene>();
+        m_Scene = std::make_shared<Scene>(m_ViewportSize);
         entityPanel(m_Scene);
 
         FrameBufferSpec fbSpec;
@@ -352,10 +352,11 @@ namespace TurboGE
 
     void Editor2D::LoadScene(const std::string& filePath)
     {
-        m_Scene = std::make_shared<Scene>();
+        m_Scene = std::make_shared<Scene>(m_ViewportSize);
         entityPanel(m_Scene);
         SceneSerializer deserializer(m_Scene);
         deserializer.Load(filePath);
+
     }
 
     void Editor2D::SaveScene()
@@ -371,7 +372,7 @@ namespace TurboGE
 
     void Editor2D::NewScene()
     {
-        m_Scene = std::make_shared<Scene>();
+        m_Scene = std::make_shared<Scene>(m_ViewportSize);
         entityPanel(m_Scene);
     }
 

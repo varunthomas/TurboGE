@@ -2,7 +2,6 @@
 #include<glm/glm.hpp>
 #include"TurboGE/Events/Event.h"
 #include"TurboGE/Time.h"
-
 namespace TurboGE
 {
 	class Camera

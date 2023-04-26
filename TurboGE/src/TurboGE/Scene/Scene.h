@@ -12,8 +12,9 @@ namespace TurboGE
 	{
 		entt::registry m_registry;
 		Renderer2D& renderer2DInstance = Renderer2D::getInstance();
+		glm::vec2 m_ViewportSize;
 	public:
-		Scene() = default;
+		Scene(glm::vec2&);
 		~Scene() = default;
 		Entity CreateEntity(std::string_view str = "");
 		void DestroyEntity(entt::entity);
@@ -23,6 +24,9 @@ namespace TurboGE
 		Entity GetPrimaryCameraEntity();
 		bool zoomed = false;
 		float yoffsetScroll;
+
+		template<typename T>
+		void OnComponentAdded(T&);
 
 		friend class Entity;
 		friend class EntityPanel;

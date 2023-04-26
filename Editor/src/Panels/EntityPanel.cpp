@@ -4,7 +4,6 @@
 #include<imgui/misc/cpp/imgui_stdlib.h>
 #include"TurboGE/Scene/Components.h"
 #include<glm/gtc/type_ptr.hpp>
-#include<iostream>
 #include<imgui/imgui_internal.h>
 
 namespace TurboGE
@@ -132,7 +131,7 @@ namespace TurboGE
 			m_SelectionContext = {};
 		}	
 
-		if (ImGui::BeginPopupContextWindow(0, 1, false))
+		if (ImGui::BeginPopupContextWindow(0, 1))
 		{
 			if (ImGui::MenuItem("Create new entity"))
 			{
