@@ -61,12 +61,12 @@ namespace TurboGE
 
             if (playPanel.isPlay)
             {
-                m_EditorCamera.OnUpdate(delta);
-                m_Scene->onUpdateEditor(delta, m_EditorCamera);
+                m_Scene->onUpdatePlay(delta, m_Physics);
             }
             else
             {
-                m_Scene->onUpdatePlay(delta);
+                m_EditorCamera.OnUpdate(delta);
+                m_Scene->onUpdateEditor(delta, m_EditorCamera);
             }
 
             auto [mx, my] = ImGui::GetMousePos();
@@ -245,7 +245,14 @@ namespace TurboGE
 
         entityPanel.OnImGuiRender();
         browserPanel.OnImGuiRender();
-        playPanel.OnImGuiRender();
+        playPanel.OnImGuiRender([&]() {
+            m_Physics = std::make_shared<Physics2D>(m_Scene);
+            }, 
+
+            [&]() {
+                m_Physics->DeleteWorld();
+                LoadScene(m_CurrentSceneFile);
+            });
 
         uint32_t textureID = m_FrameBuffer->GetID();
         ImGui::Begin("Color settings");
@@ -352,6 +359,7 @@ namespace TurboGE
 
     void Editor2D::LoadScene(const std::string& filePath)
     {
+        m_CurrentSceneFile = filePath;
         m_Scene = std::make_shared<Scene>(m_ViewportSize);
         entityPanel(m_Scene);
         SceneSerializer deserializer(m_Scene);

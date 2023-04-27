@@ -7,6 +7,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include<glm/gtx/quaternion.hpp>
 
+
 namespace TurboGE
 {
 	struct TransformComponent
@@ -69,6 +70,34 @@ namespace TurboGE
 
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
+
+	};
+
+	struct Rigidbody2D
+	{
+		std::string name = "Rigidbody2D";
+
+		enum class BodyType {Static = 0, Kinematic, Dynamic };
+		BodyType type = BodyType::Static;
+		bool fixedRotation = false;
+		void* body = nullptr;
+
+		Rigidbody2D() = default;
+		Rigidbody2D(const Rigidbody2D&) = default;
+
+	};
+
+	struct Fixture2D
+	{
+		std::string name = "Fixture2D";
+		glm::vec2 size = { 0.5f, 0.5f };
+		float density = 1.0f;
+		float friction = 0.3f;
+		float restitution = 0.0f;
+		float restitutionThreshold = 0.5f;
+
+		Fixture2D() = default;
+		Fixture2D(const Fixture2D&) = default;
 
 	};
 

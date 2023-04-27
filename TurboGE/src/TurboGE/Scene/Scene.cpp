@@ -49,7 +49,7 @@ namespace TurboGE
 		renderer2DInstance.EndScene();
 	}
 
-	void Scene::onUpdatePlay(Time& t)
+	void Scene::onUpdatePlay(Time& t, std::shared_ptr<Physics2D>& physics)
 	{
 		m_registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
 			{
@@ -79,7 +79,18 @@ namespace TurboGE
 		}
 		if (mainCamera)
 		{
+
+			//PHYSICS
+			auto view = m_registry.view<Rigidbody2D>();
+			for (auto e : view)
+			{
+				physics->UpdatePhysics(t,e);
+			}
+
 			renderer2DInstance.StartScene(*mainCamera, cameraTransform);
+
+
+
 			auto group = m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 			Renderer2D& rendererInstance = Renderer2D::getInstance();
 			for (auto entity : group)
@@ -135,4 +146,6 @@ namespace TurboGE
 
 	template void Scene::OnComponentAdded<CameraComponent>(CameraComponent& component);
 	template void Scene::OnComponentAdded<SpriteRendererComponent>(SpriteRendererComponent& component);
+	template void Scene::OnComponentAdded<Rigidbody2D>(Rigidbody2D& component);
+	template void Scene::OnComponentAdded<Fixture2D>(Fixture2D& component);
 }

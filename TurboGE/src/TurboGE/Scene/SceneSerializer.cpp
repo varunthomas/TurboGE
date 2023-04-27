@@ -49,6 +49,26 @@ namespace YAML {
 			return true;
 		}
 	};
+
+	template<>
+	struct convert<glm::vec2> {
+		static Node encode(const glm::vec2& rhs) {
+			Node node;
+			node.push_back(rhs.x);
+			node.push_back(rhs.y);
+			return node;
+		}
+
+		static bool decode(const Node& node, glm::vec2& rhs) {
+			if (!node.IsSequence() || node.size() != 2) {
+				return false;
+			}
+
+			rhs.x = node[0].as<float>();
+			rhs.y = node[1].as<float>();
+			return true;
+		}
+	};
 }
 
 namespace TurboGE
@@ -63,6 +83,12 @@ namespace TurboGE
 	YAML::Emitter& operator << (YAML::Emitter& out, const glm::vec4& v) {
 		out << YAML::Flow;
 		out << YAML::BeginSeq << v.x << v.y << v.z << v.w << YAML::EndSeq;
+		return out;
+	}
+
+	YAML::Emitter& operator << (YAML::Emitter& out, const glm::vec2& v) {
+		out << YAML::Flow;
+		out << YAML::BeginSeq << v.x << v.y << YAML::EndSeq;
 		return out;
 	}
 
@@ -101,6 +127,20 @@ namespace TurboGE
 			{
 				out << YAML::Key << "Color" << YAML::Value << component->color;
 			}
+			else if constexpr (std::is_same_v<T, Rigidbody2D>)
+			{
+				out << YAML::Key << "Body Type" << YAML::Value << (int)component->type;
+				out << YAML::Key << "Fixed Rotation" << YAML::Value << component->fixedRotation;
+			}
+			else if constexpr (std::is_same_v<T, Fixture2D>)
+			{
+				out << YAML::Key << "Size" << YAML::Value << component->size;
+				out << YAML::Key << "Density" << YAML::Value << component->density;
+				out << YAML::Key << "Friction" << YAML::Value << component->friction;
+				out << YAML::Key << "Restitution" << YAML::Value << component->restitution;
+				out << YAML::Key << "Restitution threshold" << YAML::Value << component->restitutionThreshold;
+			}
+
 			out << YAML::EndMap;
 		}
 	}
@@ -114,6 +154,8 @@ namespace TurboGE
 		ConstructSave<TransformComponent>(out, entity);
 		ConstructSave<CameraComponent>(out, entity);
 		ConstructSave<SpriteRendererComponent>(out, entity);
+		ConstructSave<Rigidbody2D>(out, entity);
+		ConstructSave<Fixture2D>(out, entity);
 
 		out << YAML::EndMap;
 	}
@@ -188,6 +230,27 @@ namespace TurboGE
 					auto& src = deserializedEntity.AddComponent<SpriteRendererComponent>();
 					src.color = spriteRendererComponent["Color"].as<glm::vec4>();
 				}
+
+				if (entity["Rigidbody2D"])
+				{
+					auto rigidbody2D = entity["Rigidbody2D"];
+					auto& src = deserializedEntity.AddComponent<Rigidbody2D>();
+					auto type = rigidbody2D["Body Type"].as<int>();
+					src.type = (Rigidbody2D::BodyType)type;
+					src.fixedRotation = rigidbody2D["Fixed Rotation"].as<bool>();
+				}
+
+				if (entity["Fixture2D"])
+				{
+					auto fixture2D = entity["Fixture2D"];
+					auto& src = deserializedEntity.AddComponent<Fixture2D>();
+					src.size = fixture2D["Size"].as<glm::vec2>();
+					src.density = fixture2D["Density"].as<float>();
+					src.friction = fixture2D["Friction"].as<float>();
+					src.restitution = fixture2D["Restitution"].as<float>();
+					src.restitutionThreshold = fixture2D["Restitution threshold"].as<float>();
+				}
+
 			}
 		}
 	}

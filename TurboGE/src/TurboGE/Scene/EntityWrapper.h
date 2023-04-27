@@ -1,12 +1,15 @@
 #pragma once
 #include"entt.hpp"
 #include"Scene.h"
+
+class b2Body;
 namespace TurboGE
 {
 	class Entity
 	{
 		entt::entity entityID{ entt::null };
 		Scene* m_Scene{};
+		b2Body* m_body = nullptr;
 	public:
 		Entity() = default;
 		Entity(entt::entity entity, Scene* scene)
@@ -62,6 +65,7 @@ namespace TurboGE
 				modifier(component, entity);
 			}
 		}
+
 		operator uint32_t() const
 		{
 			return (uint32_t)entityID;

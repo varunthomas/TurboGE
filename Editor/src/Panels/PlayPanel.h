@@ -8,9 +8,10 @@ namespace TurboGE
 		std::shared_ptr<Texture2D> m_IconPlay;
 		std::shared_ptr<Texture2D> m_IconStop;
 		
+		
 	public:
 		PlayPanel();
-		void OnImGuiRender();
+		void OnImGuiRender(std::function<void()>, std::function<void()>);
 		bool isPlay;
 		~PlayPanel() = default;
 	};
