@@ -5,7 +5,6 @@
 #include"TurboGE/Scene/Components.h"
 #include<glm/gtc/type_ptr.hpp>
 #include<imgui/imgui_internal.h>
-#include<box2d/include/box2d/b2_body.h>
 
 namespace TurboGE
 {

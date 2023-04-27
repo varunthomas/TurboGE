@@ -7,7 +7,6 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include<glm/gtx/quaternion.hpp>
 
-
 namespace TurboGE
 {
 	struct TransformComponent
