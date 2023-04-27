@@ -10,6 +10,7 @@
 #include"TurboGE/Scene/Scene.h"
 #include"TurboGE/Renderer/FrameBuffer.h"
 #include"TurboGE/Scene/EntityWrapper.h"
+#include"TurboGE/Physics2D.h"
 
 #include"Panels/BrowserPanel.h"
 #include"Panels/EntityPanel.h"
@@ -24,12 +25,15 @@ namespace TurboGE
 		BrowserPanel browserPanel;
 		PlayPanel playPanel;
 
+		std::shared_ptr<Physics2D> m_Physics;
+
 		Entity m_ClickedEntity;
 
 		void LoadScene();
 		void LoadScene(const std::string&);
 		void NewScene();
 		void SaveScene();
+		std::string m_CurrentSceneFile;
 
 		int m_TransformGizmo{ -1 };
 		bool m_Snap = false;

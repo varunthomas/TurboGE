@@ -17,3 +17,6 @@
 	path = TurboGE/vendor/imgui
 	url = https://github.com/ocornut/imgui
 	branch = docking
+[submodule "TurboGE/vendor/box2d"]
+	path = TurboGE/vendor/box2d
+	url = https://github.com/varunthomas/box2d

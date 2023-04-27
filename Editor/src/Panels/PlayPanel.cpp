@@ -1,14 +1,16 @@
 #include"tgepch.h"
 #include"PlayPanel.h"
+#include"TurboGE/Scene/Scene.h"
 #include<imgui/imgui.h>
+
 namespace TurboGE
 {
 	PlayPanel::PlayPanel()
-		:m_IconPlay{Texture2D::Create("assets/icons/playIcon.png")}, m_IconStop{Texture2D::Create("assets/icons/stopIcon.png")}, isPlay{true}
+		:m_IconPlay{Texture2D::Create("assets/icons/playIcon.png")}, m_IconStop{Texture2D::Create("assets/icons/stopIcon.png")}, isPlay{false}
 	{
 	}
 
-	void PlayPanel::OnImGuiRender()
+	void PlayPanel::OnImGuiRender(std::function<void()> init, std::function<void()> destroy)
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 2));
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
@@ -22,11 +24,20 @@ namespace TurboGE
 		ImGui::Begin("##toolbar", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
 		float size = ImGui::GetWindowHeight() - 4.0f;
-		std::shared_ptr<Texture2D> icon = isPlay ? m_IconPlay : m_IconStop;
+		std::shared_ptr<Texture2D> icon = isPlay ? m_IconStop : m_IconPlay;
 		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
 		if (ImGui::ImageButton((ImTextureID)icon->GetID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
 		{
-			isPlay = !isPlay;
+			if (isPlay)
+			{
+				destroy();
+				isPlay = false;
+			}
+			else
+			{
+				init();
+				isPlay = true;
+			}
 		}
 		ImGui::PopStyleVar(2);
 		ImGui::PopStyleColor(3);

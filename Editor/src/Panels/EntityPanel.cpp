@@ -161,6 +161,16 @@ namespace TurboGE
 					m_SelectionContext.AddComponent<SpriteRendererComponent>();
 					ImGui::CloseCurrentPopup();
 				}
+				if (ImGui::MenuItem("Rigidbody2D"))
+				{
+					m_SelectionContext.AddComponent<Rigidbody2D>();
+					ImGui::CloseCurrentPopup();
+				}
+				if (ImGui::MenuItem("Fixture2D"))
+				{
+					m_SelectionContext.AddComponent<Fixture2D>();
+					ImGui::CloseCurrentPopup();
+				}
 				ImGui::EndPopup();
 			}
 
@@ -205,6 +215,7 @@ namespace TurboGE
 			DrawVec3Control("Scale", component.scale, 1.0f);
 
 			});
+
 		DrawComponentPanel<CameraComponent>("Camera", entity, [&](auto& component) {
 			auto& cameraComponent = entity.GetComponent<CameraComponent>();
 			auto& camera = cameraComponent.camera;
@@ -287,5 +298,42 @@ namespace TurboGE
 				ImGui::EndDragDropTarget();
 			}
 		});
+
+		DrawComponentPanel<Rigidbody2D>("Rigidbody2D", entity, [](auto& component) {
+
+			std::array<const char*, 3> bodyType{ "Static", "Kinematic", "Dynamic"};
+			const char* currentBodyType = bodyType[static_cast<size_t>(component.type)];
+			if (ImGui::BeginCombo("Projection", currentBodyType))
+			{
+				for (int i = 0; i < 3; i++)
+				{
+					bool isSelected = currentBodyType == bodyType[i];
+					if (ImGui::Selectable(bodyType[i], isSelected))
+					{
+						currentBodyType = bodyType[i];
+						component.type = (Rigidbody2D::BodyType)i;
+					}
+					if (isSelected)
+					{
+						ImGui::SetItemDefaultFocus();
+					}
+
+				}
+				ImGui::EndCombo();
+			}
+
+			ImGui::Checkbox("Fixed rotation", &component.fixedRotation);
+
+			});
+
+		DrawComponentPanel<Fixture2D>("Fixture2D", entity, [](auto& component) {
+
+			ImGui::DragFloat2("Size", glm::value_ptr(component.size));
+			ImGui::DragFloat("Density", &component.density, 0.01f, 0.0f, 1.0f);
+			ImGui::DragFloat("Friction", &component.friction, 0.01f, 0.0f, 1.0f);
+			ImGui::DragFloat("Restitution", &component.restitution, 0.01f, 0.0f, 1.0f);
+			ImGui::DragFloat("Restitution Threshold", &component.restitutionThreshold, 0.01f, 0.0f);
+
+			});
 	}
 }

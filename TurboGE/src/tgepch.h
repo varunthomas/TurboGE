@@ -1,6 +1,7 @@
 #pragma once
 
 #ifdef TGE_WINDOWS
+#define NOMINMAX
 #include<Windows.h>
 #endif
 

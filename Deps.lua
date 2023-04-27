@@ -10,6 +10,7 @@ IncludeDir["entt"] = "TurboGE/vendor/entt/include"
 IncludeDir["yamlcpp"] = "TurboGE/vendor/yaml-cpp/include"
 IncludeDir["ImGuizmo"] = "TurboGE/vendor/ImGuizmo"
 IncludeDir["VulkanSDK"] = "%{VULKAN_SDK}/Include"
+IncludeDir["Box2D"] = "TurboGE/vendor/box2d/include"
 
 LibDir = {}
 

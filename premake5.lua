@@ -23,6 +23,7 @@ group "Dependencies"
 	include "TurboGE/vendor/Glad"
 	include "TurboGE/vendor/imgui"
 	include "TurboGE/vendor/yaml-cpp"
+	include "TurboGE/vendor/box2d"
 group ""
 	
 	
@@ -68,7 +69,8 @@ project "TurboGE"
 		"%{IncludeDir.entt}",
 		"%{IncludeDir.yamlcpp}",
 		"%{IncludeDir.ImGuizmo}",
-		"%{IncludeDir.VulkanSDK}"
+		"%{IncludeDir.VulkanSDK}",
+		"%{IncludeDir.Box2D}"
 	}
 	
 	links
@@ -77,7 +79,8 @@ project "TurboGE"
 		"Glad",
 		"Imgui",
 		"yaml-cpp",
-		"opengl32.lib"
+		"opengl32.lib",
+		"Box2D"
 	}
 	
 	filter "files:TurboGE/vendor/ImGuizmo/**.cpp"
