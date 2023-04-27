@@ -33,7 +33,11 @@ namespace TurboGE
 		void LoadScene(const std::string&);
 		void NewScene();
 		void SaveScene();
+		void SaveScene(const std::string&);
+		void Deserialize();
+		std::string Serialize();
 		std::string m_CurrentSceneFile;
+		std::string tempData = std::string();
 
 		int m_TransformGizmo{ -1 };
 		bool m_Snap = false;

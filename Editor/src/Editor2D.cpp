@@ -124,11 +124,23 @@ namespace TurboGE
             NewScene();
 
         }
-        if (Input::isKeyPressed(Key::LeftControl) && Input::isKeyPressed(Key::S))
+        if (Input::isKeyPressed(Key::LeftControl) && Input::isKeyPressed(Key::LeftAlt) && Input::isKeyPressed(Key::S))
         {
             SaveScene();
 
         }
+        else if (Input::isKeyPressed(Key::LeftControl) && Input::isKeyPressed(Key::S))
+        {
+            if (m_CurrentSceneFile.empty())
+            {
+                SaveScene();
+            }
+            else
+            {
+                SaveScene(m_CurrentSceneFile);
+            }
+        }
+
 
         //GIZMOS
         if (Input::isKeyPressed(Key::G))
@@ -224,9 +236,20 @@ namespace TurboGE
                 {
                     NewScene();
                 }
-                if (ImGui::MenuItem("Save as...", "ctrl+S"))
+                if (ImGui::MenuItem("Save as...", "ctrl+alt+S"))
                 {
                     SaveScene();
+                }
+                else if (ImGui::MenuItem("Save", "ctrl+S"))
+                {
+                    if (m_CurrentSceneFile.empty())
+                    {
+                        SaveScene();
+                    }
+                    else
+                    {
+                        SaveScene(m_CurrentSceneFile);
+                    }
                 }
                 if (ImGui::MenuItem("Open..", "ctrl+O"))
                 {
@@ -245,13 +268,18 @@ namespace TurboGE
 
         entityPanel.OnImGuiRender();
         browserPanel.OnImGuiRender();
+
         playPanel.OnImGuiRender([&]() {
+            //PLAY
+            tempData = Serialize(); //SAVE CURRENT CONFIG
             m_Physics = std::make_shared<Physics2D>(m_Scene);
             }, 
 
             [&]() {
+                //STOP
+                
                 m_Physics->DeleteWorld();
-                LoadScene(m_CurrentSceneFile);
+                Deserialize(); //LOAD CURRENT CONFIG
             });
 
         uint32_t textureID = m_FrameBuffer->GetID();
@@ -371,11 +399,28 @@ namespace TurboGE
     {
 
         std::optional<std::string> filepath = FileDialogs::SaveFile("Turbo Scene (*.turbo)\0*.turbo\0");
-        if (filepath)
-        {
+        if(filepath)
+            SaveScene(*filepath);
+    }
+
+    void Editor2D::SaveScene(const std::string& filePath)
+    {
             SceneSerializer serializer(m_Scene);
-            serializer.Save(*filepath);
-        }
+            serializer.Save(filePath);
+    }
+
+    std::string Editor2D::Serialize()
+    {
+        SceneSerializer serializer(m_Scene);
+        return serializer.Serialize();
+    }
+
+    void Editor2D::Deserialize()
+    {
+        m_Scene = std::make_shared<Scene>(m_ViewportSize);
+        entityPanel(m_Scene);
+        SceneSerializer deserializer(m_Scene);
+        deserializer.Load(tempData, false);
     }
 
     void Editor2D::NewScene()

@@ -160,8 +160,9 @@ namespace TurboGE
 		out << YAML::EndMap;
 	}
 
-	void SceneSerializer::Save(const std::string& filePath)
+	std::string SceneSerializer::Serialize()
 	{
+
 		YAML::Emitter out;
 		out << YAML::BeginMap;
 		out << YAML::Key << "Scene" << YAML::Value << "Untitled";
@@ -169,24 +170,40 @@ namespace TurboGE
 			YAML::BeginSeq;
 
 		m_Scene->m_registry.each([&](auto entityID) {
-			Entity e = { entityID, m_Scene.get()};
+			Entity e = { entityID, m_Scene.get() };
 			if (!e)
 				return;
 
 			SerializeEntities(out, e);
-		});
+			});
 
 		out << YAML::EndSeq;
 		out << YAML::EndMap;
+		std::string tmp = out.c_str();
+		return tmp;
+	}
+
+	void SceneSerializer::Save(const std::string& filePath)
+	{
+		std::string out = Serialize();
 
 		std::ofstream fout(filePath);
 		fout << out.c_str();
 	}
 
-	void SceneSerializer::Load(const std::string& filePath)
+	void SceneSerializer::Load(const std::string& filePath, bool isFile)
 	{
+		YAML::Node node;
+		if(isFile)
+		{
+			node = YAML::LoadFile(filePath);
+			
+		}
+		else
+		{
+			node = YAML::Load(filePath);
+		}
 
-		YAML::Node node = YAML::LoadFile(filePath);
 		if (!node["Scene"])
 		{
 			TURBO_ASSERT("Corrupt file",0);
@@ -254,5 +271,4 @@ namespace TurboGE
 			}
 		}
 	}
-
 }

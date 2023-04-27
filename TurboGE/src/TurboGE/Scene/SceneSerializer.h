@@ -18,8 +18,10 @@ namespace TurboGE
 		SceneSerializer(std::shared_ptr<Scene> scene)
 			:m_Scene{ scene } {};
 		void Save(const std::string&);
-		void Load(const std::string&);
+		void Load(const std::string&, bool isFile = true);
 		void SerializeEntities(YAML::Emitter& out, Entity& entity);
+		std::string Serialize();
+		void Deserialize();
 
 		template<typename T>
 		void ConstructSave(YAML::Emitter& out, Entity& entity);
