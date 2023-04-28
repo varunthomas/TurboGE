@@ -33,7 +33,28 @@ namespace TurboGE
 								};
 		layoutsq.MakeLayout();
 		m_SquareVA->SetLayout(layoutsq);
-		m_SquareVA->BindVertexBuffer();
+		m_SquareVA->BindVertexBuffer(m_SquareVB);
+
+		//CIRCLE
+		
+		m_CircleVA = VertexArray::Create();
+		m_CircleVB = VertexBuffer::Create(maxVertices * sizeof(CircleVertices));
+
+		circleVerticesIndexBase.resize(maxIndices);
+
+		VertexLayout layoutCircle;		//LAYOUT, DATATYPE, NORMALIZED, ENTITYID
+		layoutCircle.m_attribVec = {	{0, AttribType::Float3, false, false	},
+										{1, AttribType::Float3, false, false	},
+										{2, AttribType::Float4, false, false	},
+										{3, AttribType::Float,	false, false	},
+										{4, AttribType::Float,  false, false	},
+										{5, AttribType::Int,    false, true		}
+		};
+		layoutCircle.MakeLayout();
+		m_CircleVA->SetLayout(layoutCircle);
+		m_CircleVA->BindVertexBuffer(m_CircleVB);
+
+		
 
 		uint32_t* indicesSQ = new uint32_t[maxIndices];
 		uint32_t offset = 0;
@@ -52,10 +73,16 @@ namespace TurboGE
 		m_SquareIB = IndexBuffer::Create(indicesSQ, maxIndices * sizeof(uint32_t));
 		m_SquareVA->setIndexBuffer(m_SquareIB);
 
+
+
 		delete[] indicesSQ;
 
+		m_CircleVA->setIndexBuffer(m_SquareIB); //Intentional
+
+
 		m_WhiteTexture = Texture2D::Create();
-		m_Shader = Shader::Create("assets/shaders/Texture.glsl");
+		m_SquareShader = Shader::Create("assets/shaders/Texture.glsl");
+		m_CircleShader = Shader::Create("assets/shaders/Circle.glsl");
 
 		cameraUB = UniformBuffer::Create(sizeof(CameraData), 0);
 
@@ -67,7 +94,9 @@ namespace TurboGE
 	{
 		textureSlot = 1;
 		quadIndexCount = 0;
-		m_Index = 0;
+		circleIndexCount = 0;
+		m_IndexSquare = 0;
+		m_IndexCircle = 0;
 		cameraData.ViewProjection = camera.GetViewProjection();
 		cameraUB->SetData(&cameraData, sizeof(CameraData));
 	}
@@ -75,7 +104,9 @@ namespace TurboGE
 	{
 		textureSlot = 1;
 		quadIndexCount = 0;
-		m_Index = 0;
+		circleIndexCount = 0;
+		m_IndexSquare = 0;
+		m_IndexCircle = 0;
 		cameraData.ViewProjection = camera.getViewProjectionMatrix();
 		cameraUB->SetData(&cameraData, sizeof(CameraData));
 	}
@@ -85,25 +116,40 @@ namespace TurboGE
 		glm::mat4 viewproj = camera.GetProjection() * glm::inverse(transform);
 		textureSlot = 1;
 		quadIndexCount = 0;
-		m_Index = 0;
+		circleIndexCount = 0;
+		m_IndexSquare = 0;
+		m_IndexCircle = 0;
 		cameraData.ViewProjection = viewproj;
 		cameraUB->SetData(&cameraData, sizeof(CameraData));
 	}
 
 	void Renderer2D::EndScene()
 	{
-		if (quadIndexCount == 0)
-			return;
-		uint32_t size = m_Index * sizeof(QuadVertices);
-		m_SquareVB->SetBatchData(size, &quadVerticesIndexBase[0]);
-		
-		for (int i = 0; i < textureSlot; i++)
+		if (quadIndexCount)
 		{
-			textures[i]->Bind(i);
+			uint32_t size = m_IndexSquare * sizeof(QuadVertices);
+			m_SquareVB->SetBatchData(size, &quadVerticesIndexBase[0]);
+
+			for (int i = 0; i < textureSlot; i++)
+			{
+				textures[i]->Bind(i);
+			}
+			m_SquareShader->Bind();
+			m_SquareVA->Bind();
+			m_SquareVA->DrawCommand(quadIndexCount);
+			stats.drawCalls++;
 		}
-		m_Shader->Bind();
-		m_SquareVA->DrawCommand(quadIndexCount);
-		stats.drawCalls++;
+
+		if (circleIndexCount)
+		{
+			uint32_t size = m_IndexCircle * sizeof(CircleVertices);
+			m_CircleVB->SetBatchData(size, &circleVerticesIndexBase[0]);
+
+			m_CircleShader->Bind();
+			m_CircleVA->Bind();
+			m_CircleVA->DrawCommand(circleIndexCount);
+			stats.drawCalls++;
+		}
 		
 	}
 
@@ -111,13 +157,28 @@ namespace TurboGE
 	{
 		textureSlot = 1;
 		quadIndexCount = 0;
-		m_Index = 0;
+		circleIndexCount = 0;
+		m_IndexSquare = 0;
+		m_IndexCircle = 0;
 	}
 	
 
 	void Renderer2D::ResetStats()
 	{
 		memset(&stats, 0, sizeof(Statistics));
+	}
+
+	void Renderer2D::DrawCircle(const glm::mat4& transform, const glm::vec4& color, float thickness, float fade, int entityID)
+	{
+
+		for (size_t i{}; i < 4; i++)
+		{
+			circleVerticesIndexBase.at(m_IndexCircle) = { transform * quadVertexPos[i],  quadVertexPos[i]*2.0f, color, thickness, fade, entityID };
+			m_IndexCircle++;
+		}
+		circleIndexCount += 6;
+		stats.quadCount++;
+
 	}
 
 	Renderer2D::Statistics Renderer2D::GetStats()

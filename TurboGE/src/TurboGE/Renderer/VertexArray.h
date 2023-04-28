@@ -10,7 +10,7 @@ namespace TurboGE
 
 		virtual void SetLayout(VertexLayout&) = 0;
 		virtual VertexLayout& GetLayout() = 0;
-		virtual void BindVertexBuffer() = 0;
+		virtual void BindVertexBuffer(std::shared_ptr<VertexBuffer>&) = 0;
 		virtual void Bind() = 0;
 		virtual void DrawCommand(uint32_t count = 0) = 0;
 

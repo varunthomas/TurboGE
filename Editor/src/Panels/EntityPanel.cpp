@@ -5,7 +5,6 @@
 #include"TurboGE/Scene/Components.h"
 #include<glm/gtc/type_ptr.hpp>
 #include<imgui/imgui_internal.h>
-
 namespace TurboGE
 {
 
@@ -161,6 +160,11 @@ namespace TurboGE
 					m_SelectionContext.AddComponent<SpriteRendererComponent>();
 					ImGui::CloseCurrentPopup();
 				}
+				if (ImGui::MenuItem("Circle Renderer"))
+				{
+					m_SelectionContext.AddComponent<CircleRendererComponent>();
+					ImGui::CloseCurrentPopup();
+				}
 				if (ImGui::MenuItem("Rigidbody2D"))
 				{
 					m_SelectionContext.AddComponent<Rigidbody2D>();
@@ -298,6 +302,13 @@ namespace TurboGE
 				ImGui::EndDragDropTarget();
 			}
 		});
+
+		DrawComponentPanel<CircleRendererComponent>("Circle renderer", entity, [](auto& component) {
+
+			ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
+			ImGui::DragFloat("Thickness", &component.thickness, 0.025f, 0.0f, 1.0f);
+			ImGui::DragFloat("Fade", &component.fade, 0.00025f, 0.0f, 1.0f);
+			});
 
 		DrawComponentPanel<Rigidbody2D>("Rigidbody2D", entity, [](auto& component) {
 

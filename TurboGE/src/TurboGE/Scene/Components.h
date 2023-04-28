@@ -72,6 +72,17 @@ namespace TurboGE
 
 	};
 
+	struct CircleRendererComponent
+	{
+		std::string name = "CircleRendererComponent";
+		glm::vec4 color{ 1.0f, 1.0f, 1.0f, 1.0f };
+		float thickness = 1.0f;
+		float fade = 0.005f;
+
+		CircleRendererComponent() = default;
+		CircleRendererComponent(const CircleRendererComponent&) = default;
+	};
+
 	struct Rigidbody2D
 	{
 		std::string name = "Rigidbody2D";

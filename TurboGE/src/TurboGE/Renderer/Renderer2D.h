@@ -14,10 +14,15 @@ namespace TurboGE
 		Renderer2D() = default;
 		~Renderer2D() = default;
 		std::unique_ptr<VertexArray> m_SquareVA;
-		std::unique_ptr<Shader> m_Shader;
+		std::unique_ptr<Shader> m_SquareShader;
 		std::shared_ptr<Texture2D> m_WhiteTexture;
-		std::unique_ptr<VertexBuffer> m_SquareVB;
+		std::shared_ptr<VertexBuffer> m_SquareVB;
 		std::shared_ptr<IndexBuffer> m_SquareIB;
+
+		std::unique_ptr<VertexArray> m_CircleVA;
+		std::shared_ptr<VertexBuffer> m_CircleVB;
+		std::unique_ptr<Shader> m_CircleShader;
+		std::shared_ptr<IndexBuffer> m_CircleIB;
 
 		const uint32_t maxQuads = 20000;
 		const uint32_t maxIndices = maxQuads * 6;
@@ -31,6 +36,16 @@ namespace TurboGE
 			glm::vec2 textCoord;
 			float textIndex;
 			float tilingFactor;
+			int entityID;
+		};
+
+		struct CircleVertices
+		{
+			glm::vec3 worldPosition;
+			glm::vec3 localPosition;
+			glm::vec4 color;
+			float thickness;
+			float fade;
 			int entityID;
 		};
 
@@ -51,13 +66,17 @@ namespace TurboGE
 		std::unique_ptr<UniformBuffer> cameraUB;
 
 		std::vector<QuadVertices> quadVerticesIndexBase;
+		std::vector<CircleVertices> circleVerticesIndexBase;
 		std::array<std::shared_ptr<Texture2D>, maxTextures> textures;
 
 		uint32_t quadIndexCount = 0;
-		uint32_t m_Index = 0;
+		uint32_t circleIndexCount = 0;
+		uint32_t m_IndexSquare = 0;
+		uint32_t m_IndexCircle = 0;
 		uint32_t textureSlot = 1;
 
 		std::array<glm::vec4, 4> quadVertexPos;
+		std::array<glm::vec4, 4> circleVertexPos;
 
 	public:
 		Renderer2D(const Renderer2D&) = delete;
@@ -76,6 +95,8 @@ namespace TurboGE
 
 		void ResetStats();
 		Statistics GetStats();
+
+		void DrawCircle(const glm::mat4& transform, const glm::vec4& color, float thickness = 1.0f, float fade = 0.005f, int entityID = -1);
 		
 		template<class Position>
 		void DrawQuad(const Position& position, const glm::vec4& color, const int entityID = -1, const glm::vec2& size = {1.0f, 1.0f})
@@ -99,13 +120,13 @@ namespace TurboGE
 				{
 					if constexpr (std::is_same_v<Position, glm::mat4>)
 					{
-						quadVerticesIndexBase.at(m_Index) = { position * quadVertexPos[i], color, textureCoords[i], textSlot, tilingFactor, entityID };
+						quadVerticesIndexBase.at(m_IndexSquare) = { position * quadVertexPos[i], color, textureCoords[i], textSlot, tilingFactor, entityID };
 					}
 					else
 					{
-						quadVerticesIndexBase.at(m_Index) = { position, color, textureCoords[i], textSlot, tilingFactor};
+						quadVerticesIndexBase.at(m_IndexSquare) = { position, color, textureCoords[i], textSlot, tilingFactor};
 					}
-					m_Index++;
+					m_IndexSquare++;
 				}
 				quadIndexCount += 6;
 				stats.quadCount++;
@@ -135,17 +156,17 @@ namespace TurboGE
 				}
 
 
-				quadVerticesIndexBase[m_Index] = { position, color, textCoord[0], (float)textureSlot, tilingFactor, entityID };
-				m_Index++;
+				quadVerticesIndexBase[m_IndexSquare] = { position, color, textCoord[0], (float)textureSlot, tilingFactor, entityID };
+				m_IndexSquare++;
 
-				quadVerticesIndexBase[m_Index] = { { position.x + size.x, position.y, 0.0f }, color, textCoord[1], (float)textureSlot, tilingFactor, entityID };
-				m_Index++;
+				quadVerticesIndexBase[m_IndexSquare] = { { position.x + size.x, position.y, 0.0f }, color, textCoord[1], (float)textureSlot, tilingFactor, entityID };
+				m_IndexSquare++;
 
-				quadVerticesIndexBase[m_Index] = { { position.x + size.x, position.y + size.y, 0.0f }, color, textCoord[2], (float)textureSlot, tilingFactor, entityID };
-				m_Index++;
+				quadVerticesIndexBase[m_IndexSquare] = { { position.x + size.x, position.y + size.y, 0.0f }, color, textCoord[2], (float)textureSlot, tilingFactor, entityID };
+				m_IndexSquare++;
 
-				quadVerticesIndexBase[m_Index] = { { position.x, position.y + size.y, 0.0f }, color, textCoord[3], (float)textureSlot, tilingFactor, entityID };
-				m_Index++;
+				quadVerticesIndexBase[m_IndexSquare] = { { position.x, position.y + size.y, 0.0f }, color, textCoord[3], (float)textureSlot, tilingFactor, entityID };
+				m_IndexSquare++;
 
 
 				textureSlot++;
@@ -178,13 +199,13 @@ namespace TurboGE
 					{
 						if constexpr (std::is_same_v<Position, glm::mat4>)
 						{
-							quadVerticesIndexBase.at(m_Index) = { position * quadVertexPos[i], color, textureCoords[i], (float)textureSlot, tilingFactor, entityID };
+							quadVerticesIndexBase.at(m_IndexSquare) = { position * quadVertexPos[i], color, textureCoords[i], (float)textureSlot, tilingFactor, entityID };
 						}
 						else
 						{
-							quadVerticesIndexBase.at(m_Index) = { position, color, textureCoords[i], (float)textureSlot, tilingFactor, entityID };
+							quadVerticesIndexBase.at(m_IndexSquare) = { position, color, textureCoords[i], (float)textureSlot, tilingFactor, entityID };
 						}
-						m_Index++;
+						m_IndexSquare++;
 					}
 
 					textureSlot++;

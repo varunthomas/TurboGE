@@ -30,19 +30,31 @@ namespace TurboGE
 	void Scene::onUpdateEditor(Time& t, EditorCamera& camera)
 	{
 		renderer2DInstance.StartScene(camera);
-
-		auto group = m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 		Renderer2D& rendererInstance = Renderer2D::getInstance();
-		for (auto entity : group)
+
 		{
-			auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-			if (sprite.texture == nullptr)
+			auto view = m_registry.view<TransformComponent, SpriteRendererComponent>();
+			
+			for (auto entity : view)
 			{
-				rendererInstance.DrawQuad<glm::mat4>(transform(), sprite.color, (int)entity);
+				auto [transform, sprite] = view.get<TransformComponent, SpriteRendererComponent>(entity);
+				if (sprite.texture == nullptr)
+				{
+					rendererInstance.DrawQuad<glm::mat4>(transform(), sprite.color, (int)entity);
+				}
+				else
+				{
+					rendererInstance.DrawQuad<glm::mat4, std::shared_ptr<Texture2D>>(transform(), { transform.scale.x, transform.scale.y }, sprite.texture, 1.0f, (int)entity);
+				}
 			}
-			else
+		}
+		// Draw circles
+		{
+			auto view = m_registry.view<TransformComponent, CircleRendererComponent>();
+			for (auto entity : view)
 			{
-				rendererInstance.DrawQuad<glm::mat4, std::shared_ptr<Texture2D>>(transform(), { transform.scale.x, transform.scale.y }, sprite.texture, 1.0f, (int)entity);
+				auto [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
+				rendererInstance.DrawCircle(transform(), circle.color, circle.thickness, circle.fade, (int)entity);
 			}
 		}
 
@@ -105,6 +117,18 @@ namespace TurboGE
 					rendererInstance.DrawQuad<glm::mat4, std::shared_ptr<Texture2D>>(transform(), { transform.scale.x, transform.scale.y }, sprite.texture, 1.0f, (int)entity);
 				}
 			}
+
+			// Draw circles
+			{
+				auto view = m_registry.view<TransformComponent, CircleRendererComponent>();
+				for (auto entity : view)
+				{
+					auto [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
+
+					rendererInstance.DrawCircle(transform(), circle.color, circle.thickness, circle.fade, (int)entity);
+				}
+			}
+
 			renderer2DInstance.EndScene();
 		}
 	}
@@ -146,6 +170,7 @@ namespace TurboGE
 
 	template void Scene::OnComponentAdded<CameraComponent>(CameraComponent& component);
 	template void Scene::OnComponentAdded<SpriteRendererComponent>(SpriteRendererComponent& component);
+	template void Scene::OnComponentAdded<CircleRendererComponent>(CircleRendererComponent& component);
 	template void Scene::OnComponentAdded<Rigidbody2D>(Rigidbody2D& component);
 	template void Scene::OnComponentAdded<Fixture2D>(Fixture2D& component);
 }
