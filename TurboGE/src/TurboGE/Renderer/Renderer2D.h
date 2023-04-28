@@ -76,7 +76,6 @@ namespace TurboGE
 		uint32_t textureSlot = 1;
 
 		std::array<glm::vec4, 4> quadVertexPos;
-		std::array<glm::vec4, 4> circleVertexPos;
 
 	public:
 		Renderer2D(const Renderer2D&) = delete;

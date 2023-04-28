@@ -73,8 +73,6 @@ namespace TurboGE
 		m_SquareIB = IndexBuffer::Create(indicesSQ, maxIndices * sizeof(uint32_t));
 		m_SquareVA->setIndexBuffer(m_SquareIB);
 
-
-
 		delete[] indicesSQ;
 
 		m_CircleVA->setIndexBuffer(m_SquareIB); //Intentional
