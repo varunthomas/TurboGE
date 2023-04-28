@@ -127,6 +127,12 @@ namespace TurboGE
 			{
 				out << YAML::Key << "Color" << YAML::Value << component->color;
 			}
+			else if constexpr (std::is_same_v<T, CircleRendererComponent>)
+			{
+				out << YAML::Key << "Color" << YAML::Value << component->color;
+				out << YAML::Key << "Thickness" << YAML::Value << component->thickness;
+				out << YAML::Key << "Fade" << YAML::Value << component->fade;
+			}
 			else if constexpr (std::is_same_v<T, Rigidbody2D>)
 			{
 				out << YAML::Key << "Body Type" << YAML::Value << (int)component->type;
@@ -154,6 +160,7 @@ namespace TurboGE
 		ConstructSave<TransformComponent>(out, entity);
 		ConstructSave<CameraComponent>(out, entity);
 		ConstructSave<SpriteRendererComponent>(out, entity);
+		ConstructSave<CircleRendererComponent>(out, entity);
 		ConstructSave<Rigidbody2D>(out, entity);
 		ConstructSave<Fixture2D>(out, entity);
 
@@ -246,6 +253,15 @@ namespace TurboGE
 					auto spriteRendererComponent = entity["SpriteRendererComponent"];
 					auto& src = deserializedEntity.AddComponent<SpriteRendererComponent>();
 					src.color = spriteRendererComponent["Color"].as<glm::vec4>();
+				}
+
+				if (entity["CircleRendererComponent"])
+				{
+					auto circleRendererComponent = entity["CircleRendererComponent"];
+					auto& src = deserializedEntity.AddComponent<CircleRendererComponent>();
+					src.color = circleRendererComponent["Color"].as<glm::vec4>();
+					src.thickness = circleRendererComponent["Thickness"].as<float>();
+					src.fade = circleRendererComponent["Fade"].as<float>();
 				}
 
 				if (entity["Rigidbody2D"])

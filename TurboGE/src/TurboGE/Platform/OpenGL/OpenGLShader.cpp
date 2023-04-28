@@ -40,7 +40,8 @@ namespace TurboGE
 		if (!std::filesystem::exists("assets/shaders/temp"))
 			std::filesystem::create_directories("assets/shaders/temp");
 
-		std::filesystem::path cachedShaderFile= "assets/shaders/temp/cachedShader.glsl";
+		std::string originalFileName = m_Path.substr(m_Path.find_last_of('/') + 1);
+		std::filesystem::path cachedShaderFile= "assets/shaders/temp/" + originalFileName;
 		std::ifstream inCache(cachedShaderFile, std::ios::in | std::ios::binary);
 
 		std::filesystem::path actualShaderFile = m_Path;

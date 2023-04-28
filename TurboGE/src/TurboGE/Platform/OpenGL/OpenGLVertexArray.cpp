@@ -22,12 +22,15 @@ namespace TurboGE
 
 	OpenGLVertexArray::OpenGLVertexArray()
 	{
+		//glCreateVertexArrays(1, &m_RendererID);
 		glGenVertexArrays(1, &m_RendererID);
-		glBindVertexArray(m_RendererID);
 	}
 
-	void OpenGLVertexArray::BindVertexBuffer()
+	void OpenGLVertexArray::BindVertexBuffer(std::shared_ptr<VertexBuffer>& vertexBuffer)
 	{
+		glBindVertexArray(m_RendererID);
+		vertexBuffer->Bind();
+
 		VertexLayout& layout = GetLayout();
 		for (auto& attrib : layout.m_attribVec)
 		{
@@ -60,6 +63,13 @@ namespace TurboGE
 	void OpenGLVertexArray::Bind()
 	{
 		glBindVertexArray(m_RendererID);
+	}
+
+	void OpenGLVertexArray::setIndexBuffer(std::shared_ptr<IndexBuffer>& ib)
+	{
+		glBindVertexArray(m_RendererID);
+		ib->Bind();
+		m_IndexBuffer = ib;
 	}
 
 	OpenGLVertexArray::~OpenGLVertexArray()

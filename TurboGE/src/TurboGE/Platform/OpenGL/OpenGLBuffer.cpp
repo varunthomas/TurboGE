@@ -30,7 +30,7 @@ namespace TurboGE
 
 	void OpenGLVertexBuffer::Bind()
 	{
-		
+		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
 	}
 	void OpenGLVertexBuffer::Unbind()
 	{
@@ -52,7 +52,7 @@ namespace TurboGE
 	}
 
 	void OpenGLIndexBuffer::Bind()
-	{
+	{	
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
 	}
 	void OpenGLIndexBuffer::Unbind()
