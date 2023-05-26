@@ -146,6 +146,15 @@ namespace TurboGE
 				out << YAML::Key << "Restitution" << YAML::Value << component->restitution;
 				out << YAML::Key << "Restitution threshold" << YAML::Value << component->restitutionThreshold;
 			}
+			else if constexpr (std::is_same_v<T, CircleFixture2D>)
+			{
+				out << YAML::Key << "Offset" << YAML::Value << component->offset;
+				out << YAML::Key << "Radius" << YAML::Value << component->radius;
+				out << YAML::Key << "Density" << YAML::Value << component->density;
+				out << YAML::Key << "Friction" << YAML::Value << component->friction;
+				out << YAML::Key << "Restitution" << YAML::Value << component->restitution;
+				out << YAML::Key << "Restitution threshold" << YAML::Value << component->restitutionThreshold;
+			}
 
 			out << YAML::EndMap;
 		}
@@ -163,6 +172,7 @@ namespace TurboGE
 		ConstructSave<CircleRendererComponent>(out, entity);
 		ConstructSave<Rigidbody2D>(out, entity);
 		ConstructSave<Fixture2D>(out, entity);
+		ConstructSave<CircleFixture2D>(out, entity);
 
 		out << YAML::EndMap;
 	}
@@ -282,6 +292,18 @@ namespace TurboGE
 					src.friction = fixture2D["Friction"].as<float>();
 					src.restitution = fixture2D["Restitution"].as<float>();
 					src.restitutionThreshold = fixture2D["Restitution threshold"].as<float>();
+				}
+
+				if (entity["CircleFixture2D"])
+				{
+					auto circleFixture2D = entity["CircleFixture2D"];
+					auto& src = deserializedEntity.AddComponent<CircleFixture2D>();
+					src.offset = circleFixture2D["Offset"].as<glm::vec2>();
+					src.radius = circleFixture2D["Radius"].as<float>();
+					src.density = circleFixture2D["Density"].as<float>();
+					src.friction = circleFixture2D["Friction"].as<float>();
+					src.restitution = circleFixture2D["Restitution"].as<float>();
+					src.restitutionThreshold = circleFixture2D["Restitution threshold"].as<float>();
 				}
 
 			}
