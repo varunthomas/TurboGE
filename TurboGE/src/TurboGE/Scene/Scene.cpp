@@ -129,6 +129,7 @@ namespace TurboGE
 				}
 			}
 
+
 			renderer2DInstance.EndScene();
 		}
 	}
@@ -173,4 +174,5 @@ namespace TurboGE
 	template void Scene::OnComponentAdded<CircleRendererComponent>(CircleRendererComponent& component);
 	template void Scene::OnComponentAdded<Rigidbody2D>(Rigidbody2D& component);
 	template void Scene::OnComponentAdded<Fixture2D>(Fixture2D& component);
+	template void Scene::OnComponentAdded<CircleFixture2D>(CircleFixture2D& component);
 }

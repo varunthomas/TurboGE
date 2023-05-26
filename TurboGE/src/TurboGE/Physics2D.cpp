@@ -4,6 +4,7 @@
 #include"TurboGE/Scene/Scene.h"
 
 #include <box2d/b2_polygon_shape.h>
+#include <box2d/b2_circle_shape.h>
 #include <box2d/b2_fixture.h>
 #include"box2d/b2_body.h"
 #include<box2d/b2_world.h>
@@ -41,7 +42,22 @@ namespace TurboGE
 				fixtureDef.restitutionThreshold = boxComponent.restitutionThreshold;
 				body->CreateFixture(&fixtureDef);
 
-			}	
+			}
+			if (e.HasComponent<CircleFixture2D>())
+			{
+				auto& circleComponent = e.GetComponent<CircleFixture2D>();
+				b2CircleShape dynamicCircle;
+				dynamicCircle.m_p.Set(circleComponent.offset.x, circleComponent.offset.y);
+				dynamicCircle.m_radius = circleComponent.radius;
+				b2FixtureDef fixtureDef;
+				fixtureDef.shape = &dynamicCircle;
+				fixtureDef.density = circleComponent.density;
+				fixtureDef.friction = circleComponent.friction;
+				fixtureDef.restitution = circleComponent.restitution;
+				fixtureDef.restitutionThreshold = circleComponent.restitutionThreshold;
+				body->CreateFixture(&fixtureDef);
+
+			}
 		}
 	}
 
@@ -51,6 +67,7 @@ namespace TurboGE
 		world->Step(timeStep, velocityIterations, positionIterations);
 		Entity e{ entityID, m_Scene.get() };
 		auto& rb = e.GetComponent<Rigidbody2D>();
+
 		b2Body* body = (b2Body*)rb.body;
 		b2Vec2 position = body->GetPosition();
 		auto& transform = e.GetComponent<TransformComponent>();

@@ -111,6 +111,21 @@ namespace TurboGE
 
 	};
 
+	struct CircleFixture2D
+	{
+		std::string name = "CircleFixture2D";
+		glm::vec2 offset = { 0.0f, 0.0f };
+		float radius = 0.5f;
+		float density = 1.0f;
+		float friction = 0.3f;
+		float restitution = 0.0f;
+		float restitutionThreshold = 0.5f;
+
+		CircleFixture2D() = default;
+		CircleFixture2D(const CircleFixture2D&) = default;
+
+	};
+
 	template<typename T>
 	concept FunctionExists = requires(T a)
 	{

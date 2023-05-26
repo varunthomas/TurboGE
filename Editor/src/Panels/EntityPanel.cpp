@@ -175,6 +175,11 @@ namespace TurboGE
 					m_SelectionContext.AddComponent<Fixture2D>();
 					ImGui::CloseCurrentPopup();
 				}
+				if (ImGui::MenuItem("CircleFixture2D"))
+				{
+					m_SelectionContext.AddComponent<CircleFixture2D>();
+					ImGui::CloseCurrentPopup();
+				}
 				ImGui::EndPopup();
 			}
 
@@ -340,6 +345,17 @@ namespace TurboGE
 		DrawComponentPanel<Fixture2D>("Fixture2D", entity, [](auto& component) {
 
 			ImGui::DragFloat2("Size", glm::value_ptr(component.size));
+			ImGui::DragFloat("Density", &component.density, 0.01f, 0.0f, 1.0f);
+			ImGui::DragFloat("Friction", &component.friction, 0.01f, 0.0f, 1.0f);
+			ImGui::DragFloat("Restitution", &component.restitution, 0.01f, 0.0f, 1.0f);
+			ImGui::DragFloat("Restitution Threshold", &component.restitutionThreshold, 0.01f, 0.0f);
+
+			});
+
+		DrawComponentPanel<CircleFixture2D>("CircleFixture2D", entity, [](auto& component) {
+
+			ImGui::DragFloat2("Offset", glm::value_ptr(component.offset));
+			ImGui::DragFloat("Radius", &component.radius);
 			ImGui::DragFloat("Density", &component.density, 0.01f, 0.0f, 1.0f);
 			ImGui::DragFloat("Friction", &component.friction, 0.01f, 0.0f, 1.0f);
 			ImGui::DragFloat("Restitution", &component.restitution, 0.01f, 0.0f, 1.0f);
