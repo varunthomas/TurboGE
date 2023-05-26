@@ -38,7 +38,7 @@ void main()
 #version 450 core
 			
 layout(location = 0) out vec4 color;
-layout(location = 1) out int color2;
+layout(location = 1) out int entityID;
 
 struct VertexInput
 {
@@ -58,5 +58,5 @@ void main()
 {
 	color = texture(u_Textures[int(v_TextIndex)], Input.TextCoord * Input.TilingFactor) * Input.Color;
 	//color = v_Color;
-	color2 = v_entityID;
+	entityID = v_entityID;
 }

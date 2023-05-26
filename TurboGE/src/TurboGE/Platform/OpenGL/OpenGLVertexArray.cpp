@@ -60,6 +60,16 @@ namespace TurboGE
 		}
 	}
 
+	void OpenGLVertexArray::DrawLineCommand(uint32_t count)
+	{
+		glDrawArrays(GL_LINES, 0, count);
+	}
+
+	void OpenGLVertexArray::SetLineWidth(float width)
+	{
+		glLineWidth(width);
+	}
+
 	void OpenGLVertexArray::Bind()
 	{
 		glBindVertexArray(m_RendererID);

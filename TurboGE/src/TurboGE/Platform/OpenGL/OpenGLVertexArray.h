@@ -17,6 +17,8 @@ namespace TurboGE
 		VertexLayout& GetLayout() override { return m_layout; }
 
 		void DrawCommand(uint32_t count = 0) override;
+		void DrawLineCommand(uint32_t count) override;
+		void SetLineWidth(float) override;
 
 		std::shared_ptr<IndexBuffer>& getIndexBuffer() override { return m_IndexBuffer; }
 		void setIndexBuffer(std::shared_ptr<IndexBuffer>&) override;
