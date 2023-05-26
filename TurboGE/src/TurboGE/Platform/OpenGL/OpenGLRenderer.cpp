@@ -32,6 +32,7 @@ namespace TurboGE
 
 		//USED FOR RENDERING OBJECT ABOVE OTHER OBJECT
 		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_LINE_SMOOTH);
 	}
 
 	void OpenGLRenderer::StartScene(const Camera& camera)

@@ -24,6 +24,11 @@ namespace TurboGE
 		std::unique_ptr<Shader> m_CircleShader;
 		std::shared_ptr<IndexBuffer> m_CircleIB;
 
+		std::unique_ptr<VertexArray> m_LineVA;
+		std::shared_ptr<VertexBuffer> m_LineVB;
+		std::unique_ptr<Shader> m_LineShader;
+		std::shared_ptr<IndexBuffer> m_LineIB;
+
 		const uint32_t maxQuads = 20000;
 		const uint32_t maxIndices = maxQuads * 6;
 		const uint32_t maxVertices = maxQuads * 4;
@@ -49,6 +54,13 @@ namespace TurboGE
 			int entityID;
 		};
 
+		struct LineVertices
+		{
+			glm::vec3 position;
+			glm::vec4 color;
+			int entityID;
+		};
+
 		struct Statistics
 		{
 			uint32_t drawCalls = 0;
@@ -67,12 +79,16 @@ namespace TurboGE
 
 		std::vector<QuadVertices> quadVerticesIndexBase;
 		std::vector<CircleVertices> circleVerticesIndexBase;
+		std::vector<LineVertices> lineVerticesIndexBase;
 		std::array<std::shared_ptr<Texture2D>, maxTextures> textures;
 
 		uint32_t quadIndexCount = 0;
 		uint32_t circleIndexCount = 0;
+		uint32_t lineIndexCount = 0;
 		uint32_t m_IndexSquare = 0;
 		uint32_t m_IndexCircle = 0;
+		uint32_t m_IndexLine = 0;
+
 		uint32_t textureSlot = 1;
 
 		std::array<glm::vec4, 4> quadVertexPos;
@@ -94,6 +110,10 @@ namespace TurboGE
 
 		void ResetStats();
 		Statistics GetStats();
+
+		void DrawLine(const glm::vec3& p0, const glm::vec3& p1, const glm::vec4& color, int entityID = -1);
+		void DrawRect(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, int entityID = -1);
+		void DrawRect(const glm::mat4& transform, const glm::vec4& color, int entityID = -1);
 
 		void DrawCircle(const glm::mat4& transform, const glm::vec4& color, float thickness = 1.0f, float fade = 0.005f, int entityID = -1);
 		
