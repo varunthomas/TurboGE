@@ -213,7 +213,6 @@ namespace TurboGE
 		m_IndexLine++;
 		lineVerticesIndexBase.at(m_IndexLine) = { p1, color, entityID };
 		m_IndexLine++;
-
 		lineIndexCount += 2;
 	}
 

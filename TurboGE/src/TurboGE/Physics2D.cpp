@@ -48,7 +48,7 @@ namespace TurboGE
 				auto& circleComponent = e.GetComponent<CircleFixture2D>();
 				b2CircleShape dynamicCircle;
 				dynamicCircle.m_p.Set(circleComponent.offset.x, circleComponent.offset.y);
-				dynamicCircle.m_radius = circleComponent.radius;
+				dynamicCircle.m_radius = transform.scale.x * circleComponent.radius;
 				b2FixtureDef fixtureDef;
 				fixtureDef.shape = &dynamicCircle;
 				fixtureDef.density = circleComponent.density;

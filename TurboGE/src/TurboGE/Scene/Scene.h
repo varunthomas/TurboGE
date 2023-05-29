@@ -14,13 +14,15 @@ namespace TurboGE
 		entt::registry m_registry;
 		Renderer2D& renderer2DInstance = Renderer2D::getInstance();
 		glm::vec2 m_ViewportSize;
+		void DrawRectVisualizer(const entt::entity, const glm::vec3&, const glm::vec3&, const glm::vec3&);
+		void DrawCircleVisualizer(const entt::entity, const glm::vec3&, const glm::vec3&);
 	public:
 		Scene(glm::vec2&);
 		~Scene() = default;
 		Entity CreateEntity(std::string_view str = "");
 		void DestroyEntity(entt::entity);
-		void onUpdatePlay(Time& t, std::shared_ptr<Physics2D>&);
-		void onUpdateEditor(Time&, EditorCamera&);
+		void onUpdatePlay(Time& t, std::shared_ptr<Physics2D>&, bool);
+		void onUpdateEditor(Time&, EditorCamera&, bool);
 		void OnResize(uint32_t, uint32_t);
 		Entity GetPrimaryCameraEntity();
 		bool zoomed = false;
