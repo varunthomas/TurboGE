@@ -61,12 +61,12 @@ namespace TurboGE
 
             if (playPanel.isPlay)
             {
-                m_Scene->onUpdatePlay(delta, m_Physics);
+                m_Scene->onUpdatePlay(delta, m_Physics, m_ShowPhysicsColliders);
             }
             else
             {
                 m_EditorCamera.OnUpdate(delta);
-                m_Scene->onUpdateEditor(delta, m_EditorCamera);
+                m_Scene->onUpdateEditor(delta, m_EditorCamera, m_ShowPhysicsColliders);
             }
 
             auto [mx, my] = ImGui::GetMousePos();
@@ -288,6 +288,10 @@ namespace TurboGE
         ImGui::Text("Quad count: %d", renderer2DInstance.GetStats().quadCount);
 
         ImGui::Separator();
+        ImGui::End();
+
+        ImGui::Begin("Settings");
+        ImGui::Checkbox("Show physics colliders", &m_ShowPhysicsColliders);
         ImGui::End();
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
