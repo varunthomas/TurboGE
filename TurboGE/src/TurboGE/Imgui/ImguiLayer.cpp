@@ -4,7 +4,6 @@
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 #include"ImGuizmo.h"
-#include<iostream>
 #include"TurboGE/Application.h"
 #include<glad/glad.h>
 //#define GLFW_INCLUDE_VULKAN
