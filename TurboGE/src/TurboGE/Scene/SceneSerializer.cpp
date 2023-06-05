@@ -213,8 +213,14 @@ namespace TurboGE
 		YAML::Node node;
 		if(isFile)
 		{
-			node = YAML::LoadFile(filePath);
-			
+			try
+			{
+				node = YAML::LoadFile(filePath);
+			}
+			catch (YAML::ParserException e)
+			{
+				TURBO_CORE_ERR("Failed to read file {0} : {1}", filePath, e.what());
+			}
 		}
 		else
 		{
@@ -223,7 +229,7 @@ namespace TurboGE
 
 		if (!node["Scene"])
 		{
-			TURBO_ASSERT("Corrupt file",0);
+			TURBO_CLIENT_ERR("Corrupt file {0}", filePath);
 			return;
 		}
 
