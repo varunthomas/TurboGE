@@ -140,25 +140,25 @@ namespace TurboGE
             }
         }
 
-            //GIZMOS
-            if (Input::isKeyPressed(Key::G))
-            {
-                m_TransformGizmo = (int)ImGuizmo::OPERATION::TRANSLATE;
-            }
-            else if (Input::isKeyPressed(Key::R))
-            {
-                m_TransformGizmo = (int)ImGuizmo::OPERATION::ROTATE;
-            }
-            else if (Input::isKeyPressed(Key::S)) //TODO::Change S in Zoom
-            {
-                m_TransformGizmo = (int)ImGuizmo::OPERATION::SCALE;
-            }
+        //GIZMOS
+        if (Input::isKeyPressed(Key::G))
+        {
+            m_TransformGizmo = (int)ImGuizmo::OPERATION::TRANSLATE;
+        }
+        else if (Input::isKeyPressed(Key::R))
+        {
+            m_TransformGizmo = (int)ImGuizmo::OPERATION::ROTATE;
+        }
+        else if (Input::isKeyPressed(Key::S)) //TODO::Change S in Zoom
+        {
+            m_TransformGizmo = (int)ImGuizmo::OPERATION::SCALE;
+        }
 
-            //SNAP
-            if (Input::isKeyPressed(Key::LeftControl))
-            {
-                m_Snap = !m_Snap; //TODO:: Disable snap when ctrl+O for opening file
-            }
+        //SNAP
+        if (Input::isKeyPressed(Key::LeftControl))
+        {
+            m_Snap = !m_Snap; //TODO:: Disable snap when ctrl+O for opening file
+        }
 
     }
 
