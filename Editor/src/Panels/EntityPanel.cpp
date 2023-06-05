@@ -150,42 +150,29 @@ namespace TurboGE
 				ImGui::OpenPopup("Add Component");
 			if (ImGui::BeginPopup("Add Component"))
 			{
-				if (ImGui::MenuItem("Camera"))
-				{
-					m_SelectionContext.AddComponent<CameraComponent>();
-					ImGui::CloseCurrentPopup();
-				}
-				if (ImGui::MenuItem("Sprite Renderer"))
-				{
-					m_SelectionContext.AddComponent<SpriteRendererComponent>();
-					ImGui::CloseCurrentPopup();
-				}
-				if (ImGui::MenuItem("Circle Renderer"))
-				{
-					m_SelectionContext.AddComponent<CircleRendererComponent>();
-					ImGui::CloseCurrentPopup();
-				}
-				if (ImGui::MenuItem("Rigidbody2D"))
-				{
-					m_SelectionContext.AddComponent<Rigidbody2D>();
-					ImGui::CloseCurrentPopup();
-				}
-				if (ImGui::MenuItem("Fixture2D"))
-				{
-					m_SelectionContext.AddComponent<Fixture2D>();
-					ImGui::CloseCurrentPopup();
-				}
-				if (ImGui::MenuItem("CircleFixture2D"))
-				{
-					m_SelectionContext.AddComponent<CircleFixture2D>();
-					ImGui::CloseCurrentPopup();
-				}
+				DisplayPopup<CameraComponent>("Camera");
+				DisplayPopup<SpriteRendererComponent>("Sprite Renderer");
+				DisplayPopup<CircleRendererComponent>("Circle Renderer");
+				DisplayPopup<Rigidbody2D>("Rigidbody2D");
+				DisplayPopup<Fixture2D>("Fixture2D");
+				DisplayPopup<CircleFixture2D>("CircleFixture2D");
+
 				ImGui::EndPopup();
 			}
 
 		}
 
 		ImGui::End();
+	}
+
+	template<typename T>
+	void EntityPanel::DisplayPopup(const std::string& name)
+	{
+		if (ImGui::MenuItem(name.c_str()))
+		{
+			m_SelectionContext.AddComponent<T>();
+			ImGui::CloseCurrentPopup();
+		}
 	}
 
 	void EntityPanel::DrawEntityList(const Entity& entity )

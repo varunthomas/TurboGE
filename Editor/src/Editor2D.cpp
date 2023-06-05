@@ -101,7 +101,6 @@ namespace TurboGE
         {
             m_EditorCamera.OnEvent(e);
         }
-
         if (e.getEventType() == EventType::MousePressEvent)
         {
             auto& mousePressEvent = dynamic_cast<MousePressEvent&>(e);
@@ -140,7 +139,6 @@ namespace TurboGE
                 SaveScene(m_CurrentSceneFile);
             }
         }
-
 
         //GIZMOS
         if (Input::isKeyPressed(Key::G))
@@ -230,7 +228,7 @@ namespace TurboGE
         style.WindowMinSize.x = minWinSizeX;
         if (ImGui::BeginMenuBar())
         {
-            if (ImGui::BeginMenu("Options"))
+            if (ImGui::BeginMenu("File"))
             {
                 if (ImGui::MenuItem("New", "ctrl+N"))
                 {
