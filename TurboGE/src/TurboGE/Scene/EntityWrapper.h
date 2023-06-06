@@ -76,6 +76,11 @@ namespace TurboGE
 			return entityID;
 		}
 
+		operator int() const
+		{
+			return (int)entityID;
+		}
+
 		operator bool() const
 		{
 			return entityID != entt::null;

@@ -14,6 +14,8 @@ namespace TurboGE
 		entt::registry m_registry;
 		Renderer2D& renderer2DInstance = Renderer2D::getInstance();
 		glm::vec2 m_ViewportSize;
+		int highlightedEntity = -1;
+
 		void DrawRectVisualizer(const entt::entity, const glm::vec3&, const glm::vec3&, const glm::vec3&);
 		void DrawCircleVisualizer(const entt::entity, const glm::vec3&, const glm::vec3&);
 	public:
@@ -32,6 +34,8 @@ namespace TurboGE
 		void OnComponentAdded(T&);
 
 		static void StartPhysics();
+
+		void HighlightEntity(int entity) { highlightedEntity = entity; }
 
 		friend class Entity;
 		friend class EntityPanel;
