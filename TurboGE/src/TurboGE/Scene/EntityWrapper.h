@@ -1,7 +1,6 @@
 #pragma once
 #include"entt.hpp"
 #include"Scene.h"
-#include<iostream>
 
 class b2Body;
 namespace TurboGE

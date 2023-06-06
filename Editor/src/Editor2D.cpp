@@ -80,7 +80,6 @@ namespace TurboGE
             if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
             {
                 int pixelData = m_FrameBuffer->GetPixelData(1, mouseX, mouseY);
-                
                 m_ClickedEntity = pixelData == -1 ? Entity{} : Entity{ (entt::entity)pixelData, m_Scene.get() };
             }
 
