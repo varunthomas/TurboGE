@@ -243,13 +243,15 @@ namespace TurboGE
 
 				Entity deserializedEntity = m_Scene->CreateEntity(tag);
 
-				auto transformComponent = entity["TransformComponent"];
+				if (entity["TransformComponent"])
+				{
+					auto transformComponent = entity["TransformComponent"];
 
-				auto& tc = deserializedEntity.GetComponent<TransformComponent>();
-				tc.rotate = transformComponent["Rotation"].as<glm::vec3>();
-				tc.scale = transformComponent["Scale"].as<glm::vec3>();
-				tc.translate = transformComponent["Translation"].as<glm::vec3>();
-
+					auto& tc = deserializedEntity.GetComponent<TransformComponent>();
+					tc.rotate = transformComponent["Rotation"].as<glm::vec3>();
+					tc.scale = transformComponent["Scale"].as<glm::vec3>();
+					tc.translate = transformComponent["Translation"].as<glm::vec3>();
+				}
 				if (entity["CameraComponent"])
 				{
 					auto cameraComponent = entity["CameraComponent"];
