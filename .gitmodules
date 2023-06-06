@@ -6,7 +6,7 @@
 	url = https://github.com/g-truc/glm
 [submodule "TurboGE/vendor/yaml-cpp"]
 	path = TurboGE/vendor/yaml-cpp
-	url = https://github.com/jbeder/yaml-cpp
+	url = https://github.com/varunthomas/yaml-cpp
 [submodule "TurboGE/vendor/ImGuizmo"]
 	path = TurboGE/vendor/ImGuizmo
 	url = https://github.com/CedricGuillemet/ImGuizmo
