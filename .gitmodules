@@ -9,7 +9,7 @@
 	url = https://github.com/varunthomas/yaml-cpp
 [submodule "TurboGE/vendor/ImGuizmo"]
 	path = TurboGE/vendor/ImGuizmo
-	url = https://github.com/CedricGuillemet/ImGuizmo
+	url = https://github.com/varunthomas/ImGuizmo
 [submodule "TurboGE/vendor/GLFW"]
 	path = TurboGE/vendor/GLFW
 	url = https://github.com/glfw/glfw
