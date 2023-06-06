@@ -80,6 +80,7 @@ namespace TurboGE
             if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
             {
                 int pixelData = m_FrameBuffer->GetPixelData(1, mouseX, mouseY);
+                
                 m_ClickedEntity = pixelData == -1 ? Entity{} : Entity{ (entt::entity)pixelData, m_Scene.get() };
             }
 
@@ -107,6 +108,7 @@ namespace TurboGE
             if (mousePressEvent.getMouseButton() == (int)MouseCode::ButtonLeft && m_ViewportHovered && !Input::isKeyPressed(Key::LeftAlt) && !ImGuizmo::IsOver())
             {
                 entityPanel.SetSelectedEntity(m_ClickedEntity);
+                m_Scene->HighlightEntity((int)m_ClickedEntity);
             }
         }
 

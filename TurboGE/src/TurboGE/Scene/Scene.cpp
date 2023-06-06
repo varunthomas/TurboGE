@@ -41,6 +41,11 @@ namespace TurboGE
 				if (sprite.texture == nullptr)
 				{
 					rendererInstance.DrawQuad<glm::mat4>(transform(), sprite.color, (int)entity);
+					if (highlightedEntity == (int)entity)
+					{
+						renderer2DInstance.DrawRect(transform(), glm::vec4(1, 0, 0, 1));
+					}
+					
 					if (showCollider)
 					{
 						DrawRectVisualizer(entity, transform.translate, transform.scale, transform.rotate);
@@ -60,6 +65,12 @@ namespace TurboGE
 			{
 				auto [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
 				rendererInstance.DrawCircle(transform(), circle.color, circle.thickness, circle.fade, (int)entity);
+
+				if (highlightedEntity == (int)entity)
+				{
+					renderer2DInstance.DrawRect(transform(), glm::vec4(1, 0, 0, 1));
+				}
+
 				if (showCollider)
 				{
 					DrawCircleVisualizer(entity, transform.translate, transform.scale);
@@ -198,6 +209,7 @@ namespace TurboGE
 			renderer2DInstance.DrawCircle(circleTransform, glm::vec4(0, 1, 0, 1), 0.03f);
 		}
 	}
+
 	template<typename T>
 	void Scene::OnComponentAdded(T& component)
 	{

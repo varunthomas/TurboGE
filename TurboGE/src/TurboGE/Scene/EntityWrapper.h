@@ -1,6 +1,7 @@
 #pragma once
 #include"entt.hpp"
 #include"Scene.h"
+#include<iostream>
 
 class b2Body;
 namespace TurboGE
@@ -74,6 +75,11 @@ namespace TurboGE
 		operator entt::entity() const 
 		{
 			return entityID;
+		}
+
+		operator int() const
+		{
+			return (int)entityID;
 		}
 
 		operator bool() const
