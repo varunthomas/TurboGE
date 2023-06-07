@@ -9,7 +9,6 @@
 #include"TurboGE/Scene/SceneSerializer.h"
 #include"TurboGE/Utils/PlatformUtils.h"
 #include"ImGuizmo.h"
-
 namespace TurboGE
 {
 
@@ -335,7 +334,7 @@ namespace TurboGE
 
             ImGuizmo::SetRect(m_BoundsArray[0].x, m_BoundsArray[0].y, m_BoundsArray[1].x - m_BoundsArray[0].x, m_BoundsArray[1].y - m_BoundsArray[0].y);
             
-            glm::mat4 cameraProjection = m_EditorCamera.GetProjection();
+            const glm::mat4& cameraProjection = m_EditorCamera.GetProjection();
             glm::mat4 cameraView = m_EditorCamera.GetView();
 
             //ENTITY
