@@ -153,23 +153,27 @@ namespace TurboGE
         }
 
         //GIZMOS
-        if (Input::isKeyPressed(Key::G))
-        {
-            m_TransformGizmo = (int)ImGuizmo::OPERATION::TRANSLATE;
-        }
-        else if (Input::isKeyPressed(Key::R))
-        {
-            m_TransformGizmo = (int)ImGuizmo::OPERATION::ROTATE;
-        }
-        else if (Input::isKeyPressed(Key::S)) //TODO::Change S in Zoom
-        {
-            m_TransformGizmo = (int)ImGuizmo::OPERATION::SCALE;
-        }
 
-        //SNAP
-        if (Input::isKeyPressed(Key::LeftControl))
+        if (Input::inputViewPort == Input::InputViewport::EDITOR)
         {
-            m_Snap = !m_Snap; //TODO:: Disable snap when ctrl+O for opening file
+            if (Input::isKeyPressed(Key::G))
+            {
+                m_TransformGizmo = (int)ImGuizmo::OPERATION::TRANSLATE;
+            }
+            else if (Input::isKeyPressed(Key::R))
+            {
+                m_TransformGizmo = (int)ImGuizmo::OPERATION::ROTATE;
+            }
+            else if (Input::isKeyPressed(Key::S)) //TODO::Change S in Zoom
+            {
+                m_TransformGizmo = (int)ImGuizmo::OPERATION::SCALE;
+            }
+
+            //SNAP
+            if (Input::isKeyPressed(Key::LeftControl))
+            {
+                m_Snap = !m_Snap; //TODO:: Disable snap when ctrl+O for opening file
+            }
         }
 
     }
@@ -330,6 +334,10 @@ namespace TurboGE
 
         m_ViewportFocused = ImGui::IsWindowFocused();
         m_ViewportHovered = ImGui::IsWindowHovered();
+
+        m_ViewportFocused == true ? Input::inputViewPort = Input::InputViewport::EDITOR : Input::inputViewPort = Input::InputViewport::PANEL;
+
+        std::cout << " focussed " << m_ViewportFocused << " hovered " << m_ViewportHovered << '\n';
 
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail(); //PIXEL WIDTH AND HEIGHT OF VIEWPORT EXCLUDING HEIGHT OF option BAR
         auto viewportOffset = ImGui::GetWindowPos(); //GET OFFSET FROM ACTUAL SCREEN COORD TO VIEWPORT COORD TOP LEFT
