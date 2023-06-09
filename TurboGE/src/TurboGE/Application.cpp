@@ -70,4 +70,17 @@ namespace TurboGE
 		m_Running = false;
 	}
 
+	void Application::Minimize()
+	{
+		glfwIconifyWindow((GLFWwindow*)GetWindow().GetNativeWindow());
+	}
+
+	void Application::RestoreDown()
+	{
+		glfwSetWindowSize((GLFWwindow*)GetWindow().GetNativeWindow(), 1280, 720);
+	}
+	void Application::RestoreUp()
+	{
+		glfwSetWindowSize((GLFWwindow*)GetWindow().GetNativeWindow(), 1920, 1080);
+	}
 }

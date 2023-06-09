@@ -30,6 +30,9 @@ namespace TurboGE
 		void Run();
 		void OnEvent(Event& e);
 		void Close();
+		void Minimize();
+		void RestoreUp();
+		void RestoreDown();
 	};
 	Application* CreateApplication();
 

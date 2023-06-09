@@ -28,8 +28,8 @@ namespace TurboGE
 
         FrameBufferSpec fbSpec;
         fbSpec.formats = { FrameBufferFormat::RGBA8, FrameBufferFormat::RED_INT, FrameBufferFormat::DEPTH24_STENCIL8 };
-        fbSpec.width = 1280;
-        fbSpec.height = 720;
+        fbSpec.width = 1920;
+        fbSpec.height = 1080;
         m_FrameBuffer = FrameBuffer::Create(fbSpec);
     }
 
@@ -115,8 +115,11 @@ namespace TurboGE
         //SHORTCUTS
         if (Input::isKeyPressed(Key::LeftControl) && Input::isKeyPressed(Key::O))
         {
-            LoadScene();
-            
+            if (m_DialogDone)
+            {
+                m_DialogDone = false;
+                LoadScene();
+            }
         }
         if (Input::isKeyPressed(Key::LeftControl) && Input::isKeyPressed(Key::N))
         {
@@ -125,14 +128,23 @@ namespace TurboGE
         }
         if (Input::isKeyPressed(Key::LeftControl) && Input::isKeyPressed(Key::LeftAlt) && Input::isKeyPressed(Key::S))
         {
-            SaveScene();
+            if (m_DialogDone)
+            {
+                m_DialogDone = false;
+                SaveScene();
+            }
+            
 
         }
         else if (Input::isKeyPressed(Key::LeftControl) && Input::isKeyPressed(Key::S))
         {
             if (m_CurrentSceneFile.empty())
             {
-                SaveScene();
+                if (m_DialogDone)
+                {
+                    m_DialogDone = false;
+                    SaveScene();
+                }
             }
             else
             {
@@ -261,6 +273,23 @@ namespace TurboGE
                 ImGui::EndMenu();
             }
 
+            ImGui::SetCursorPosX(ImGui::GetWindowSize().x - 30 * 3); // Adjust the width and spacing according to your needs
+            if (ImGui::Button("-", ImVec2(30, 0)))
+            {
+                Application::Get().Minimize();
+            }
+            ImGui::SameLine(0, 0);
+            if (ImGui::Button("[ ]", ImVec2(30, 0)))
+            {
+                m_RestoreDown == true ? Application::Get().RestoreDown() : Application::Get().RestoreUp();
+                m_RestoreDown = !m_RestoreDown;
+            }
+            ImGui::SameLine(0, 0);
+            if (ImGui::Button("X", ImVec2(30, 0)))
+            {
+                Application::Get().Close();
+            }
+
             ImGui::EndMenuBar();
         }
 
@@ -383,12 +412,15 @@ namespace TurboGE
         std::optional<std::string> filepath = FileDialogs::OpenFile("Turbo Scene (*.turbo)\0*.turbo\0");
         if (filepath)
         {
+            m_DialogDone = true;
             LoadScene(*filepath);
         }
     }
 
     void Editor2D::LoadScene(const std::string& filePath)
     {
+        if (filePath == "C")
+            return;
         m_CurrentSceneFile = filePath;
         m_Scene = std::make_shared<Scene>(m_ViewportSize);
         entityPanel(m_Scene);
@@ -401,14 +433,19 @@ namespace TurboGE
     {
 
         std::optional<std::string> filepath = FileDialogs::SaveFile("Turbo Scene (*.turbo)\0*.turbo\0");
-        if(filepath)
+        if (filepath)
+        {
+            m_DialogDone = true;
             SaveScene(*filepath);
+        }
     }
 
     void Editor2D::SaveScene(const std::string& filePath)
     {
-            SceneSerializer serializer(m_Scene);
-            serializer.Save(filePath);
+        if (filePath == "C")
+            return;
+        SceneSerializer serializer(m_Scene);
+        serializer.Save(filePath);
     }
 
     std::string Editor2D::Serialize()

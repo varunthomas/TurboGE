@@ -17,7 +17,7 @@ class Sandbox2D
 	TurboGE::Renderer2D& renderer2DInstance = TurboGE::Renderer2D::getInstance();
 	std::unique_ptr<TurboGE::Renderer> m_Renderer;
 
-	TurboGE::OrthographicCameraController m_CameraController{ 1280.0f / 720.0f };
+	TurboGE::OrthographicCameraController m_CameraController{ 1920.0f / 1080.0f };
 	std::shared_ptr<TurboGE::Texture2D> m_CheckTexture;
 	std::shared_ptr<TurboGE::Texture2D> m_SpriteSheet;
 	std::unique_ptr<TurboGE::SubTexture2D> m_SpriteStairs;

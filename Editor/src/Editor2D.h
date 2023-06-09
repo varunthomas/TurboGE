@@ -44,12 +44,15 @@ namespace TurboGE
 
 		bool m_ShowPhysicsColliders = false;
 
+		bool m_DialogDone = true;
+		bool m_RestoreDown = true;
+
 		Entity m_SquareEntity;
 		Entity m_Camera;
 		Entity m_SecCamera;
 
 		bool m_PrimaryCamera = true;
-		EditorCamera m_EditorCamera{1280.0f/720.0f};
+		EditorCamera m_EditorCamera{1920.0f/1080.0f};
 
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
 		bool m_ViewportFocused = false;

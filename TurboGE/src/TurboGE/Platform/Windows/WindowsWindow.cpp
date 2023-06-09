@@ -30,6 +30,10 @@ namespace TurboGE
 			glfwSetErrorCallback(GLFWErrorCallback);
 			m_Glfw_init = true;
 		}
+
+		glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);  // Disable window decorations
+		glfwWindowHint(GLFW_AUTO_ICONIFY, GLFW_FALSE);
+		
 		m_window = glfwCreateWindow((int)props.width, (int)props.height, "TURBOGE", nullptr, nullptr);
 		
 		glfwMakeContextCurrent(m_window);
