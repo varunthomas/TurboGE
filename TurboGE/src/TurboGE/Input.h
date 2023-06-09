@@ -7,6 +7,15 @@ namespace TurboGE
 	class Input
 	{
 	public:
+
+		enum class InputViewport
+		{
+			EDITOR = 1,
+			PANEL
+		};
+
+		static inline InputViewport inputViewPort = InputViewport::EDITOR;
+
 		static bool isKeyPressed(Key);
 		
 		static bool isMouseButtonPressed(MouseCode button);
