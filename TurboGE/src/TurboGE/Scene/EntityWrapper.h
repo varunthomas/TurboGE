@@ -1,6 +1,7 @@
 #pragma once
 #include"entt.hpp"
 #include"Scene.h"
+#include"TurboGE/Logger.h"
 
 class b2Body;
 namespace TurboGE
@@ -31,6 +32,11 @@ namespace TurboGE
 		template<typename T, typename... Args>
 		T& AddComponent(Args&&... args)
 		{
+			if (T* component = HasComponent<T>(); component != nullptr)
+			{
+				TURBO_CLIENT_ERR("Component already exists");
+				return *component;
+			}
 			T& component = m_Scene->m_registry.emplace<T>(entityID, std::forward<Args>(args)...);
 			m_Scene->OnComponentAdded<T>(component);
 			return component;
