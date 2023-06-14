@@ -1,4 +1,5 @@
 VULKAN_SDK = os.getenv("VULKAN_SDK")
+PYTHON_PATH = os.getenv("Python")
 
 IncludeDir = {}
 IncludeDir["GLFW"] = "TurboGE/vendor/GLFW/include"
@@ -11,14 +12,19 @@ IncludeDir["yamlcpp"] = "TurboGE/vendor/yaml-cpp/include"
 IncludeDir["ImGuizmo"] = "TurboGE/vendor/ImGuizmo"
 IncludeDir["VulkanSDK"] = "%{VULKAN_SDK}/Include"
 IncludeDir["Box2D"] = "TurboGE/vendor/box2d/include"
+IncludeDir["Python"] = "%{PYTHON_PATH}/include"
 
 LibDir = {}
 
 LibDir["VulkanSDK"] = "%{VULKAN_SDK}/Lib"
+LibDir["Python"] = "%{PYTHON_PATH}/libs"
 
 Lib = {}
 Lib["Vulkan"] = "%{LibDir.VulkanSDK}/vulkan-1.lib"
 Lib["VulkanUtils"] = "%{LibDir.VulkanSDK}/VkLayer_utils.lib"
+
+Lib["Python_Debug"] = "%{LibDir.Python}/python311_d.lib"
+Lib["Python_Release"] = "%{LibDir.Python}/python311.lib"
 
 Lib["ShaderC_Debug"] = "%{LibDir.VulkanSDK}/shaderc_sharedd.lib"
 Lib["SPIRV_Cross_Debug"] = "%{LibDir.VulkanSDK}/spirv-cross-cored.lib"

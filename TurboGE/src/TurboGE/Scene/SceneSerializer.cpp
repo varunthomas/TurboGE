@@ -155,6 +155,11 @@ namespace TurboGE
 				out << YAML::Key << "Restitution" << YAML::Value << component->restitution;
 				out << YAML::Key << "Restitution threshold" << YAML::Value << component->restitutionThreshold;
 			}
+			else if constexpr (std::is_same_v<T, PyScriptComponent>)
+			{
+				out << YAML::Key << "FileName" << YAML::Value << component->name;
+				out << YAML::Key << "Create" << YAML::Value << component->create;
+			}
 
 			out << YAML::EndMap;
 		}
@@ -173,6 +178,7 @@ namespace TurboGE
 		ConstructSave<Rigidbody2D>(out, entity);
 		ConstructSave<Fixture2D>(out, entity);
 		ConstructSave<CircleFixture2D>(out, entity);
+		ConstructSave<PyScriptComponent>(out, entity);
 
 		out << YAML::EndMap;
 	}
@@ -312,6 +318,13 @@ namespace TurboGE
 					src.friction = circleFixture2D["Friction"].as<float>();
 					src.restitution = circleFixture2D["Restitution"].as<float>();
 					src.restitutionThreshold = circleFixture2D["Restitution threshold"].as<float>();
+				}
+				if (entity["PyScriptComponent"])
+				{
+					auto pyScriptComponent = entity["PyScriptComponent"];
+					auto& src = deserializedEntity.AddComponent<PyScriptComponent>();
+					src.fileName = pyScriptComponent["FileName"].as<std::string>();
+					src.create = pyScriptComponent["Create"].as<bool>();
 				}
 
 			}

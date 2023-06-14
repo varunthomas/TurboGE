@@ -3,6 +3,7 @@
 #include"TurboGE/Renderer/Camera.h"
 #include"TurboGE/Renderer/Texture.h"
 #include"ScriptableEntity.h"
+#include"TurboGE/Scripting/Scripting.h"
 #include<glm/gtc/matrix_transform.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include<glm/gtx/quaternion.hpp>
@@ -124,6 +125,17 @@ namespace TurboGE
 		CircleFixture2D() = default;
 		CircleFixture2D(const CircleFixture2D&) = default;
 
+	};
+
+	struct PyScriptComponent
+	{
+		std::string name = "PyScriptComponent";
+		std::string fileName;
+		bool create = false;
+		std::unique_ptr<PyScript> script;
+
+		PyScriptComponent() = default;
+		PyScriptComponent(const PyScriptComponent&) = default;
 	};
 
 	template<typename T>

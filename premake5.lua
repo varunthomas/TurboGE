@@ -70,7 +70,8 @@ project "TurboGE"
 		"%{IncludeDir.yamlcpp}",
 		"%{IncludeDir.ImGuizmo}",
 		"%{IncludeDir.VulkanSDK}",
-		"%{IncludeDir.Box2D}"
+		"%{IncludeDir.Box2D}",
+		"%{IncludeDir.Python}"
 	}
 	
 	links
@@ -106,7 +107,8 @@ project "TurboGE"
 		{
 			"%{Lib.ShaderC_Debug}",
 			"%{Lib.SPIRV_Cross_Debug}",
-			"%{Lib.SPIRV_Cross_GLSL_Debug}"
+			"%{Lib.SPIRV_Cross_GLSL_Debug}",
+			"%{Lib.Python_Debug}"
 		}
 
 	filter "configurations:Release"
@@ -118,7 +120,8 @@ project "TurboGE"
 		{
 			"%{Lib.ShaderC_Release}",
 			"%{Lib.SPIRV_Cross_Release}",
-			"%{Lib.SPIRV_Cross_GLSL_Release}"
+			"%{Lib.SPIRV_Cross_GLSL_Release}",
+			"%{Lib.Python_Release}"
 		}
 		
 	filter "configurations:Dist"
@@ -130,7 +133,8 @@ project "TurboGE"
 		{
 			"%{Lib.ShaderC_Release}",
 			"%{Lib.SPIRV_Cross_Release}",
-			"%{Lib.SPIRV_Cross_GLSL_Release}"
+			"%{Lib.SPIRV_Cross_GLSL_Release}",
+			"%{Lib.Python_Release}"
 		}
 
 project "Sandbox"
@@ -226,11 +230,23 @@ project "Editor"
 	filter "configurations:Debug"
 		defines "TGE_DEBUG"
 		symbols "on"
+		links
+		{
+			"%{Lib.Python_Debug}"
+		}
 
 	filter "configurations:Release"
 		defines "TGE_RELEASE"
 		optimize "on"
-
+		links
+		{
+			"%{Lib.Python_Release}"
+		}
+		
 	filter "configurations:Dist"
 		defines "TGE_DIST"
 		optimize "on"
+		links
+		{
+			"%{Lib.Python_Release}"
+		}

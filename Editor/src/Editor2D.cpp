@@ -337,8 +337,6 @@ namespace TurboGE
 
         m_ViewportFocused == true ? Input::inputViewPort = Input::InputViewport::EDITOR : Input::inputViewPort = Input::InputViewport::PANEL;
 
-        std::cout << " focussed " << m_ViewportFocused << " hovered " << m_ViewportHovered << '\n';
-
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail(); //PIXEL WIDTH AND HEIGHT OF VIEWPORT EXCLUDING HEIGHT OF option BAR
         auto viewportOffset = ImGui::GetWindowPos(); //GET OFFSET FROM ACTUAL SCREEN COORD TO VIEWPORT COORD TOP LEFT
         m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };

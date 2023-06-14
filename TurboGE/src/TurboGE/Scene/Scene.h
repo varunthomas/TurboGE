@@ -5,6 +5,7 @@
 #include"TurboGE/Renderer/Renderer2D.h"
 #include"TurboGE/Renderer/Camera.h"
 #include"TurboGE/Physics2D.h"
+#include"TurboGE/Scripting/Scripting.h"
 namespace TurboGE
 {
 	class Entity;
@@ -15,6 +16,8 @@ namespace TurboGE
 		Renderer2D& renderer2DInstance = Renderer2D::getInstance();
 		glm::vec2 m_ViewportSize;
 		int highlightedEntity = -1;
+
+		std::unique_ptr<PyScript> m_PyScript;
 
 		void DrawRectVisualizer(const entt::entity, const glm::vec3&, const glm::vec3&, const glm::vec3&);
 		void DrawCircleVisualizer(const entt::entity, const glm::vec3&, const glm::vec3&);
@@ -36,6 +39,7 @@ namespace TurboGE
 		static void StartPhysics();
 
 		void HighlightEntity(int entity) { highlightedEntity = entity; }
+
 
 		friend class Entity;
 		friend class EntityPanel;

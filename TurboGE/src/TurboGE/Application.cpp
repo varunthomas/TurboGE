@@ -4,6 +4,9 @@
 #include "Imgui/ImguiLayer.h"
 #include"GLFW/glfw3.h"
 #include"Time.h"
+#include"Scripting/Scripting.h"
+#include<filesystem>
+
 
 
 namespace TurboGE
@@ -11,6 +14,8 @@ namespace TurboGE
 	Application* Application::s_Instance = nullptr;
 	Application::Application()
 	{
+
+		PyScript::Init();
 		s_Instance = this;
 		m_window = Window::Create();
 		layer = new ImguiLayer() ;
@@ -44,6 +49,7 @@ namespace TurboGE
 	}
 	Application::~Application()
 	{
+		PyScript::ShutDown();
 		delete s;
 	}
 	void Application::Run()

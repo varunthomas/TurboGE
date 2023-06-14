@@ -156,6 +156,7 @@ namespace TurboGE
 				DisplayPopup<Rigidbody2D>("Rigidbody2D");
 				DisplayPopup<Fixture2D>("Fixture2D");
 				DisplayPopup<CircleFixture2D>("CircleFixture2D");
+				DisplayPopup<PyScriptComponent>("PyScript");
 
 				ImGui::EndPopup();
 			}
@@ -348,6 +349,21 @@ namespace TurboGE
 			ImGui::DragFloat("Restitution", &component.restitution, 0.01f, 0.0f, 1.0f);
 			ImGui::DragFloat("Restitution Threshold", &component.restitutionThreshold, 0.01f, 0.0f);
 
+			});
+
+		DrawComponentPanel<PyScriptComponent>("PyScript", entity, [&](auto& component) {
+
+
+			std::string buffer = component.fileName;
+			if (ImGui::InputText("Script", &buffer))
+			{
+				component.fileName = buffer;
+			}
+			if (ImGui::Button("Save"))
+			{
+				component.fileName = buffer;
+				m_Scene->OnComponentAdded<PyScriptComponent>(component);
+			}
 			});
 	}
 }
