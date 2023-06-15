@@ -13,6 +13,7 @@ namespace TurboGE
 		PlayPanel();
 		void OnImGuiRender(std::function<void()>, std::function<void()>);
 		bool isPlay;
+		bool toggle = false;
 		~PlayPanel() = default;
 	};
 }

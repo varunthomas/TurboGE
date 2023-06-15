@@ -22,6 +22,9 @@ namespace TurboGE
         Py_XDECREF(sys_path);
         Py_XDECREF(folder_path);
 
+        m_ModuleName = PyUnicode_FromString(m_ScriptName.c_str());
+        m_Module = PyImport_Import(m_ModuleName);
+
     }
 	void PyScript::Init()
 	{
@@ -94,6 +97,9 @@ namespace TurboGE
 
     void PyScript::ShutDown()
     {
+        
+        PyScriptRepo::scriptMap.clear();
+        std::cout << "Shutdown called\n";
         Py_Finalize();
     }
 
@@ -138,6 +144,8 @@ namespace TurboGE
         std::ofstream ofs(path);
         ofs << "def OnCreate():\n\tprint('Created')\ndef OnUpdate(ts):\n\tprint('Time is ' + str(ts))\n";
         ofs.close();
+
+        
     }
 
     void PyScript::OnCreate()
@@ -149,7 +157,7 @@ namespace TurboGE
         if (m_File)
         {
             PyRun_SimpleFile(m_File, pyScript.c_str());
-            //fclose(file);
+            fclose(m_File);
         }
         else
         {
@@ -160,8 +168,8 @@ namespace TurboGE
 
         // Call the hello() function from Python
         //PyObject* moduleName = PyUnicode_FromString(scriptName.c_str());
-        m_ModuleName = PyUnicode_FromString(m_ScriptName.c_str());
-        m_Module = PyImport_Import(m_ModuleName);
+        //m_ModuleName = PyUnicode_FromString(m_ScriptName.c_str());
+        //m_Module = PyImport_Import(m_ModuleName);
         //Py_XDECREF(m_ModuleName);
 
         if (m_Module)
@@ -193,6 +201,7 @@ namespace TurboGE
 
     void PyScript::OnUpdate(float ts)
     {
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
         SetPath();
 
         std::string pyScript = m_ScriptName + ".py";
@@ -253,13 +262,19 @@ namespace TurboGE
 
         UnsetPath();
 
+        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+
+        std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << "\n";
+        std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::nanoseconds> (end - begin).count() << "[ns]" << "\n\n";
+
     }
 	
     PyScript::~PyScript()
     {
-        std::cout << "Destroyed\n";
-        fclose(m_File);
-        Py_XDECREF(m_ModuleName);
+        std::cout << "Dest pyscript\n";
+        if(m_File)
+            fclose(m_File);
         Py_XDECREF(m_Module);
+        Py_XDECREF(m_ModuleName);
     }
 }

@@ -1,7 +1,7 @@
 #pragma once
 #include"TurboGE/Time.h"
 #include<entt.hpp>
-
+#include<iostream>
 class b2World;
 namespace TurboGE
 {
@@ -15,8 +15,9 @@ namespace TurboGE
 		int32_t positionIterations = 2;
 	public:
 		Physics2D(std::shared_ptr<Scene>&);
+		~Physics2D();
 
 		void UpdatePhysics(Time&, entt::entity);
-		void DeleteWorld();
+		//void DeleteWorld();
 	};
 }

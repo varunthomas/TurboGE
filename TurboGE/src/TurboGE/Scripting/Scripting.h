@@ -1,5 +1,5 @@
 #pragma once
-
+#include<iostream>
 typedef struct _object PyObject;
 
 namespace TurboGE
@@ -7,9 +7,9 @@ namespace TurboGE
 	class PyScript
 	{
 		std::string m_ScriptName;
-		PyObject* m_ModuleName;
-		PyObject* m_Module;
-		FILE* m_File;
+		PyObject* m_ModuleName{};
+		PyObject* m_Module{};
+		FILE* m_File{};
 
 		void SetPath();
 		void UnsetPath();
@@ -24,5 +24,11 @@ namespace TurboGE
 			void OnUpdate(float);
 
 			static void ShutDown();
+	};
+
+	struct PyScriptRepo
+	{
+		inline static std::unordered_map<std::string, std::shared_ptr<PyScript>> scriptMap;
+		~PyScriptRepo() { std::cout << "Dest pyscript repo\n"; }
 	};
 }

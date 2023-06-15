@@ -88,11 +88,23 @@ namespace TurboGE
 				if (!psc.create)
 				{
 					//PyScript::OnCreate(psc.name);
+					if (psc.script.get() == nullptr)
+					{
+						
+						if (auto it = PyScriptRepo::scriptMap.find(psc.fileName); it == PyScriptRepo::scriptMap.end())
+						{
+							std::cout << "Unexpected\n";
+						}
+						else
+						{
+							psc.script = it->second;
+						}
+					}
 					psc.script->OnCreate();
 					psc.create = true;
 				}
 				//PyScript::OnUpdate(psc.name, t);
-				//psc.script->OnUpdate(t);
+				psc.script->OnUpdate(t);
 				
 			});
 
@@ -234,8 +246,10 @@ namespace TurboGE
 		{
 			if (!component.fileName.empty())
 			{
-				std::cout << "Added script\n";
-				component.script = std::make_unique<PyScript>(component.fileName);
+					std::cout << "Added script oncomponentAdded " << component.fileName << "\n";
+					component.script = std::make_shared<PyScript>(component.fileName);
+					PyScriptRepo::scriptMap.emplace(std::make_pair(component.fileName, component.script));
+				
 
 				//PyScript::CreateScript(component.name);
 			}

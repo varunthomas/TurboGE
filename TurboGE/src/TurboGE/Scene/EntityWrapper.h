@@ -22,12 +22,12 @@ namespace TurboGE
 			return entityID;
 		}
 
-		template<typename T>
+	/*	template<typename T>
 		std::string GetName()
 		{
 			T a;
 			return a.name;
-		}
+		}*/
 
 		template<typename T, typename... Args>
 		T& AddComponent(Args&&... args)

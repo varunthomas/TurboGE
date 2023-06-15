@@ -60,12 +60,26 @@ namespace TurboGE
 
             if (playPanel.isPlay)
             {
+                if (playPanel.toggle)
+                {
+                    tempData = Serialize(); //SAVE CURRENT CONFIG
+                    m_Physics = std::make_shared<Physics2D>(m_Scene);
+                    //std::cout << m_Scene.use_count() << " Editor\n";
+                    std::cout << "Play\n";
+                }
                 m_Scene->onUpdatePlay(delta, m_Physics, m_ShowPhysicsColliders);
             }
             else
             {
                 m_EditorCamera.OnUpdate(delta);
                 m_Scene->onUpdateEditor(delta, m_EditorCamera, m_ShowPhysicsColliders);
+                if (playPanel.toggle)
+                {
+                    m_Physics.reset();
+                    std::cout << "Stop\n";
+                    //m_Physics->DeleteWorld();
+                    Deserialize(); //LOAD CURRENT CONFIG
+                }
             }
 
             auto [mx, my] = ImGui::GetMousePos();
@@ -300,18 +314,41 @@ namespace TurboGE
         entityPanel.OnImGuiRender();
         browserPanel.OnImGuiRender();
 
-        playPanel.OnImGuiRender([&]() {
+        /*if (playPanel.toggle && playPanel.isPlay)
+        {
+
+            tempData = Serialize(); //SAVE CURRENT CONFIG
+            m_Physics = std::make_shared<Physics2D>(m_Scene);
+            std::cout << m_Scene.use_count() << " Editor\n";
+            std::cout << "Play\n";
+            
+        }
+        else if(playPanel.toggle && !playPanel.isPlay)
+        {
+            m_Physics.reset();
+            std::cout << "DeleteWorld\n";
+            //m_Physics->DeleteWorld();
+            Deserialize(); //LOAD CURRENT CONFIG
+
+        }*/
+
+        playPanel.OnImGuiRender([]() {}, []() {});
+        /*playPanel.OnImGuiRender([&]() {
             //PLAY
             tempData = Serialize(); //SAVE CURRENT CONFIG
             m_Physics = std::make_shared<Physics2D>(m_Scene);
+            std::cout << m_Scene.use_count() << " Editor\n";
+            std::cout << "Play\n";
             }, 
 
             [&]() {
                 //STOP
-                
+                std::cout << "DeleteWorld\n";
                 m_Physics->DeleteWorld();
                 Deserialize(); //LOAD CURRENT CONFIG
-            });
+            });*/
+
+
 
         uint32_t textureID = m_FrameBuffer->GetID();
         ImGui::Begin("Color settings");
@@ -462,7 +499,9 @@ namespace TurboGE
 
     void Editor2D::Deserialize()
     {
+        //std::cout << "Making scene or dest scene\n";
         m_Scene = std::make_shared<Scene>(m_ViewportSize);
+        //std::cout << "Overwritten scene\n";
         entityPanel(m_Scene);
         SceneSerializer deserializer(m_Scene);
         deserializer.Load(tempData, false);

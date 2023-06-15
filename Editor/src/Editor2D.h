@@ -15,6 +15,7 @@
 #include"Panels/BrowserPanel.h"
 #include"Panels/EntityPanel.h"
 #include"Panels/PlayPanel.h"
+#include<iostream>
 
 namespace TurboGE
 {
@@ -70,7 +71,7 @@ namespace TurboGE
 		void renderCustom();
 		void onEvent(Event&);
 		Editor2D* getLayer();
-		~Editor2D() = default;
+		~Editor2D() { std::cout << "Dest editor\n"; };
 	};
 
 }

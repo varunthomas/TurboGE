@@ -96,10 +96,12 @@ namespace TurboGE
 	void SceneSerializer::ConstructSave(YAML::Emitter& out, Entity& entity)
 	{
 		auto component = entity.HasComponent<T>();
+		
 		if (component)
 		{
-			auto name = entity.GetName<T>();
-			out << YAML::Key << name.c_str();
+			std::cout << "***\n";
+			//auto name = entity.GetName<T>();
+			out << YAML::Key << component->name;
 			out << YAML::BeginMap;
 
 			if constexpr (std::is_same_v<T, TagComponent>)
@@ -157,7 +159,7 @@ namespace TurboGE
 			}
 			else if constexpr (std::is_same_v<T, PyScriptComponent>)
 			{
-				out << YAML::Key << "FileName" << YAML::Value << component->name;
+				out << YAML::Key << "FileName" << YAML::Value << component->fileName;
 				out << YAML::Key << "Create" << YAML::Value << component->create;
 			}
 
@@ -251,6 +253,7 @@ namespace TurboGE
 
 				if (entity["TransformComponent"])
 				{
+					std::cout << "Transform add\n";
 					auto transformComponent = entity["TransformComponent"];
 
 					auto& tc = deserializedEntity.GetComponent<TransformComponent>();
@@ -321,6 +324,7 @@ namespace TurboGE
 				}
 				if (entity["PyScriptComponent"])
 				{
+					std::cout << "pyscript add\n";
 					auto pyScriptComponent = entity["PyScriptComponent"];
 					auto& src = deserializedEntity.AddComponent<PyScriptComponent>();
 					src.fileName = pyScriptComponent["FileName"].as<std::string>();

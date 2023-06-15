@@ -49,8 +49,8 @@ namespace TurboGE
 	}
 	Application::~Application()
 	{
-		PyScript::ShutDown();
 		delete s;
+		PyScript::ShutDown();
 	}
 	void Application::Run()
 	{
