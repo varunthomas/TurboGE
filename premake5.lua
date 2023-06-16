@@ -137,56 +137,6 @@ project "TurboGE"
 			"%{Lib.Python_Release}"
 		}
 
-project "Sandbox"
-	location "Sandbox"
-	kind "ConsoleApp"
-	language "C++"
-	cppdialect "C++17"
-	staticruntime "on"
-
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
-
-	files
-	{
-		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
-	}
-
-	includedirs
-	{
-		"TurboGE/vendor/spdlog/include",
-		"TurboGE/src",
-		"TurboGE/vendor",
-		"%{IncludeDir.glm}",
-		"%{IncludeDir.entt}"
-	}
-
-	links
-	{
-		"TurboGE"
-	}
-
-	filter "system:windows"
-		systemversion "latest"
-
-		defines
-		{
-			"TGE_WINDOWS"
-		}
-
-	filter "configurations:Debug"
-		defines "TGE_DEBUG"
-		symbols "on"
-
-	filter "configurations:Release"
-		defines "TGE_RELEASE"
-		optimize "on"
-
-	filter "configurations:Dist"
-		defines "TGE_DIST"
-		optimize "on"
-		
 project "Editor"
 	location "Editor"
 	kind "ConsoleApp"
@@ -245,6 +195,51 @@ project "Editor"
 		
 	filter "configurations:Dist"
 		defines "TGE_DIST"
+		optimize "on"
+		links
+		{
+			"%{Lib.Python_Release}"
+		}
+		
+project "ScriptEngine"
+	kind "SharedLib"
+	location "ScriptEngine"
+	language "C++"
+	cppdialect "C++20"
+	
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+   
+	files { "%{prj.name}/hello.cpp" }
+	
+	includedirs
+	{
+		"TurboGE/src",
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.Python}"
+	}
+	
+	links
+	{
+		"Editor",
+		"TurboGE"
+	}
+	
+	filter "configurations:Debug"
+		symbols "On"
+		links
+		{
+			"%{Lib.Python_Debug}"
+		}
+
+	filter "configurations:Release"
+		optimize "On"
+		links
+		{
+			"%{Lib.Python_Release}"
+		}
+		
+	filter "configurations:Dist"
 		optimize "on"
 		links
 		{

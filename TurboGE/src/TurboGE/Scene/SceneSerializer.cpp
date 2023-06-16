@@ -160,7 +160,7 @@ namespace TurboGE
 			else if constexpr (std::is_same_v<T, PyScriptComponent>)
 			{
 				out << YAML::Key << "FileName" << YAML::Value << component->fileName;
-				out << YAML::Key << "Create" << YAML::Value << component->create;
+				//out << YAML::Key << "Create" << YAML::Value << component->create;
 			}
 
 			out << YAML::EndMap;
@@ -328,7 +328,7 @@ namespace TurboGE
 					auto pyScriptComponent = entity["PyScriptComponent"];
 					auto& src = deserializedEntity.AddComponent<PyScriptComponent>();
 					src.fileName = pyScriptComponent["FileName"].as<std::string>();
-					src.create = pyScriptComponent["Create"].as<bool>();
+					//src.create = pyScriptComponent["Create"].as<bool>();
 				}
 
 			}

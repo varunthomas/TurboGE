@@ -88,12 +88,17 @@ namespace TurboGE
 				if (!psc.create)
 				{
 					//PyScript::OnCreate(psc.name);
+					std::cout << "Not created\n";
+					
 					if (psc.script.get() == nullptr)
 					{
 						
 						if (auto it = PyScriptRepo::scriptMap.find(psc.fileName); it == PyScriptRepo::scriptMap.end())
 						{
-							std::cout << "Unexpected\n";
+							//TURBO_ASSERT("Unexpected error: script not found", 0);
+							std::cout << "Added script onUpdatePlay " << psc.fileName << "\n";
+							psc.script = std::make_shared<PyScript>(psc.fileName);
+							PyScriptRepo::scriptMap.emplace(std::make_pair(psc.fileName, psc.script));
 						}
 						else
 						{
@@ -244,15 +249,16 @@ namespace TurboGE
 		}
 		else if constexpr (std::is_same_v<T, PyScriptComponent>)
 		{
-			if (!component.fileName.empty())
-			{
-					std::cout << "Added script oncomponentAdded " << component.fileName << "\n";
-					component.script = std::make_shared<PyScript>(component.fileName);
-					PyScriptRepo::scriptMap.emplace(std::make_pair(component.fileName, component.script));
-				
+			if (component.fileName.empty())
+				return;
 
-				//PyScript::CreateScript(component.name);
+			if (PyScriptRepo::scriptMap.find(component.fileName) == PyScriptRepo::scriptMap.end())
+			{
+				std::cout << "Added script oncomponentAdded " << component.fileName << "\n";
+				component.script = std::make_shared<PyScript>(component.fileName);
+				PyScriptRepo::scriptMap.emplace(std::make_pair(component.fileName, component.script));
 			}
+
 		}
 	}
 

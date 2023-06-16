@@ -136,7 +136,7 @@ namespace TurboGE
 		bool create = false;
 		std::shared_ptr<PyScript> script;
 
-		PyScriptComponent() = default;
+		PyScriptComponent() { std::cout << "Pyscript comp created\n"; };
 		PyScriptComponent(const PyScriptComponent&) = default;
 		~PyScriptComponent() { std::cout << "Dest pysc\n"; }
 	};

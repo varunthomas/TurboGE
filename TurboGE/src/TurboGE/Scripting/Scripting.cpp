@@ -138,33 +138,32 @@ namespace TurboGE
     {
         std::cout << "CreateScript\n";
         m_ScriptName = scriptName;
-        std::filesystem::path path{ std::filesystem::current_path() };
-        path /= "scripts/" + scriptName + ".py";
-
+        std::string pyScript = m_ScriptName + ".py";
+        std::string fpath = "scripts/" + pyScript;
+        std::filesystem::path path{ fpath };
         std::ofstream ofs(path);
         ofs << "def OnCreate():\n\tprint('Created')\ndef OnUpdate(ts):\n\tprint('Time is ' + str(ts))\n";
         ofs.close();
+
+        
+        m_File = fopen(fpath.c_str(), "rb");
+        if (m_File != NULL)
+        {
+            PyRun_SimpleFile(m_File, pyScript.c_str());
+        }
+        else
+        {
+            TURBO_CLIENT_ERR("Failed to open Python script {0}\n", pyScript);
+            return;
+        }
 
         
     }
 
     void PyScript::OnCreate()
     {
-        SetPath();
-        std::string pyScript = m_ScriptName + ".py";
-
-        m_File = fopen(pyScript.c_str(), "rb");
-        if (m_File)
-        {
-            PyRun_SimpleFile(m_File, pyScript.c_str());
-            fclose(m_File);
-        }
-        else
-        {
-
-            TURBO_CLIENT_ERR("Failed to open Python script\n");
-            return;
-        }
+        //SetPath();
+        
 
         // Call the hello() function from Python
         //PyObject* moduleName = PyUnicode_FromString(scriptName.c_str());
@@ -195,21 +194,21 @@ namespace TurboGE
             return;
         }
 
-        UnsetPath();
+        //UnsetPath();
 
     }
 
     void PyScript::OnUpdate(float ts)
     {
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-        SetPath();
+        //SetPath();
 
-        std::string pyScript = m_ScriptName + ".py";
+        //std::string pyScript = m_ScriptName + ".py";
 
         //FILE* file = fopen(pyScript.c_str(), "rb");
         //if (file)
         //{
-            PyRun_SimpleFile(m_File, pyScript.c_str());
+            //PyRun_SimpleFile(m_File, pyScript.c_str());
           //  fclose(file);
         //}
         //else
@@ -260,7 +259,7 @@ namespace TurboGE
             return;
         }
 
-        UnsetPath();
+        //UnsetPath();
 
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
