@@ -165,7 +165,8 @@ project "Editor"
 
 	links
 	{
-		"TurboGE"
+		"TurboGE",
+		"ScriptEngine"
 	}
 
 	filter "system:windows"
@@ -221,7 +222,6 @@ project "ScriptEngine"
 	
 	links
 	{
-		"Editor",
 		"TurboGE"
 	}
 	

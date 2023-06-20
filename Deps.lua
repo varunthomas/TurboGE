@@ -1,6 +1,8 @@
 VULKAN_SDK = os.getenv("VULKAN_SDK")
 PYTHON_PATH = os.getenv("Python")
 
+print("The python path of the project is " .. PYTHON_PATH)
+
 IncludeDir = {}
 IncludeDir["GLFW"] = "TurboGE/vendor/GLFW/include"
 IncludeDir["Glad"] = "TurboGE/vendor/Glad/include"
@@ -34,3 +36,5 @@ Lib["SPIRV_Tools_Debug"] = "%{LibDir.VulkanSDK}/SPIRV-Toolsd.lib"
 Lib["ShaderC_Release"] = "%{LibDir.VulkanSDK}/shaderc_shared.lib"
 Lib["SPIRV_Cross_Release"] = "%{LibDir.VulkanSDK}/spirv-cross-core.lib"
 Lib["SPIRV_Cross_GLSL_Release"] = "%{LibDir.VulkanSDK}/spirv-cross-glsl.lib"
+
+Lib["GLFW_test"] = "C:/dev/TurboGE/TurboGE/vendor/GLFW/bin/Debug-windows-x86_64/GLFW/GLFW.lib"

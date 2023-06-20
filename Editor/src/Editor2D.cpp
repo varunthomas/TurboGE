@@ -14,15 +14,19 @@ namespace TurboGE
 
     Editor2D::Editor2D()
     {
-        m_Renderer = Renderer::Create();
-        m_Renderer->Init();
-        renderer2DInstance.Init();
+        //m_Renderer = Renderer::Create();
+        //m_Renderer->Init();
+        //renderer2DInstance.Init();
 
-        OnAttach();
+        //OnAttach();
     }
 
     void Editor2D::OnAttach()
     {
+        m_Renderer = Renderer::Create();
+        m_Renderer->Init();
+        renderer2DInstance.Init();
+
         m_Scene = std::make_shared<Scene>(m_ViewportSize);
         entityPanel(m_Scene);
 

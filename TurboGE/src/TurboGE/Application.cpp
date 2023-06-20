@@ -21,8 +21,15 @@ namespace TurboGE
 		layer = new ImguiLayer() ;
 		layer->onAttach();
 		m_window->setCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
-		s = new Editor2D();
+		//s = new Editor2D();
+		
 
+	}
+
+	void Application::GetLayer(Layer* layer)
+	{
+		m_Layer = layer;
+		m_Layer->OnAttach();
 	}
 
 	void Application::OnEvent(Event& e)
@@ -45,11 +52,11 @@ namespace TurboGE
 		{
 			Close();
 		}
-		s->onEvent(e);
+		m_Layer->onEvent(e);
 	}
 	Application::~Application()
 	{
-		delete s;
+		delete m_Layer;
 		PyScript::ShutDown();
 	}
 	void Application::Run()
@@ -63,8 +70,8 @@ namespace TurboGE
 			layer->Begin();
 			if (!m_minimized)
 			{
-				s->onUpdate(deltaTime);
-				s->renderCustom();
+				m_Layer->onUpdate(deltaTime);
+				m_Layer->renderCustom();
 			}
 			layer->End();
 			m_window->onUpdate();

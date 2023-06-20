@@ -1,9 +1,6 @@
 #pragma once
 
-namespace TurboGE
+extern "C"
 {
-	class PyCppMap
-	{
-
-	};
+	int add_numbers(int a, int b);
 }

@@ -23,5 +23,7 @@ namespace TurboGE
 		static glm::vec2 GetMousePosition();
 		static float GetMouseX();
 		static float GetMouseY();
+
+		static bool testFunc();
 	};
 }

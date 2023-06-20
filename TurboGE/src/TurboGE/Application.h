@@ -4,7 +4,8 @@
 #include"Window.h"
 #include"Imgui/ImguiLayer.h"
 #include"Events/Event.h"
-#include"../../Editor/src/Editor2D.h"  //TEMP
+#include"Layer.h"
+//#include"../../Editor/src/Editor2D.h"  //TEMP
 
 
 
@@ -16,14 +17,18 @@ namespace TurboGE
 		std::unique_ptr<Window> m_window;
 		ImguiLayer* layer;
 		
-		Editor2D* s; //TEMP
+		//Editor2D* s; //TEMP
 		bool m_Running = true;
+		Layer* m_Layer{};
 
 
 		static Application* s_Instance;
 	public:
 		Application();
 		virtual ~Application();
+
+		void GetLayer(Layer*);
+
 		inline Window& GetWindow() { return *m_window; }
 
 		inline static Application& Get() { return *s_Instance; }

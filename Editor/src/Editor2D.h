@@ -11,6 +11,7 @@
 #include"TurboGE/Renderer/FrameBuffer.h"
 #include"TurboGE/Scene/EntityWrapper.h"
 #include"TurboGE/Physics2D.h"
+#include"TurboGE/Layer.h"
 
 #include"Panels/BrowserPanel.h"
 #include"Panels/EntityPanel.h"
@@ -19,7 +20,7 @@
 
 namespace TurboGE
 {
-	class Editor2D
+	class Editor2D : public Layer
 	{
 		std::shared_ptr<Scene> m_Scene;
 		EntityPanel entityPanel;
