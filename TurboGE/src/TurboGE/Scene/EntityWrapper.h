@@ -57,6 +57,7 @@ namespace TurboGE
 		template<typename T>
 		T* HasComponent() const
 		{
+			//std::cout << "Entity id " << (int)entityID << std::endl;
 			return m_Scene->m_registry.try_get<T>(entityID);
 			
 		}

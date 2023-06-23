@@ -5,7 +5,7 @@
 #include"TurboGE/Renderer/Renderer2D.h"
 #include"TurboGE/Renderer/Camera.h"
 #include"TurboGE/Physics2D.h"
-#include"TurboGE/Scripting/Scripting.h" //TODO: Move to CPP and try
+//#include"TurboGE/Scripting/Scripting.h" //TODO: Move to CPP and try
 #include<iostream>
 namespace TurboGE
 {

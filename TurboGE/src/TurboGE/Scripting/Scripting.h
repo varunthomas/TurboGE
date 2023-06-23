@@ -1,5 +1,7 @@
 #pragma once
 #include<iostream>
+#include"TurboGE/Scene/EntityWrapper.h"
+
 typedef struct _object PyObject;
 
 namespace TurboGE
@@ -16,6 +18,7 @@ namespace TurboGE
 		void CreateScript(const std::string&);
 
 		public:
+			Entity entity;
 			PyScript(const std::string&);
 			~PyScript();
 			static void Init();

@@ -5,6 +5,7 @@
 #include"EntityWrapper.h"
 #include <GLFW/glfw3.h>
 #include"TurboGE/Input.h"
+#include"TurboGE/Scripting/Scripting.h"
 
 namespace TurboGE
 {
@@ -92,6 +93,7 @@ namespace TurboGE
 					
 					if (psc.script.get() == nullptr)
 					{
+						std::cout << "Script not null\n";
 						
 						if (auto it = PyScriptRepo::scriptMap.find(psc.fileName); it == PyScriptRepo::scriptMap.end())
 						{
@@ -104,7 +106,10 @@ namespace TurboGE
 						{
 							psc.script = it->second;
 						}
+						
 					}
+					std::cout << "Entity id in scene" << (int)entity << std::endl;
+					psc.script->entity = Entity{ entity, this };
 					psc.script->OnCreate();
 					psc.create = true;
 				}

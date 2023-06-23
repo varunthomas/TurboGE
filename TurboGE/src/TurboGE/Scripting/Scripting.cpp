@@ -4,19 +4,107 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 #include <filesystem>
-//#include <stdio.h>
+#include"TurboGE/Scene/Components.h"
 
 namespace TurboGE
 {
+    template<typename T>
+    static std::string convertToScript(T&& file)
+    {
+        std::string fileString = std::forward<T>(file);
+        auto pos = fileString.find_last_of('\\');
+        auto fileWithExtension = fileString.substr(pos + 1);
+        auto pos2 = fileWithExtension.find('.');
+        return fileWithExtension.substr(0, pos2);
+    }
+
     static PyObject* GetKeyPress(PyObject* pyObj, PyObject* args, PyObject* keywords)
     {
-        const bool isKeyPressed = Input::isKeyPressed(Key::A);
-        printf("C Function GetRandomNumber():  I choose:  %i\n", isKeyPressed);
+        int key;
+        if (!PyArg_ParseTuple(args, "i", &key))
+        {
+            return NULL;
+        }
+        const bool isKeyPressed = Input::isKeyPressed((Key)key);
+        printf("C Function GetRandomNumber():  I choose:  %i %i\n", isKeyPressed, key);
         return PyBool_FromLong(isKeyPressed);
     }
 
+
+    static PyObject* GetTransform(PyObject* pyObj, PyObject* args, PyObject* keywords)
+    {
+
+        PyTraceBack_Here(PyEval_GetFrame());
+        PyObject* exc;
+        PyObject* val;
+        PyObject* tb;
+        PyErr_Fetch(&exc, &val, &tb);
+        std::string filename = convertToScript(PyUnicode_AsUTF8(PyObject_GetAttrString(PyObject_GetAttrString(PyObject_GetAttrString(tb, "tb_frame"), "f_code"), "co_filename")));
+
+        auto  it = PyScriptRepo::scriptMap.find(filename);
+        if (it == PyScriptRepo::scriptMap.end())
+        {
+            TURBO_ASSERT("NOT FOUND", 0);
+        }
+        auto script = it->second;
+        auto e = script->entity;
+        if (auto transform = e.HasComponent<TransformComponent>(); transform != nullptr)
+        {
+
+
+            PyObject* result = Py_BuildValue("(ff)", transform->translate.x, transform->translate.y);
+            return result;
+        }
+        else
+        {
+            
+            TURBO_ASSERT("Transform null", 0);
+            return NULL;
+        }
+        //printf("C Function GetRandomNumber():  I choose:  %i %i\n", isKeyPressed, key);
+        
+    }
+
+    static PyObject* SetTransform(PyObject* pyObj, PyObject* args, PyObject* keywords)
+    {
+        //char* scriptName;
+        float x, y;
+        if (!PyArg_ParseTuple(args, "ff", &x, &y))
+        {
+            Py_RETURN_NONE;
+        }
+
+        PyTraceBack_Here(PyEval_GetFrame());
+        PyObject* exc;
+        PyObject* val;
+        PyObject* tb;
+        PyErr_Fetch(&exc, &val, &tb);
+        std::string filename = convertToScript(PyUnicode_AsUTF8(PyObject_GetAttrString(PyObject_GetAttrString(PyObject_GetAttrString(tb, "tb_frame"), "f_code"), "co_filename")));
+
+
+
+        auto  it = PyScriptRepo::scriptMap.find(filename);
+        if (it == PyScriptRepo::scriptMap.end())
+        {
+            TURBO_ASSERT("NOT FOUND", 0);
+        }
+        auto script = it->second;
+        auto e = script->entity;
+        auto& transform = e.GetComponent<TransformComponent>();
+        transform.translate.x = x;
+        transform.translate.y = y;
+
+        Py_RETURN_NONE;
+        //printf("C Function GetRandomNumber():  I choose:  %i %i\n", isKeyPressed, key);
+
+    }
+
+
+
     static PyMethodDef DemoEditorMethods[] = {
        {"GetKeyPress", (PyCFunction)GetKeyPress, METH_KEYWORDS | METH_VARARGS, "Returns a random integer."},
+       {"GetTransform", (PyCFunction)GetTransform, METH_KEYWORDS | METH_VARARGS, "Returns whether input is enabled."},
+       {"SetTransform", (PyCFunction)SetTransform, METH_KEYWORDS | METH_VARARGS, "Modifies transform"},
        {NULL, NULL, 0, NULL}  // list terminator
     };
 
@@ -43,14 +131,18 @@ namespace TurboGE
         CreateScript(scriptName);
 
         std::filesystem::path scriptPath = std::filesystem::current_path() / "scripts";
+        std::filesystem::path modulePath = std::filesystem::current_path() / "scripts/modules";
         PyObject* sys = PyImport_ImportModule("sys");
         PyObject* sys_path = PyObject_GetAttrString(sys, "path");
         PyObject* folder_path = PyUnicode_FromString(scriptPath.string().c_str());
+        PyObject* module_path = PyUnicode_FromString(modulePath.string().c_str());
         PyList_Append(sys_path, folder_path);
+        PyList_Append(sys_path, module_path);
 
         Py_XDECREF(sys);
         Py_XDECREF(sys_path);
         Py_XDECREF(folder_path);
+        Py_XDECREF(module_path);
 
 
 
@@ -196,16 +288,24 @@ namespace TurboGE
     {
         std::cout << "CreateScript\n";
         m_ScriptName = scriptName;
+
         std::string pyScript = m_ScriptName + ".py";
         std::string fpath = "scripts/" + pyScript;
         std::filesystem::path path{ fpath };
-        std::ofstream ofs(path);
-        //ofs << "import embedded_demo\ndef OnCreate():\n\tprint('Created')\n\ndef OnUpdate(ts):\n\tprint('Time is ' + str(ts))\n\tv = embedded_demo.GetKeyPress()\n\tprint('Python Script:  The random value I got from the C GetRandomNumber() function is: %i' % v)\n";
-        ofs << "def OnCreate():\n    print('Created')\n\ndef OnUpdate(ts):\n    print('Time is ' + str(ts))\n\n";
-        //ofs << "def OnCreate():\n\tprint('Created')\n\ndef OnUpdate(ts):\n\tprint('Time is ' + str(ts))";
+        if (!std::filesystem::exists(fpath))
+        {
+            std::cout << "File does not exist\n";
+            std::ofstream ofs(path);
+            //ofs << "import embedded_demo\ndef OnCreate():\n\tprint('Created')\n\ndef OnUpdate(ts):\n\tprint('Time is ' + str(ts))\n\tv = embedded_demo.GetKeyPress()\n\tprint('Python Script:  The random value I got from the C GetRandomNumber() function is: %i' % v)\n";
+            ofs << "import embedded_demo\n script = \"" + m_ScriptName + "\"\ndef OnCreate() :\n    print('Created')\n\ndef OnUpdate(ts) :\n    print('Time is ' + str(ts))\n\n";
+            //ofs << "def OnCreate():\n\tprint('Created')\n\ndef OnUpdate(ts):\n\tprint('Time is ' + str(ts))";
 
-        ofs.close();
-
+            ofs.close();
+        }
+        else
+        {
+            std::cout << "Not creating again\n";
+        }
         
         //m_File = fopen(fpath.c_str(), "rb");
         //if (m_File != NULL)
