@@ -1,6 +1,6 @@
 # TurboGE [![License](https://img.shields.io/github/license/varunthomas/TurboGE)](https://github.com/varunthomas/TurboGE/blob/main/LICENSE)
 
-TurboGE is a small game engine created in C++20 using OpenGL rendering. This is made purely for learning purposes.
+TurboGE is a small game engine created in C++20 using OpenGL rendering. It uses Python as scripting language. This is made purely for learning purposes.
 
 ***
 
@@ -20,6 +20,7 @@ Start by cloning the repository with `git clone --recursive https://github.com/v
 ***
 
 ### Main features:
+- Python Scripting (Pyscript)
 - Quad rendering
 - Sprite rendering
 - Batching
