@@ -17,6 +17,7 @@ Start by cloning the repository with `git clone --recursive https://github.com/v
 Go to Vulkan and download the windows SDK: <br/>
 https://sdk.lunarg.com/sdk/download/latest/windows/vulkan-sdk.exe <br/>
 Install the Vulkan SDK.<br/>
+Select all optional components<br/>
 
 <ins>**3. Generate the solution:**</ins>
 
