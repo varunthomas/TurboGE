@@ -33,3 +33,7 @@ Start by cloning the repository with `git clone --recursive https://github.com/v
 
 - Cherno Game Engine
 - learnopengl.com
+- Sample python script can be referenced in Editor/scripts/sample.py
+
+**Screenshots:**
+![alt text](https://github.com/varunthomas/TurboGE/blob/TurboGE_dev/Screenshot1.png?raw=true)
