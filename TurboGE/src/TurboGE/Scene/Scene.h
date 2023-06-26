@@ -5,8 +5,6 @@
 #include"TurboGE/Renderer/Renderer2D.h"
 #include"TurboGE/Renderer/Camera.h"
 #include"TurboGE/Physics2D.h"
-//#include"TurboGE/Scripting/Scripting.h" //TODO: Move to CPP and try
-#include<iostream>
 namespace TurboGE
 {
 	class Entity;
@@ -18,13 +16,10 @@ namespace TurboGE
 		glm::vec2 m_ViewportSize;
 		int highlightedEntity = -1;
 
-		//std::unique_ptr<PyScript> m_PyScript;
-
 		void DrawRectVisualizer(const entt::entity, const glm::vec3&, const glm::vec3&, const glm::vec3&);
 		void DrawCircleVisualizer(const entt::entity, const glm::vec3&, const glm::vec3&);
 	public:
 		Scene(glm::vec2&);
-		~Scene() { std::cout << "Delete scene\n"; }
 		Entity CreateEntity(std::string_view str = "");
 		void DestroyEntity(entt::entity);
 		void onUpdatePlay(Time& t, std::shared_ptr<Physics2D>&, bool);
@@ -36,8 +31,6 @@ namespace TurboGE
 
 		template<typename T>
 		void OnComponentAdded(T&);
-
-		static void StartPhysics();
 
 		void HighlightEntity(int entity) { highlightedEntity = entity; }
 

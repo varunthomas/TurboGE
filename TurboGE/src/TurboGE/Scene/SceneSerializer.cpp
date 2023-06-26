@@ -99,8 +99,6 @@ namespace TurboGE
 		
 		if (component)
 		{
-			std::cout << "***\n";
-			//auto name = entity.GetName<T>();
 			out << YAML::Key << component->name;
 			out << YAML::BeginMap;
 
@@ -160,7 +158,6 @@ namespace TurboGE
 			else if constexpr (std::is_same_v<T, PyScriptComponent>)
 			{
 				out << YAML::Key << "FileName" << YAML::Value << component->fileName;
-				//out << YAML::Key << "Create" << YAML::Value << component->create;
 			}
 
 			out << YAML::EndMap;
@@ -253,7 +250,6 @@ namespace TurboGE
 
 				if (entity["TransformComponent"])
 				{
-					std::cout << "Transform add\n";
 					auto transformComponent = entity["TransformComponent"];
 
 					auto& tc = deserializedEntity.GetComponent<TransformComponent>();
@@ -324,11 +320,9 @@ namespace TurboGE
 				}
 				if (entity["PyScriptComponent"])
 				{
-					std::cout << "pyscript add\n";
 					auto pyScriptComponent = entity["PyScriptComponent"];
 					auto& src = deserializedEntity.AddComponent<PyScriptComponent>();
 					src.fileName = pyScriptComponent["FileName"].as<std::string>();
-					//src.create = pyScriptComponent["Create"].as<bool>();
 				}
 
 			}

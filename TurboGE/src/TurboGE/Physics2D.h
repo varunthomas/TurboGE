@@ -1,7 +1,6 @@
 #pragma once
 #include"TurboGE/Time.h"
 #include<entt.hpp>
-#include<iostream>
 class b2World;
 namespace TurboGE
 {
@@ -18,6 +17,6 @@ namespace TurboGE
 		~Physics2D();
 
 		void UpdatePhysics(Time&, entt::entity);
-		//void DeleteWorld();
+		static void ApplyLinearImpulse(void*, float, float);
 	};
 }

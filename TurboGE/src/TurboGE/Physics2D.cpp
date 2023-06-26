@@ -12,16 +12,13 @@
 namespace TurboGE
 {
 	Physics2D::Physics2D(std::shared_ptr<Scene>& scene)
-		//:m_Scene{scene}
+		:m_Scene{scene}
 	{
-		//std::cout << "Physics created\n";
-		m_Scene = scene;
 		world = new b2World({ 0.0f, -9.8f });
 
 		auto view = m_Scene->m_registry.view<Rigidbody2D>();
 		for (auto entity : view)
 		{
-			//std::cout << "###\n";
 			Entity e{ entity, m_Scene.get()};
 			auto& rb = view.get<Rigidbody2D>(entity);
 			auto& transform = e.GetComponent<TransformComponent>();
@@ -62,8 +59,6 @@ namespace TurboGE
 
 			}
 		}
-		//std::cout << m_Scene.use_count() << "\n";
-		//std::cout << "--- " << "\n";
 	}
 
 	void Physics2D::UpdatePhysics(Time& timeStep, entt::entity entityID)
@@ -83,9 +78,14 @@ namespace TurboGE
 
 	}
 
+	void Physics2D::ApplyLinearImpulse(void *body, float x, float y)
+	{
+		b2Body* rbbody = (b2Body*)body;
+		rbbody->ApplyLinearImpulseToCenter(b2Vec2(x, y), true);
+	}
+
 	Physics2D::~Physics2D()
 	{
-		//std::cout << "Dest physics\n";
 		if (world)
 		{
 			delete world;

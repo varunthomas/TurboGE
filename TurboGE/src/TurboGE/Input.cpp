@@ -6,11 +6,6 @@
 
 namespace TurboGE
 {
-	bool Input::testFunc()
-	{
-		std::cout << "Test func\n";
-		return true;
-	}
 	bool Input::isKeyPressed(Key keycode)
 	{
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());

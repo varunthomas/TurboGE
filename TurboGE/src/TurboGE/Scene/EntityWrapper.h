@@ -22,13 +22,6 @@ namespace TurboGE
 			return entityID;
 		}
 
-	/*	template<typename T>
-		std::string GetName()
-		{
-			T a;
-			return a.name;
-		}*/
-
 		template<typename T, typename... Args>
 		T& AddComponent(Args&&... args)
 		{
@@ -57,7 +50,6 @@ namespace TurboGE
 		template<typename T>
 		T* HasComponent() const
 		{
-			//std::cout << "Entity id " << (int)entityID << std::endl;
 			return m_Scene->m_registry.try_get<T>(entityID);
 			
 		}

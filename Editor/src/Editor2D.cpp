@@ -11,16 +11,6 @@
 #include"ImGuizmo.h"
 namespace TurboGE
 {
-
-    Editor2D::Editor2D()
-    {
-        //m_Renderer = Renderer::Create();
-        //m_Renderer->Init();
-        //renderer2DInstance.Init();
-
-        //OnAttach();
-    }
-
     void Editor2D::OnAttach()
     {
         m_Renderer = Renderer::Create();
@@ -68,8 +58,6 @@ namespace TurboGE
                 {
                     tempData = Serialize(); //SAVE CURRENT CONFIG
                     m_Physics = std::make_shared<Physics2D>(m_Scene);
-                    //std::cout << m_Scene.use_count() << " Editor\n";
-                    std::cout << "Play\n";
                 }
                 m_Scene->onUpdatePlay(delta, m_Physics, m_ShowPhysicsColliders);
             }
@@ -80,8 +68,6 @@ namespace TurboGE
                 if (playPanel.toggle)
                 {
                     m_Physics.reset();
-                    std::cout << "Stop\n";
-                    //m_Physics->DeleteWorld();
                     Deserialize(); //LOAD CURRENT CONFIG
                 }
             }
@@ -255,10 +241,6 @@ namespace TurboGE
             ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
             ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
         }
-        else
-        {
-            std::cout << "Docking not enabled\n";
-        }
         style.WindowMinSize.x = minWinSizeX;
         if (ImGui::BeginMenuBar())
         {
@@ -318,39 +300,7 @@ namespace TurboGE
         entityPanel.OnImGuiRender();
         browserPanel.OnImGuiRender();
 
-        /*if (playPanel.toggle && playPanel.isPlay)
-        {
-
-            tempData = Serialize(); //SAVE CURRENT CONFIG
-            m_Physics = std::make_shared<Physics2D>(m_Scene);
-            std::cout << m_Scene.use_count() << " Editor\n";
-            std::cout << "Play\n";
-            
-        }
-        else if(playPanel.toggle && !playPanel.isPlay)
-        {
-            m_Physics.reset();
-            std::cout << "DeleteWorld\n";
-            //m_Physics->DeleteWorld();
-            Deserialize(); //LOAD CURRENT CONFIG
-
-        }*/
-
-        playPanel.OnImGuiRender([]() {}, []() {});
-        /*playPanel.OnImGuiRender([&]() {
-            //PLAY
-            tempData = Serialize(); //SAVE CURRENT CONFIG
-            m_Physics = std::make_shared<Physics2D>(m_Scene);
-            std::cout << m_Scene.use_count() << " Editor\n";
-            std::cout << "Play\n";
-            }, 
-
-            [&]() {
-                //STOP
-                std::cout << "DeleteWorld\n";
-                m_Physics->DeleteWorld();
-                Deserialize(); //LOAD CURRENT CONFIG
-            });*/
+        playPanel.OnImGuiRender();
 
 
 
@@ -503,9 +453,7 @@ namespace TurboGE
 
     void Editor2D::Deserialize()
     {
-        //std::cout << "Making scene or dest scene\n";
         m_Scene = std::make_shared<Scene>(m_ViewportSize);
-        //std::cout << "Overwritten scene\n";
         entityPanel(m_Scene);
         SceneSerializer deserializer(m_Scene);
         deserializer.Load(tempData, false);

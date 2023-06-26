@@ -7,7 +7,6 @@
 #include<glm/gtc/matrix_transform.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include<glm/gtx/quaternion.hpp>
-#include<iostream>
 
 namespace TurboGE
 {
@@ -40,7 +39,6 @@ namespace TurboGE
 		std::shared_ptr<Texture2D> texture;
 
 		SpriteRendererComponent() = default;
-		~SpriteRendererComponent() { std::cout << "Dest sr\n"; }
 		SpriteRendererComponent(const SpriteRendererComponent&) = default;
 		SpriteRendererComponent(const glm::vec4& c)
 			: color(c) {}
@@ -136,9 +134,8 @@ namespace TurboGE
 		bool create = false;
 		std::shared_ptr<PyScript> script;
 
-		PyScriptComponent() { std::cout << "Pyscript comp created\n"; };
+		PyScriptComponent() = default;
 		PyScriptComponent(const PyScriptComponent&) = default;
-		~PyScriptComponent() { std::cout << "Dest pysc\n"; }
 	};
 
 	template<typename T>

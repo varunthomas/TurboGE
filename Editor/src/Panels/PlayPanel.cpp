@@ -10,7 +10,7 @@ namespace TurboGE
 	{
 	}
 
-	void PlayPanel::OnImGuiRender(std::function<void()> init, std::function<void()> destroy)
+	void PlayPanel::OnImGuiRender()
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 2));
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
@@ -31,16 +31,7 @@ namespace TurboGE
 		{
 
 			toggle = true;
-			if (isPlay)
-			{
-				destroy();
-				isPlay = false;
-			}
-			else
-			{
-				init();
-				isPlay = true;
-			}
+			isPlay = !isPlay;
 		}
 		ImGui::PopStyleVar(2);
 		ImGui::PopStyleColor(3);

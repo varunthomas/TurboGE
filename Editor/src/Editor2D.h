@@ -16,7 +16,6 @@
 #include"Panels/BrowserPanel.h"
 #include"Panels/EntityPanel.h"
 #include"Panels/PlayPanel.h"
-#include<iostream>
 
 namespace TurboGE
 {
@@ -66,13 +65,11 @@ namespace TurboGE
 		std::unique_ptr<FrameBuffer> m_FrameBuffer;
 
 	public:
-		Editor2D();
 		void OnAttach();
 		void onUpdate(Time);
 		void renderCustom();
 		void onEvent(Event&);
 		Editor2D* getLayer();
-		~Editor2D() { std::cout << "Dest editor\n"; };
 	};
 
 }

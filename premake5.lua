@@ -107,8 +107,7 @@ project "TurboGE"
 		{
 			"%{Lib.ShaderC_Debug}",
 			"%{Lib.SPIRV_Cross_Debug}",
-			"%{Lib.SPIRV_Cross_GLSL_Debug}",
-			"%{Lib.Python_Debug}"
+			"%{Lib.SPIRV_Cross_GLSL_Debug}"
 		}
 
 	filter "configurations:Release"
@@ -120,8 +119,7 @@ project "TurboGE"
 		{
 			"%{Lib.ShaderC_Release}",
 			"%{Lib.SPIRV_Cross_Release}",
-			"%{Lib.SPIRV_Cross_GLSL_Release}",
-			"%{Lib.Python_Release}"
+			"%{Lib.SPIRV_Cross_GLSL_Release}"
 		}
 		
 	filter "configurations:Dist"
@@ -133,8 +131,7 @@ project "TurboGE"
 		{
 			"%{Lib.ShaderC_Release}",
 			"%{Lib.SPIRV_Cross_Release}",
-			"%{Lib.SPIRV_Cross_GLSL_Release}",
-			"%{Lib.Python_Release}"
+			"%{Lib.SPIRV_Cross_GLSL_Release}"
 		}
 
 project "Editor"
@@ -165,8 +162,7 @@ project "Editor"
 
 	links
 	{
-		"TurboGE",
-		"ScriptEngine"
+		"TurboGE"
 	}
 
 	filter "system:windows"
@@ -196,50 +192,6 @@ project "Editor"
 		
 	filter "configurations:Dist"
 		defines "TGE_DIST"
-		optimize "on"
-		links
-		{
-			"%{Lib.Python_Release}"
-		}
-		
-project "ScriptEngine"
-	kind "SharedLib"
-	location "ScriptEngine"
-	language "C++"
-	cppdialect "C++20"
-	
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
-   
-	files { "%{prj.name}/hello.cpp" }
-	
-	includedirs
-	{
-		"TurboGE/src",
-		"%{IncludeDir.glm}",
-		"%{IncludeDir.Python}"
-	}
-	
-	links
-	{
-		"TurboGE"
-	}
-	
-	filter "configurations:Debug"
-		symbols "On"
-		links
-		{
-			"%{Lib.Python_Debug}"
-		}
-
-	filter "configurations:Release"
-		optimize "On"
-		links
-		{
-			"%{Lib.Python_Release}"
-		}
-		
-	filter "configurations:Dist"
 		optimize "on"
 		links
 		{
