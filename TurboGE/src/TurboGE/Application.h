@@ -5,9 +5,6 @@
 #include"Imgui/ImguiLayer.h"
 #include"Events/Event.h"
 #include"Layer.h"
-//#include"../../Editor/src/Editor2D.h"  //TEMP
-
-
 
 namespace TurboGE
 {
@@ -16,8 +13,7 @@ namespace TurboGE
 		bool m_minimized = false;
 		std::unique_ptr<Window> m_window;
 		ImguiLayer* layer;
-		
-		//Editor2D* s; //TEMP
+
 		bool m_Running = true;
 		Layer* m_Layer{};
 

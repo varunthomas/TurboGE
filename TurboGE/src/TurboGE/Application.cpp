@@ -5,7 +5,6 @@
 #include"GLFW/glfw3.h"
 #include"Time.h"
 #include"Scripting/Scripting.h"
-#include<filesystem>
 
 
 
@@ -21,7 +20,6 @@ namespace TurboGE
 		layer = new ImguiLayer() ;
 		layer->onAttach();
 		m_window->setCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
-		//s = new Editor2D();
 		
 
 	}
