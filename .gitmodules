@@ -1,18 +1,22 @@
 [submodule "TurboGE/vendor/spdlog"]
 	path = TurboGE/vendor/spdlog
-	url = https://github.com/gabime/spdlog
-[submodule "TurboGE/vendor/imgui"]
-	path = TurboGE/vendor/imgui
-	url = https://github.com/TheCherno/imgui
+	url = https://github.com/varunthomas/spdlog
 [submodule "TurboGE/vendor/glm"]
 	path = TurboGE/vendor/glm
-	url = https://github.com/g-truc/glm
+	url = https://github.com/varunthomas/glm
 [submodule "TurboGE/vendor/yaml-cpp"]
 	path = TurboGE/vendor/yaml-cpp
-	url = https://github.com/jbeder/yaml-cpp
+	url = https://github.com/varunthomas/yaml-cpp
 [submodule "TurboGE/vendor/ImGuizmo"]
 	path = TurboGE/vendor/ImGuizmo
-	url = https://github.com/CedricGuillemet/ImGuizmo
+	url = https://github.com/varunthomas/ImGuizmo
 [submodule "TurboGE/vendor/GLFW"]
 	path = TurboGE/vendor/GLFW
-	url = https://github.com/glfw/glfw
+	url = https://github.com/varunthomas/glfw
+[submodule "TurboGE/vendor/imgui"]
+	path = TurboGE/vendor/imgui
+	url = https://github.com/varunthomas/imgui
+	branch = docking
+[submodule "TurboGE/vendor/box2d"]
+	path = TurboGE/vendor/box2d
+	url = https://github.com/varunthomas/box2d

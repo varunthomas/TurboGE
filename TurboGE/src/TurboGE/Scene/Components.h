@@ -1,7 +1,9 @@
 #pragma once
 #include<glm/glm.hpp>
 #include"TurboGE/Renderer/Camera.h"
+#include"TurboGE/Renderer/Texture.h"
 #include"ScriptableEntity.h"
+#include"TurboGE/Scripting/Scripting.h"
 #include<glm/gtc/matrix_transform.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include<glm/gtx/quaternion.hpp>
@@ -34,6 +36,7 @@ namespace TurboGE
 		std::string name = "SpriteRendererComponent";
 
 		glm::vec4 color{ 1.0f, 1.0f, 1.0f, 1.0f };
+		std::shared_ptr<Texture2D> texture;
 
 		SpriteRendererComponent() = default;
 		SpriteRendererComponent(const SpriteRendererComponent&) = default;
@@ -68,6 +71,71 @@ namespace TurboGE
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
 
+	};
+
+	struct CircleRendererComponent
+	{
+		std::string name = "CircleRendererComponent";
+		glm::vec4 color{ 1.0f, 1.0f, 1.0f, 1.0f };
+		float thickness = 1.0f;
+		float fade = 0.005f;
+
+		CircleRendererComponent() = default;
+		CircleRendererComponent(const CircleRendererComponent&) = default;
+	};
+
+	struct Rigidbody2D
+	{
+		std::string name = "Rigidbody2D";
+
+		enum class BodyType {Static = 0, Kinematic, Dynamic };
+		BodyType type = BodyType::Static;
+		bool fixedRotation = false;
+		void* body = nullptr;
+
+		Rigidbody2D() = default;
+		Rigidbody2D(const Rigidbody2D&) = default;
+
+	};
+
+	struct Fixture2D
+	{
+		std::string name = "Fixture2D";
+		glm::vec2 size = { 0.5f, 0.5f };
+		float density = 1.0f;
+		float friction = 0.3f;
+		float restitution = 0.0f;
+		float restitutionThreshold = 0.5f;
+
+		Fixture2D() = default;
+		Fixture2D(const Fixture2D&) = default;
+
+	};
+
+	struct CircleFixture2D
+	{
+		std::string name = "CircleFixture2D";
+		glm::vec2 offset = { 0.0f, 0.0f };
+		float radius = 0.5f;
+		float density = 1.0f;
+		float friction = 0.3f;
+		float restitution = 0.0f;
+		float restitutionThreshold = 0.5f;
+
+		CircleFixture2D() = default;
+		CircleFixture2D(const CircleFixture2D&) = default;
+
+	};
+
+	struct PyScriptComponent
+	{
+		std::string name = "PyScriptComponent";
+		std::string fileName;
+		bool create = false;
+		std::shared_ptr<PyScript> script;
+
+		PyScriptComponent() = default;
+		PyScriptComponent(const PyScriptComponent&) = default;
 	};
 
 	template<typename T>

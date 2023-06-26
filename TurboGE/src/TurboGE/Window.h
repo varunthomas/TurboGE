@@ -11,7 +11,7 @@ namespace TurboGE
 		unsigned int height;
 		unsigned int width;
 
-		WindowProp(const std::string& title = "TurboGE", unsigned int height = 720, unsigned int width = 1280)
+		WindowProp(const std::string& title = "TurboGE", unsigned int height = 1080, unsigned int width = 1920)
 			:title{ title }, height{ height }, width{ width }
 		{
 		}

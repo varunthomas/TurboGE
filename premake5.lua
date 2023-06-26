@@ -23,6 +23,7 @@ group "Dependencies"
 	include "TurboGE/vendor/Glad"
 	include "TurboGE/vendor/imgui"
 	include "TurboGE/vendor/yaml-cpp"
+	include "TurboGE/vendor/box2d"
 group ""
 	
 	
@@ -68,7 +69,9 @@ project "TurboGE"
 		"%{IncludeDir.entt}",
 		"%{IncludeDir.yamlcpp}",
 		"%{IncludeDir.ImGuizmo}",
-		"%{IncludeDir.VulkanSDK}"
+		"%{IncludeDir.VulkanSDK}",
+		"%{IncludeDir.Box2D}",
+		"%{IncludeDir.Python}"
 	}
 	
 	links
@@ -77,7 +80,8 @@ project "TurboGE"
 		"Glad",
 		"Imgui",
 		"yaml-cpp",
-		"opengl32.lib"
+		"opengl32.lib",
+		"Box2D"
 	}
 	
 	filter "files:TurboGE/vendor/ImGuizmo/**.cpp"
@@ -130,56 +134,6 @@ project "TurboGE"
 			"%{Lib.SPIRV_Cross_GLSL_Release}"
 		}
 
-project "Sandbox"
-	location "Sandbox"
-	kind "ConsoleApp"
-	language "C++"
-	cppdialect "C++17"
-	staticruntime "on"
-
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
-
-	files
-	{
-		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
-	}
-
-	includedirs
-	{
-		"TurboGE/vendor/spdlog/include",
-		"TurboGE/src",
-		"TurboGE/vendor",
-		"%{IncludeDir.glm}",
-		"%{IncludeDir.entt}"
-	}
-
-	links
-	{
-		"TurboGE"
-	}
-
-	filter "system:windows"
-		systemversion "latest"
-
-		defines
-		{
-			"TGE_WINDOWS"
-		}
-
-	filter "configurations:Debug"
-		defines "TGE_DEBUG"
-		symbols "on"
-
-	filter "configurations:Release"
-		defines "TGE_RELEASE"
-		optimize "on"
-
-	filter "configurations:Dist"
-		defines "TGE_DIST"
-		optimize "on"
-		
 project "Editor"
 	location "Editor"
 	kind "ConsoleApp"
@@ -223,11 +177,23 @@ project "Editor"
 	filter "configurations:Debug"
 		defines "TGE_DEBUG"
 		symbols "on"
+		links
+		{
+			"%{Lib.Python_Debug}"
+		}
 
 	filter "configurations:Release"
 		defines "TGE_RELEASE"
 		optimize "on"
-
+		links
+		{
+			"%{Lib.Python_Release}"
+		}
+		
 	filter "configurations:Dist"
 		defines "TGE_DIST"
 		optimize "on"
+		links
+		{
+			"%{Lib.Python_Release}"
+		}

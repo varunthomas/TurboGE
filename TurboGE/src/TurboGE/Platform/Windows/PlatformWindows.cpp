@@ -26,6 +26,10 @@ namespace TurboGE {
 		{
 			return ofn.lpstrFile;
 		}
+		else if (CommDlgExtendedError() == 0)
+		{
+			return std::string("C");
+		}
 		return std::nullopt;
 	}
 
@@ -45,6 +49,10 @@ namespace TurboGE {
 		if (GetSaveFileNameA(&ofn) == TRUE)
 		{
 			return ofn.lpstrFile;
+		}
+		else if (CommDlgExtendedError() == 0)
+		{
+			return std::string("C");
 		}
 		return std::nullopt;
 	}

@@ -2,6 +2,7 @@
 #include"Renderer2D.h"
 #include"glm/gtc/matrix_transform.hpp"
 #include"glm/gtx/string_cast.hpp"
+
 namespace TurboGE
 {
 
@@ -27,13 +28,51 @@ namespace TurboGE
 		layoutsq.m_attribVec = {	{0, AttribType::Float3, false, false	},
 									{1, AttribType::Float4, false, false	},
 									{2, AttribType::Float2, false, false	},
-									{3, AttribType::Float,  false, false	},
+									{3, AttribType::Float,	false, false	},
 									{4, AttribType::Float,  false, false	},
 									{5, AttribType::Int,    false, true		}
 								};
 		layoutsq.MakeLayout();
 		m_SquareVA->SetLayout(layoutsq);
-		m_SquareVA->BindVertexBuffer();
+		m_SquareVA->BindVertexBuffer(m_SquareVB);
+
+		
+		//CIRCLE
+		
+		m_CircleVA = VertexArray::Create();
+		m_CircleVB = VertexBuffer::Create(maxVertices * sizeof(CircleVertices));
+
+		circleVerticesIndexBase.resize(maxIndices);
+
+		VertexLayout layoutCircle;		//LAYOUT, DATATYPE, NORMALIZED, ENTITYID
+		layoutCircle.m_attribVec = {	{0, AttribType::Float3, false, false	},
+										{1, AttribType::Float3, false, false	},
+										{2, AttribType::Float4, false, false	},
+										{3, AttribType::Float,	false, false	},
+										{4, AttribType::Float,  false, false	},
+										{5, AttribType::Int,    false, true		}
+		};
+		layoutCircle.MakeLayout();
+		m_CircleVA->SetLayout(layoutCircle);
+		m_CircleVA->BindVertexBuffer(m_CircleVB);
+
+		
+		//LINE
+
+		m_LineVA = VertexArray::Create();
+		m_LineVB = VertexBuffer::Create(maxVertices * sizeof(LineVertices));
+
+		lineVerticesIndexBase.resize(maxIndices);
+
+		VertexLayout layoutLine;		//LAYOUT, DATATYPE, NORMALIZED, ENTITYID
+		layoutLine.m_attribVec = { {0, AttribType::Float3, false, false	},
+										{1, AttribType::Float4, false, false	},
+										{2, AttribType::Int,    false, true		}
+		};
+		layoutLine.MakeLayout();
+		m_LineVA->SetLayout(layoutLine);
+		m_LineVA->BindVertexBuffer(m_LineVB);
+
 
 		uint32_t* indicesSQ = new uint32_t[maxIndices];
 		uint32_t offset = 0;
@@ -54,8 +93,13 @@ namespace TurboGE
 
 		delete[] indicesSQ;
 
+		m_CircleVA->setIndexBuffer(m_SquareIB); //Intentional
+
+
 		m_WhiteTexture = Texture2D::Create();
-		m_Shader = Shader::Create("assets/shaders/Texture.glsl");
+		m_SquareShader = Shader::Create("assets/shaders/Texture.glsl");
+		m_CircleShader = Shader::Create("assets/shaders/Circle.glsl");
+		m_LineShader = Shader::Create("assets/shaders/Line.glsl");
 
 		cameraUB = UniformBuffer::Create(sizeof(CameraData), 0);
 
@@ -67,7 +111,11 @@ namespace TurboGE
 	{
 		textureSlot = 1;
 		quadIndexCount = 0;
-		m_Index = 0;
+		circleIndexCount = 0;
+		lineIndexCount = 0;
+		m_IndexSquare = 0;
+		m_IndexCircle = 0;
+		m_IndexLine = 0;
 		cameraData.ViewProjection = camera.GetViewProjection();
 		cameraUB->SetData(&cameraData, sizeof(CameraData));
 	}
@@ -75,7 +123,11 @@ namespace TurboGE
 	{
 		textureSlot = 1;
 		quadIndexCount = 0;
-		m_Index = 0;
+		circleIndexCount = 0;
+		lineIndexCount = 0;
+		m_IndexSquare = 0;
+		m_IndexCircle = 0;
+		m_IndexLine = 0;
 		cameraData.ViewProjection = camera.getViewProjectionMatrix();
 		cameraUB->SetData(&cameraData, sizeof(CameraData));
 	}
@@ -85,25 +137,57 @@ namespace TurboGE
 		glm::mat4 viewproj = camera.GetProjection() * glm::inverse(transform);
 		textureSlot = 1;
 		quadIndexCount = 0;
-		m_Index = 0;
-		m_Shader->Bind();
-		m_Shader->SetMat4("u_ViewProjection",viewproj);
+		circleIndexCount = 0;
+		lineIndexCount = 0;
+		m_IndexSquare = 0;
+		m_IndexCircle = 0;
+		m_IndexLine = 0;
+		cameraData.ViewProjection = viewproj;
+		cameraUB->SetData(&cameraData, sizeof(CameraData));
 	}
 
 	void Renderer2D::EndScene()
 	{
-		if (quadIndexCount == 0)
-			return;
-		uint32_t size = m_Index * sizeof(QuadVertices);
-		m_SquareVB->SetBatchData(size, &quadVerticesIndexBase[0]);
-		
-		for (uint32_t i = 0; i < textureSlot; i++)
+		if (quadIndexCount)
 		{
-			textures[i]->Bind(i);
+			uint32_t size = m_IndexSquare * sizeof(QuadVertices);
+			m_SquareVB->SetBatchData(size, &quadVerticesIndexBase[0]);
+
+			for (int i = 0; i < textureSlot; i++)
+			{
+				textures[i]->Bind(i);
+			}
+			m_SquareShader->Bind();
+			m_SquareVA->Bind();
+			m_SquareVA->DrawCommand(quadIndexCount);
+			stats.drawCalls++;
 		}
-		m_Shader->Bind();
-		m_SquareVA->DrawCommand(quadIndexCount);
-		stats.drawCalls++;
+
+
+
+		if (circleIndexCount)
+		{
+			uint32_t size = m_IndexCircle * sizeof(CircleVertices);
+			m_CircleVB->SetBatchData(size, &circleVerticesIndexBase[0]);
+
+			m_CircleShader->Bind();
+			m_CircleVA->Bind();
+			m_CircleVA->DrawCommand(circleIndexCount);
+			stats.drawCalls++;
+		}
+
+		if (lineIndexCount)
+		{
+			uint32_t size = m_IndexLine * sizeof(LineVertices);
+			m_LineVB->SetBatchData(size, &lineVerticesIndexBase[0]);
+
+			m_LineShader->Bind();
+			m_LineVA->SetLineWidth(2.0f);
+			m_LineVA->Bind();
+
+			m_LineVA->DrawLineCommand(lineIndexCount);
+			stats.drawCalls++;
+		}
 		
 	}
 
@@ -111,13 +195,64 @@ namespace TurboGE
 	{
 		textureSlot = 1;
 		quadIndexCount = 0;
-		m_Index = 0;
+		circleIndexCount = 0;
+		lineIndexCount = 0;
+		m_IndexSquare = 0;
+		m_IndexCircle = 0;
+		m_IndexLine = 0;
 	}
 	
 
 	void Renderer2D::ResetStats()
 	{
 		memset(&stats, 0, sizeof(Statistics));
+	}
+
+	void Renderer2D::DrawLine(const glm::vec3& p0, const glm::vec3& p1, const glm::vec4& color, int entityID)
+	{
+		lineVerticesIndexBase.at(m_IndexLine) = { p0, color, entityID };
+		m_IndexLine++;
+		lineVerticesIndexBase.at(m_IndexLine) = { p1, color, entityID };
+		m_IndexLine++;
+		lineIndexCount += 2;
+	}
+
+	void Renderer2D::DrawRect(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, int entityID)
+	{
+		glm::vec3 p0 = glm::vec3(position.x - size.x , position.y - size.y, position.z);
+		glm::vec3 p1 = glm::vec3(position.x + size.x , position.y - size.y, position.z);
+		glm::vec3 p2 = glm::vec3(position.x + size.x , position.y + size.y, position.z);
+		glm::vec3 p3 = glm::vec3(position.x - size.x , position.y + size.y, position.z);
+
+		DrawLine(p0, p1, color);
+		DrawLine(p1, p2, color);
+		DrawLine(p2, p3, color);
+		DrawLine(p3, p0, color);
+	}
+
+	void Renderer2D::DrawRect(const glm::mat4& transform, const glm::vec4& color, int entityID)
+	{
+		glm::vec3 lineVertices[4];
+		for (size_t i = 0; i < 4; i++)
+			lineVertices[i] = transform * quadVertexPos[i];
+
+		DrawLine(lineVertices[0], lineVertices[1], color);
+		DrawLine(lineVertices[1], lineVertices[2], color);
+		DrawLine(lineVertices[2], lineVertices[3], color);
+		DrawLine(lineVertices[3], lineVertices[0], color);
+	}
+
+	void Renderer2D::DrawCircle(const glm::mat4& transform, const glm::vec4& color, float thickness, float fade, int entityID)
+	{
+
+		for (size_t i{}; i < 4; i++)
+		{
+			circleVerticesIndexBase.at(m_IndexCircle) = { transform * quadVertexPos[i],  quadVertexPos[i]*2.0f, color, thickness, fade, entityID };
+			m_IndexCircle++;
+		}
+		circleIndexCount += 6;
+		stats.quadCount++;
+
 	}
 
 	Renderer2D::Statistics Renderer2D::GetStats()

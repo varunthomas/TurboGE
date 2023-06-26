@@ -49,6 +49,26 @@ namespace YAML {
 			return true;
 		}
 	};
+
+	template<>
+	struct convert<glm::vec2> {
+		static Node encode(const glm::vec2& rhs) {
+			Node node;
+			node.push_back(rhs.x);
+			node.push_back(rhs.y);
+			return node;
+		}
+
+		static bool decode(const Node& node, glm::vec2& rhs) {
+			if (!node.IsSequence() || node.size() != 2) {
+				return false;
+			}
+
+			rhs.x = node[0].as<float>();
+			rhs.y = node[1].as<float>();
+			return true;
+		}
+	};
 }
 
 namespace TurboGE
@@ -66,14 +86,20 @@ namespace TurboGE
 		return out;
 	}
 
+	YAML::Emitter& operator << (YAML::Emitter& out, const glm::vec2& v) {
+		out << YAML::Flow;
+		out << YAML::BeginSeq << v.x << v.y << YAML::EndSeq;
+		return out;
+	}
+
 	template<typename T>
 	void SceneSerializer::ConstructSave(YAML::Emitter& out, Entity& entity)
 	{
 		auto component = entity.HasComponent<T>();
+		
 		if (component)
 		{
-			auto name = entity.GetName<T>();
-			out << YAML::Key << name.c_str();
+			out << YAML::Key << component->name;
 			out << YAML::BeginMap;
 
 			if constexpr (std::is_same_v<T, TagComponent>)
@@ -101,6 +127,39 @@ namespace TurboGE
 			{
 				out << YAML::Key << "Color" << YAML::Value << component->color;
 			}
+			else if constexpr (std::is_same_v<T, CircleRendererComponent>)
+			{
+				out << YAML::Key << "Color" << YAML::Value << component->color;
+				out << YAML::Key << "Thickness" << YAML::Value << component->thickness;
+				out << YAML::Key << "Fade" << YAML::Value << component->fade;
+			}
+			else if constexpr (std::is_same_v<T, Rigidbody2D>)
+			{
+				out << YAML::Key << "Body Type" << YAML::Value << (int)component->type;
+				out << YAML::Key << "Fixed Rotation" << YAML::Value << component->fixedRotation;
+			}
+			else if constexpr (std::is_same_v<T, Fixture2D>)
+			{
+				out << YAML::Key << "Size" << YAML::Value << component->size;
+				out << YAML::Key << "Density" << YAML::Value << component->density;
+				out << YAML::Key << "Friction" << YAML::Value << component->friction;
+				out << YAML::Key << "Restitution" << YAML::Value << component->restitution;
+				out << YAML::Key << "Restitution threshold" << YAML::Value << component->restitutionThreshold;
+			}
+			else if constexpr (std::is_same_v<T, CircleFixture2D>)
+			{
+				out << YAML::Key << "Offset" << YAML::Value << component->offset;
+				out << YAML::Key << "Radius" << YAML::Value << component->radius;
+				out << YAML::Key << "Density" << YAML::Value << component->density;
+				out << YAML::Key << "Friction" << YAML::Value << component->friction;
+				out << YAML::Key << "Restitution" << YAML::Value << component->restitution;
+				out << YAML::Key << "Restitution threshold" << YAML::Value << component->restitutionThreshold;
+			}
+			else if constexpr (std::is_same_v<T, PyScriptComponent>)
+			{
+				out << YAML::Key << "FileName" << YAML::Value << component->fileName;
+			}
+
 			out << YAML::EndMap;
 		}
 	}
@@ -114,12 +173,18 @@ namespace TurboGE
 		ConstructSave<TransformComponent>(out, entity);
 		ConstructSave<CameraComponent>(out, entity);
 		ConstructSave<SpriteRendererComponent>(out, entity);
+		ConstructSave<CircleRendererComponent>(out, entity);
+		ConstructSave<Rigidbody2D>(out, entity);
+		ConstructSave<Fixture2D>(out, entity);
+		ConstructSave<CircleFixture2D>(out, entity);
+		ConstructSave<PyScriptComponent>(out, entity);
 
 		out << YAML::EndMap;
 	}
 
-	void SceneSerializer::Save(const std::string& filePath)
+	std::string SceneSerializer::Serialize()
 	{
+
 		YAML::Emitter out;
 		out << YAML::BeginMap;
 		out << YAML::Key << "Scene" << YAML::Value << "Untitled";
@@ -127,27 +192,49 @@ namespace TurboGE
 			YAML::BeginSeq;
 
 		m_Scene->m_registry.each([&](auto entityID) {
-			Entity e = { entityID, m_Scene.get()};
+			Entity e = { entityID, m_Scene.get() };
 			if (!e)
 				return;
 
 			SerializeEntities(out, e);
-		});
+			});
 
 		out << YAML::EndSeq;
 		out << YAML::EndMap;
+		std::string tmp = out.c_str();
+		return tmp;
+	}
+
+	void SceneSerializer::Save(const std::string& filePath)
+	{
+		std::string out = Serialize();
 
 		std::ofstream fout(filePath);
 		fout << out.c_str();
 	}
 
-	void SceneSerializer::Load(const std::string& filePath)
+	void SceneSerializer::Load(const std::string& filePath, bool isFile)
 	{
+		YAML::Node node;
+		if(isFile)
+		{
+			try
+			{
+				node = YAML::LoadFile(filePath);
+			}
+			catch (YAML::ParserException e)
+			{
+				TURBO_CORE_ERR("Failed to read file {0} : {1}", filePath, e.what());
+			}
+		}
+		else
+		{
+			node = YAML::Load(filePath);
+		}
 
-		YAML::Node node = YAML::LoadFile(filePath);
 		if (!node["Scene"])
 		{
-			TURBO_ASSERT("Corrupt file",0);
+			TURBO_CLIENT_ERR("Corrupt file {0}", filePath);
 			return;
 		}
 
@@ -161,13 +248,15 @@ namespace TurboGE
 
 				Entity deserializedEntity = m_Scene->CreateEntity(tag);
 
-				auto transformComponent = entity["TransformComponent"];
+				if (entity["TransformComponent"])
+				{
+					auto transformComponent = entity["TransformComponent"];
 
-				auto& tc = deserializedEntity.GetComponent<TransformComponent>();
-				tc.rotate = transformComponent["Rotation"].as<glm::vec3>();
-				tc.scale = transformComponent["Scale"].as<glm::vec3>();
-				tc.translate = transformComponent["Translation"].as<glm::vec3>();
-
+					auto& tc = deserializedEntity.GetComponent<TransformComponent>();
+					tc.rotate = transformComponent["Rotation"].as<glm::vec3>();
+					tc.scale = transformComponent["Scale"].as<glm::vec3>();
+					tc.translate = transformComponent["Translation"].as<glm::vec3>();
+				}
 				if (entity["CameraComponent"])
 				{
 					auto cameraComponent = entity["CameraComponent"];
@@ -188,8 +277,55 @@ namespace TurboGE
 					auto& src = deserializedEntity.AddComponent<SpriteRendererComponent>();
 					src.color = spriteRendererComponent["Color"].as<glm::vec4>();
 				}
+
+				if (entity["CircleRendererComponent"])
+				{
+					auto circleRendererComponent = entity["CircleRendererComponent"];
+					auto& src = deserializedEntity.AddComponent<CircleRendererComponent>();
+					src.color = circleRendererComponent["Color"].as<glm::vec4>();
+					src.thickness = circleRendererComponent["Thickness"].as<float>();
+					src.fade = circleRendererComponent["Fade"].as<float>();
+				}
+
+				if (entity["Rigidbody2D"])
+				{
+					auto rigidbody2D = entity["Rigidbody2D"];
+					auto& src = deserializedEntity.AddComponent<Rigidbody2D>();
+					auto type = rigidbody2D["Body Type"].as<int>();
+					src.type = (Rigidbody2D::BodyType)type;
+					src.fixedRotation = rigidbody2D["Fixed Rotation"].as<bool>();
+				}
+
+				if (entity["Fixture2D"])
+				{
+					auto fixture2D = entity["Fixture2D"];
+					auto& src = deserializedEntity.AddComponent<Fixture2D>();
+					src.size = fixture2D["Size"].as<glm::vec2>();
+					src.density = fixture2D["Density"].as<float>();
+					src.friction = fixture2D["Friction"].as<float>();
+					src.restitution = fixture2D["Restitution"].as<float>();
+					src.restitutionThreshold = fixture2D["Restitution threshold"].as<float>();
+				}
+
+				if (entity["CircleFixture2D"])
+				{
+					auto circleFixture2D = entity["CircleFixture2D"];
+					auto& src = deserializedEntity.AddComponent<CircleFixture2D>();
+					src.offset = circleFixture2D["Offset"].as<glm::vec2>();
+					src.radius = circleFixture2D["Radius"].as<float>();
+					src.density = circleFixture2D["Density"].as<float>();
+					src.friction = circleFixture2D["Friction"].as<float>();
+					src.restitution = circleFixture2D["Restitution"].as<float>();
+					src.restitutionThreshold = circleFixture2D["Restitution threshold"].as<float>();
+				}
+				if (entity["PyScriptComponent"])
+				{
+					auto pyScriptComponent = entity["PyScriptComponent"];
+					auto& src = deserializedEntity.AddComponent<PyScriptComponent>();
+					src.fileName = pyScriptComponent["FileName"].as<std::string>();
+				}
+
 			}
 		}
 	}
-
 }

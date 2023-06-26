@@ -9,28 +9,21 @@
 #include"TurboGE/Scene/SceneSerializer.h"
 #include"TurboGE/Utils/PlatformUtils.h"
 #include"ImGuizmo.h"
-
 namespace TurboGE
 {
-
-    Editor2D::Editor2D()
+    void Editor2D::OnAttach()
     {
         m_Renderer = Renderer::Create();
         m_Renderer->Init();
         renderer2DInstance.Init();
 
-        OnAttach();
-    }
-
-    void Editor2D::OnAttach()
-    {
-        m_Scene = std::make_shared<Scene>();
+        m_Scene = std::make_shared<Scene>(m_ViewportSize);
         entityPanel(m_Scene);
 
         FrameBufferSpec fbSpec;
         fbSpec.formats = { FrameBufferFormat::RGBA8, FrameBufferFormat::RED_INT, FrameBufferFormat::DEPTH24_STENCIL8 };
-        fbSpec.width = 1280;
-        fbSpec.height = 720;
+        fbSpec.width = 1920;
+        fbSpec.height = 1080;
         m_FrameBuffer = FrameBuffer::Create(fbSpec);
     }
 
@@ -59,8 +52,25 @@ namespace TurboGE
         {
             TGE_PROFILE_SCOPE("Draw Render");
 
-            m_EditorCamera.OnUpdate(delta);
-            m_Scene->onUpdateEditor(delta, m_EditorCamera);
+            if (playPanel.isPlay)
+            {
+                if (playPanel.toggle)
+                {
+                    tempData = Serialize(); //SAVE CURRENT CONFIG
+                    m_Physics = std::make_shared<Physics2D>(m_Scene);
+                }
+                m_Scene->onUpdatePlay(delta, m_Physics, m_ShowPhysicsColliders);
+            }
+            else
+            {
+                m_EditorCamera.OnUpdate(delta);
+                m_Scene->onUpdateEditor(delta, m_EditorCamera, m_ShowPhysicsColliders);
+                if (playPanel.toggle)
+                {
+                    m_Physics.reset();
+                    Deserialize(); //LOAD CURRENT CONFIG
+                }
+            }
 
             auto [mx, my] = ImGui::GetMousePos();
             mx -= m_BoundsArray[0].x;
@@ -94,13 +104,13 @@ namespace TurboGE
         {
             m_EditorCamera.OnEvent(e);
         }
-
         if (e.getEventType() == EventType::MousePressEvent)
         {
             auto& mousePressEvent = dynamic_cast<MousePressEvent&>(e);
             if (mousePressEvent.getMouseButton() == (int)MouseCode::ButtonLeft && m_ViewportHovered && !Input::isKeyPressed(Key::LeftAlt) && !ImGuizmo::IsOver())
             {
                 entityPanel.SetSelectedEntity(m_ClickedEntity);
+                m_Scene->HighlightEntity((int)m_ClickedEntity);
             }
         }
 
@@ -109,38 +119,65 @@ namespace TurboGE
         //SHORTCUTS
         if (Input::isKeyPressed(Key::LeftControl) && Input::isKeyPressed(Key::O))
         {
-            LoadScene();
-            
+            if (m_DialogDone)
+            {
+                m_DialogDone = false;
+                LoadScene();
+            }
         }
         if (Input::isKeyPressed(Key::LeftControl) && Input::isKeyPressed(Key::N))
         {
             NewScene();
 
         }
-        if (Input::isKeyPressed(Key::LeftControl) && Input::isKeyPressed(Key::S))
+        if (Input::isKeyPressed(Key::LeftControl) && Input::isKeyPressed(Key::LeftAlt) && Input::isKeyPressed(Key::S))
         {
-            SaveScene();
+            if (m_DialogDone)
+            {
+                m_DialogDone = false;
+                SaveScene();
+            }
+            
 
+        }
+        else if (Input::isKeyPressed(Key::LeftControl) && Input::isKeyPressed(Key::S))
+        {
+            if (m_CurrentSceneFile.empty())
+            {
+                if (m_DialogDone)
+                {
+                    m_DialogDone = false;
+                    SaveScene();
+                }
+            }
+            else
+            {
+                SaveScene(m_CurrentSceneFile);
+            }
         }
 
         //GIZMOS
-        if (Input::isKeyPressed(Key::G))
-        {
-            m_TransformGizmo = (int)ImGuizmo::OPERATION::TRANSLATE;
-        }
-        else if (Input::isKeyPressed(Key::R))
-        {
-            m_TransformGizmo = (int)ImGuizmo::OPERATION::ROTATE;
-        }
-        else if (Input::isKeyPressed(Key::S)) //TODO::Change S in Zoom
-        {
-            m_TransformGizmo = (int)ImGuizmo::OPERATION::SCALE;
-        }
 
-        //SNAP
-        if (Input::isKeyPressed(Key::LeftControl))
+        if (Input::inputViewPort == Input::InputViewport::EDITOR)
         {
-            m_Snap = !m_Snap; //TODO:: Disable snap when ctrl+O for opening file
+            if (Input::isKeyPressed(Key::G))
+            {
+                m_TransformGizmo = (int)ImGuizmo::OPERATION::TRANSLATE;
+            }
+            else if (Input::isKeyPressed(Key::R))
+            {
+                m_TransformGizmo = (int)ImGuizmo::OPERATION::ROTATE;
+            }
+            else if (Input::isKeyPressed(Key::S)) //TODO::Change S in Zoom
+            {
+                m_TransformGizmo = (int)ImGuizmo::OPERATION::SCALE;
+            }
+
+            //SNAP
+            if (Input::isKeyPressed(Key::LeftControl))
+            {
+                m_Snap = !m_Snap; //TODO:: Disable snap when ctrl+O for opening file
+            }
         }
 
     }
@@ -204,22 +241,29 @@ namespace TurboGE
             ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
             ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
         }
-        else
-        {
-            std::cout << "Docking not enabled\n";
-        }
         style.WindowMinSize.x = minWinSizeX;
         if (ImGui::BeginMenuBar())
         {
-            if (ImGui::BeginMenu("Options"))
+            if (ImGui::BeginMenu("File"))
             {
                 if (ImGui::MenuItem("New", "ctrl+N"))
                 {
                     NewScene();
                 }
-                if (ImGui::MenuItem("Save as...", "ctrl+S"))
+                if (ImGui::MenuItem("Save as...", "ctrl+alt+S"))
                 {
                     SaveScene();
+                }
+                else if (ImGui::MenuItem("Save", "ctrl+S"))
+                {
+                    if (m_CurrentSceneFile.empty())
+                    {
+                        SaveScene();
+                    }
+                    else
+                    {
+                        SaveScene(m_CurrentSceneFile);
+                    }
                 }
                 if (ImGui::MenuItem("Open..", "ctrl+O"))
                 {
@@ -233,10 +277,32 @@ namespace TurboGE
                 ImGui::EndMenu();
             }
 
+            ImGui::SetCursorPosX(ImGui::GetWindowSize().x - 30 * 3); // Adjust the width and spacing according to your needs
+            if (ImGui::Button("-", ImVec2(30, 0)))
+            {
+                Application::Get().Minimize();
+            }
+            ImGui::SameLine(0, 0);
+            if (ImGui::Button("[ ]", ImVec2(30, 0)))
+            {
+                m_RestoreDown == true ? Application::Get().RestoreDown() : Application::Get().RestoreUp();
+                m_RestoreDown = !m_RestoreDown;
+            }
+            ImGui::SameLine(0, 0);
+            if (ImGui::Button("X", ImVec2(30, 0)))
+            {
+                Application::Get().Close();
+            }
+
             ImGui::EndMenuBar();
         }
 
         entityPanel.OnImGuiRender();
+        browserPanel.OnImGuiRender();
+
+        playPanel.OnImGuiRender();
+
+
 
         uint32_t textureID = m_FrameBuffer->GetID();
         ImGui::Begin("Color settings");
@@ -244,6 +310,10 @@ namespace TurboGE
         ImGui::Text("Quad count: %d", renderer2DInstance.GetStats().quadCount);
 
         ImGui::Separator();
+        ImGui::End();
+
+        ImGui::Begin("Settings");
+        ImGui::Checkbox("Show physics colliders", &m_ShowPhysicsColliders);
         ImGui::End();
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
@@ -256,6 +326,8 @@ namespace TurboGE
         m_ViewportFocused = ImGui::IsWindowFocused();
         m_ViewportHovered = ImGui::IsWindowHovered();
 
+        m_ViewportFocused == true ? Input::inputViewPort = Input::InputViewport::EDITOR : Input::inputViewPort = Input::InputViewport::PANEL;
+
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail(); //PIXEL WIDTH AND HEIGHT OF VIEWPORT EXCLUDING HEIGHT OF option BAR
         auto viewportOffset = ImGui::GetWindowPos(); //GET OFFSET FROM ACTUAL SCREEN COORD TO VIEWPORT COORD TOP LEFT
         m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
@@ -265,6 +337,18 @@ namespace TurboGE
         m_BoundsArray[1] = { viewportMaxBound.x + viewportOffset.x, viewportMaxBound.y + viewportOffset.y };
 
         ImGui::Image((void*)textureID, viewportPanelSize, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+
+        if (ImGui::BeginDragDropTarget())
+        {
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DRAG_DROP"))
+            {
+                
+                const char* path = (const char*)payload->Data;
+                std::string loadFile(path);
+                LoadScene(loadFile);
+            }
+            ImGui::EndDragDropTarget();
+        }
 
         //GIZMOS
 
@@ -276,7 +360,7 @@ namespace TurboGE
 
             ImGuizmo::SetRect(m_BoundsArray[0].x, m_BoundsArray[0].y, m_BoundsArray[1].x - m_BoundsArray[0].x, m_BoundsArray[1].y - m_BoundsArray[0].y);
             
-            glm::mat4 cameraProjection = m_EditorCamera.GetProjection();
+            const glm::mat4& cameraProjection = m_EditorCamera.GetProjection();
             glm::mat4 cameraView = m_EditorCamera.GetView();
 
             //ENTITY
@@ -325,11 +409,21 @@ namespace TurboGE
         std::optional<std::string> filepath = FileDialogs::OpenFile("Turbo Scene (*.turbo)\0*.turbo\0");
         if (filepath)
         {
-            m_Scene = std::make_shared<Scene>();
-            entityPanel(m_Scene);
-            SceneSerializer deserializer(m_Scene);
-            deserializer.Load(*filepath);
+            m_DialogDone = true;
+            LoadScene(*filepath);
         }
+    }
+
+    void Editor2D::LoadScene(const std::string& filePath)
+    {
+        if (filePath == "C")
+            return;
+        m_CurrentSceneFile = filePath;
+        m_Scene = std::make_shared<Scene>(m_ViewportSize);
+        entityPanel(m_Scene);
+        SceneSerializer deserializer(m_Scene);
+        deserializer.Load(filePath);
+
     }
 
     void Editor2D::SaveScene()
@@ -338,14 +432,36 @@ namespace TurboGE
         std::optional<std::string> filepath = FileDialogs::SaveFile("Turbo Scene (*.turbo)\0*.turbo\0");
         if (filepath)
         {
-            SceneSerializer serializer(m_Scene);
-            serializer.Save(*filepath);
+            m_DialogDone = true;
+            SaveScene(*filepath);
         }
+    }
+
+    void Editor2D::SaveScene(const std::string& filePath)
+    {
+        if (filePath == "C")
+            return;
+        SceneSerializer serializer(m_Scene);
+        serializer.Save(filePath);
+    }
+
+    std::string Editor2D::Serialize()
+    {
+        SceneSerializer serializer(m_Scene);
+        return serializer.Serialize();
+    }
+
+    void Editor2D::Deserialize()
+    {
+        m_Scene = std::make_shared<Scene>(m_ViewportSize);
+        entityPanel(m_Scene);
+        SceneSerializer deserializer(m_Scene);
+        deserializer.Load(tempData, false);
     }
 
     void Editor2D::NewScene()
     {
-        m_Scene = std::make_shared<Scene>();
+        m_Scene = std::make_shared<Scene>(m_ViewportSize);
         entityPanel(m_Scene);
     }
 

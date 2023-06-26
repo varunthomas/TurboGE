@@ -8,6 +8,8 @@ namespace TurboGE
 	{
 		std::shared_ptr<Scene> m_Scene;
 		Entity m_SelectionContext{};
+		template <typename T>
+		void DisplayPopup(const std::string&);
 	public:
 		EntityPanel() = default;
 		void operator()(const std::shared_ptr<Scene>&);

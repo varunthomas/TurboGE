@@ -41,14 +41,14 @@ namespace TurboGE
 	}
 
 	/////FOR NOW ONLY OPENGL IS USED
-	std::unique_ptr<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
+	std::shared_ptr<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
 	{
-		return std::make_unique<OpenGLVertexBuffer>(vertices, size);
+		return std::make_shared<OpenGLVertexBuffer>(vertices, size);
 	}
 
-	std::unique_ptr<VertexBuffer> VertexBuffer::Create(uint32_t size)
+	std::shared_ptr<VertexBuffer> VertexBuffer::Create(uint32_t size)
 	{
-		return std::make_unique<OpenGLVertexBuffer>(size);
+		return std::make_shared<OpenGLVertexBuffer>(size);
 	}
 
 	std::shared_ptr<IndexBuffer> IndexBuffer::Create(unsigned int* indices, uint32_t size)

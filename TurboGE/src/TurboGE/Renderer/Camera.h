@@ -2,7 +2,6 @@
 #include<glm/glm.hpp>
 #include"TurboGE/Events/Event.h"
 #include"TurboGE/Time.h"
-
 namespace TurboGE
 {
 	class Camera
@@ -89,8 +88,8 @@ namespace TurboGE
 		bool firstMouse = true;
 		float yaw = -90.0f;	// yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right so we initially rotate a bit to the left.
 		float pitch = 0.0f;
-		float lastX = 1280.0f / 2.0f; //MIDDLE OF SCREEN
-		float lastY = 720.0f / 2.0f;
+		float lastX = 1920.0f / 2.0f; //MIDDLE OF SCREEN
+		float lastY = 1080.0f / 2.0f;
 		float m_Fov = 45.0f;
 		bool m_MousePressed = false;
 		float xpos, ypos;

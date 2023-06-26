@@ -17,19 +17,19 @@ struct VertexOutput
 {
 	vec4 Color;
 	vec2 TextCoord;
-	float TextIndex;
 	float TilingFactor;
 };
 
 layout (location = 0) out VertexOutput Output;
+layout (location = 3) out flat float v_TextIndex;
 layout (location = 4) out flat int v_entityID;
 
 void main()
 {
 	Output.Color = a_Color;
 	Output.TextCoord = a_TextCoord;
-	Output.TextIndex = a_TextIndex;
 	Output.TilingFactor = a_TilingFactor;
+	v_TextIndex = a_TextIndex;
 	v_entityID = a_entityID;
 	gl_Position = u_ViewProjection * vec4(a_Position, 1.0);	
 }
@@ -38,17 +38,17 @@ void main()
 #version 450 core
 			
 layout(location = 0) out vec4 color;
-layout(location = 1) out int color2;
+layout(location = 1) out int entityID;
 
 struct VertexInput
 {
 	vec4 Color;
 	vec2 TextCoord;
-	float TextIndex;
 	float TilingFactor;
 };
 
 layout (location = 0) in VertexInput Input;
+layout (location = 3) in flat float v_TextIndex;
 layout (location = 4) in flat int v_entityID;
 
 
@@ -56,7 +56,7 @@ layout (binding = 0) uniform sampler2D u_Textures[32];
 
 void main()
 {
-	color = texture(u_Textures[int(Input.TextIndex)], Input.TextCoord * Input.TilingFactor) * Input.Color;
+	color = texture(u_Textures[int(v_TextIndex)], Input.TextCoord * Input.TilingFactor) * Input.Color;
 	//color = v_Color;
-	color2 = v_entityID;
+	entityID = v_entityID;
 }

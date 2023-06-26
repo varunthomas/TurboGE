@@ -4,9 +4,7 @@
 #include<imgui/misc/cpp/imgui_stdlib.h>
 #include"TurboGE/Scene/Components.h"
 #include<glm/gtc/type_ptr.hpp>
-#include<iostream>
 #include<imgui/imgui_internal.h>
-
 namespace TurboGE
 {
 
@@ -132,7 +130,7 @@ namespace TurboGE
 			m_SelectionContext = {};
 		}	
 
-		if (ImGui::BeginPopupContextWindow(0, 1, false))
+		if (ImGui::BeginPopupContextWindow(0, 1))
 		{
 			if (ImGui::MenuItem("Create new entity"))
 			{
@@ -152,22 +150,30 @@ namespace TurboGE
 				ImGui::OpenPopup("Add Component");
 			if (ImGui::BeginPopup("Add Component"))
 			{
-				if (ImGui::MenuItem("Camera"))
-				{
-					m_SelectionContext.AddComponent<CameraComponent>();
-					ImGui::CloseCurrentPopup();
-				}
-				if (ImGui::MenuItem("Sprite Renderer"))
-				{
-					m_SelectionContext.AddComponent<SpriteRendererComponent>();
-					ImGui::CloseCurrentPopup();
-				}
+				DisplayPopup<CameraComponent>("Camera");
+				DisplayPopup<SpriteRendererComponent>("Sprite Renderer");
+				DisplayPopup<CircleRendererComponent>("Circle Renderer");
+				DisplayPopup<Rigidbody2D>("Rigidbody2D");
+				DisplayPopup<Fixture2D>("Fixture2D");
+				DisplayPopup<CircleFixture2D>("CircleFixture2D");
+				DisplayPopup<PyScriptComponent>("PyScript");
+
 				ImGui::EndPopup();
 			}
 
 		}
 
 		ImGui::End();
+	}
+
+	template<typename T>
+	void EntityPanel::DisplayPopup(const std::string& name)
+	{
+		if (ImGui::MenuItem(name.c_str()))
+		{
+			m_SelectionContext.AddComponent<T>();
+			ImGui::CloseCurrentPopup();
+		}
 	}
 
 	void EntityPanel::DrawEntityList(const Entity& entity )
@@ -206,6 +212,7 @@ namespace TurboGE
 			DrawVec3Control("Scale", component.scale, 1.0f);
 
 			});
+
 		DrawComponentPanel<CameraComponent>("Camera", entity, [&](auto& component) {
 			auto& cameraComponent = entity.GetComponent<CameraComponent>();
 			auto& camera = cameraComponent.camera;
@@ -273,6 +280,90 @@ namespace TurboGE
 
 		DrawComponentPanel<SpriteRendererComponent>("Sprite renderer", entity, [](auto& component) {
 			ImGui::ColorEdit4("Square color", glm::value_ptr(component.color));
+
+			ImGui::Button("Texture", ImVec2(100.0f, 0.0f));
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DRAG_DROP"))
+				{
+
+					const char* path = (const char*)payload->Data;
+					std::string loadFile(path);
+					component.texture = Texture2D::Create(loadFile);
+
+				}
+				ImGui::EndDragDropTarget();
+			}
 		});
+
+		DrawComponentPanel<CircleRendererComponent>("Circle renderer", entity, [](auto& component) {
+
+			ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
+			ImGui::DragFloat("Thickness", &component.thickness, 0.025f, 0.0f, 1.0f);
+			ImGui::DragFloat("Fade", &component.fade, 0.00025f, 0.0f, 1.0f);
+			});
+
+		DrawComponentPanel<Rigidbody2D>("Rigidbody2D", entity, [](auto& component) {
+
+			std::array<const char*, 3> bodyType{ "Static", "Kinematic", "Dynamic"};
+			const char* currentBodyType = bodyType[static_cast<size_t>(component.type)];
+			if (ImGui::BeginCombo("Projection", currentBodyType))
+			{
+				for (int i = 0; i < 3; i++)
+				{
+					bool isSelected = currentBodyType == bodyType[i];
+					if (ImGui::Selectable(bodyType[i], isSelected))
+					{
+						currentBodyType = bodyType[i];
+						component.type = (Rigidbody2D::BodyType)i;
+					}
+					if (isSelected)
+					{
+						ImGui::SetItemDefaultFocus();
+					}
+
+				}
+				ImGui::EndCombo();
+			}
+
+			ImGui::Checkbox("Fixed rotation", &component.fixedRotation);
+
+			});
+
+		DrawComponentPanel<Fixture2D>("Fixture2D", entity, [](auto& component) {
+
+			ImGui::DragFloat2("Size", glm::value_ptr(component.size));
+			ImGui::DragFloat("Density", &component.density, 0.01f, 0.0f, 1.0f);
+			ImGui::DragFloat("Friction", &component.friction, 0.01f, 0.0f, 1.0f);
+			ImGui::DragFloat("Restitution", &component.restitution, 0.01f, 0.0f, 1.0f);
+			ImGui::DragFloat("Restitution Threshold", &component.restitutionThreshold, 0.01f, 0.0f);
+
+			});
+
+		DrawComponentPanel<CircleFixture2D>("CircleFixture2D", entity, [](auto& component) {
+
+			ImGui::DragFloat2("Offset", glm::value_ptr(component.offset));
+			ImGui::DragFloat("Radius", &component.radius);
+			ImGui::DragFloat("Density", &component.density, 0.01f, 0.0f, 1.0f);
+			ImGui::DragFloat("Friction", &component.friction, 0.01f, 0.0f, 1.0f);
+			ImGui::DragFloat("Restitution", &component.restitution, 0.01f, 0.0f, 1.0f);
+			ImGui::DragFloat("Restitution Threshold", &component.restitutionThreshold, 0.01f, 0.0f);
+
+			});
+
+		DrawComponentPanel<PyScriptComponent>("PyScript", entity, [&](auto& component) {
+
+
+			std::string buffer = component.fileName;
+			if (ImGui::InputText("Script", &buffer))
+			{
+				component.fileName = buffer;
+			}
+			if (ImGui::Button("Save"))
+			{
+				component.fileName = buffer;
+				m_Scene->OnComponentAdded<PyScriptComponent>(component);
+			}
+			});
 	}
 }

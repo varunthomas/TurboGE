@@ -4,6 +4,8 @@
 #include "Imgui/ImguiLayer.h"
 #include"GLFW/glfw3.h"
 #include"Time.h"
+#include"Scripting/Scripting.h"
+
 
 
 namespace TurboGE
@@ -11,13 +13,21 @@ namespace TurboGE
 	Application* Application::s_Instance = nullptr;
 	Application::Application()
 	{
+
+		PyScript::Init();
 		s_Instance = this;
 		m_window = Window::Create();
 		layer = new ImguiLayer() ;
 		layer->onAttach();
 		m_window->setCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
-		s = new Editor2D();
+		
 
+	}
+
+	void Application::GetLayer(Layer* layer)
+	{
+		m_Layer = layer;
+		m_Layer->OnAttach();
 	}
 
 	void Application::OnEvent(Event& e)
@@ -40,11 +50,12 @@ namespace TurboGE
 		{
 			Close();
 		}
-		s->onEvent(e);
+		m_Layer->onEvent(e);
 	}
 	Application::~Application()
 	{
-		delete s;
+		delete m_Layer;
+		PyScript::ShutDown();
 	}
 	void Application::Run()
 	{
@@ -57,8 +68,8 @@ namespace TurboGE
 			layer->Begin();
 			if (!m_minimized)
 			{
-				s->onUpdate(deltaTime);
-				s->renderCustom();
+				m_Layer->onUpdate(deltaTime);
+				m_Layer->renderCustom();
 			}
 			layer->End();
 			m_window->onUpdate();
@@ -70,4 +81,17 @@ namespace TurboGE
 		m_Running = false;
 	}
 
+	void Application::Minimize()
+	{
+		glfwIconifyWindow((GLFWwindow*)GetWindow().GetNativeWindow());
+	}
+
+	void Application::RestoreDown()
+	{
+		glfwSetWindowSize((GLFWwindow*)GetWindow().GetNativeWindow(), 1280, 720);
+	}
+	void Application::RestoreUp()
+	{
+		glfwSetWindowSize((GLFWwindow*)GetWindow().GetNativeWindow(), 1920, 1080);
+	}
 }

@@ -1,12 +1,16 @@
 #pragma once
 #include"entt.hpp"
 #include"Scene.h"
+#include"TurboGE/Logger.h"
+
+class b2Body;
 namespace TurboGE
 {
 	class Entity
 	{
 		entt::entity entityID{ entt::null };
 		Scene* m_Scene{};
+		b2Body* m_body = nullptr;
 	public:
 		Entity() = default;
 		Entity(entt::entity entity, Scene* scene)
@@ -18,17 +22,17 @@ namespace TurboGE
 			return entityID;
 		}
 
-		template<typename T>
-		std::string GetName()
-		{
-			T a;
-			return a.name;
-		}
-
 		template<typename T, typename... Args>
 		T& AddComponent(Args&&... args)
 		{
-			return m_Scene->m_registry.emplace<T>(entityID, std::forward<Args>(args)...);
+			if (T* component = HasComponent<T>(); component != nullptr)
+			{
+				TURBO_CLIENT_ERR("Component already exists");
+				return *component;
+			}
+			T& component = m_Scene->m_registry.emplace<T>(entityID, std::forward<Args>(args)...);
+			m_Scene->OnComponentAdded<T>(component);
+			return component;
 		}
 
 		template<typename T>
@@ -60,6 +64,7 @@ namespace TurboGE
 				modifier(component, entity);
 			}
 		}
+
 		operator uint32_t() const
 		{
 			return (uint32_t)entityID;
@@ -68,6 +73,11 @@ namespace TurboGE
 		operator entt::entity() const 
 		{
 			return entityID;
+		}
+
+		operator int() const
+		{
+			return (int)entityID;
 		}
 
 		operator bool() const
