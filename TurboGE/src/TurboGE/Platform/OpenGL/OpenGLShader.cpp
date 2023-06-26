@@ -19,7 +19,7 @@ namespace TurboGE
 
 		if (!isBinariesPresent())
 		{
-			std::cout << "Compiling " << m_Path.c_str() << std::endl;
+			TURBO_CORE_INF("Compiling {0}", m_Path.c_str());
 			//ADDING SUPPORT FOR VULKAN. GLSL FILE IS MODIFIED TO HELP CONVERT TO SPIRV BY SHADERC
 			CompileVulkan(source); // THE SHADERC CONVERTS THE GLSL TO SPIRV AS VULKAN AS ARGUMENT AND GETS A SPIRV WITH VULKAN COMPATIBLE BIN
 			CompileOpenGL(); // THIS VULKAN BIN IS FED TO SPIRV TO GET A STRING GLSL FOR OPENGL. THIS STRING IS PASSED TO SHADERC THAT CONVERTS TO SPIRV AS OPENGL AS ARGUMENT AND GETS A SPIRV WITH OPENGL COMPATIBLE BIN.
@@ -158,7 +158,7 @@ namespace TurboGE
 
 			if (result.GetCompilationStatus() != shaderc_compilation_status_success)
 			{
-				std::cout << result.GetErrorMessage() << '\n';
+				TURBO_CORE_ERR("{0}", result.GetErrorMessage());
 				TURBO_ASSERT("Failed to compile", 0);
 			}
 
@@ -240,7 +240,7 @@ namespace TurboGE
 
 			std::vector<GLchar> infoLog(maxLength);
 			glGetProgramInfoLog(program, maxLength, &maxLength, infoLog.data());
-			std::cout << "Shader linking failed " <<  m_Path << " data:: " << infoLog.data();
+			TURBO_CORE_ERR("Shader linking failed {0} data: {1}", m_Path, infoLog.data());
 
 			glDeleteProgram(program);
 

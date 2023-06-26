@@ -20,7 +20,6 @@ namespace TurboGE
 		void DrawCircleVisualizer(const entt::entity, const glm::vec3&, const glm::vec3&);
 	public:
 		Scene(glm::vec2&);
-		~Scene() = default;
 		Entity CreateEntity(std::string_view str = "");
 		void DestroyEntity(entt::entity);
 		void onUpdatePlay(Time& t, std::shared_ptr<Physics2D>&, bool);
@@ -33,9 +32,8 @@ namespace TurboGE
 		template<typename T>
 		void OnComponentAdded(T&);
 
-		static void StartPhysics();
-
 		void HighlightEntity(int entity) { highlightedEntity = entity; }
+
 
 		friend class Entity;
 		friend class EntityPanel;

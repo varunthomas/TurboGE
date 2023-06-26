@@ -1,5 +1,5 @@
 #include<TurboGE.h>
-
+#include"Editor2D.h"
 
 namespace TurboGE
 {
@@ -9,7 +9,7 @@ namespace TurboGE
 	public:
 		Editor()
 		{
-
+			GetLayer(new Editor2D());
 		}
 
 		~Editor()

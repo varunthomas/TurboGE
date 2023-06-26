@@ -10,7 +10,7 @@ namespace TurboGE
 	{
 	}
 
-	void PlayPanel::OnImGuiRender(std::function<void()> init, std::function<void()> destroy)
+	void PlayPanel::OnImGuiRender()
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 2));
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
@@ -26,18 +26,12 @@ namespace TurboGE
 		float size = ImGui::GetWindowHeight() - 4.0f;
 		std::shared_ptr<Texture2D> icon = isPlay ? m_IconStop : m_IconPlay;
 		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+		toggle = false;
 		if (ImGui::ImageButton((ImTextureID)icon->GetID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
 		{
-			if (isPlay)
-			{
-				destroy();
-				isPlay = false;
-			}
-			else
-			{
-				init();
-				isPlay = true;
-			}
+
+			toggle = true;
+			isPlay = !isPlay;
 		}
 		ImGui::PopStyleVar(2);
 		ImGui::PopStyleColor(3);

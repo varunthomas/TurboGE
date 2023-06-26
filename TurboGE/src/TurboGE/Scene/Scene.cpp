@@ -5,6 +5,7 @@
 #include"EntityWrapper.h"
 #include <GLFW/glfw3.h>
 #include"TurboGE/Input.h"
+#include"TurboGE/Scripting/Scripting.h"
 
 namespace TurboGE
 {
@@ -83,6 +84,30 @@ namespace TurboGE
 
 	void Scene::onUpdatePlay(Time& t, std::shared_ptr<Physics2D>& physics, bool showCollider)
 	{
+		m_registry.view<PyScriptComponent>().each([=](auto entity, auto& psc)
+			{
+				if (!psc.create)
+				{
+					if (psc.script.get() == nullptr)
+					{	
+						if (auto it = PyScriptRepo::scriptMap.find(psc.fileName); it == PyScriptRepo::scriptMap.end())
+						{
+							psc.script = std::make_shared<PyScript>(psc.fileName);
+							PyScriptRepo::scriptMap.emplace(std::make_pair(psc.fileName, psc.script));
+						}
+						else
+						{
+							psc.script = it->second;
+						}
+					}
+					psc.script->entity = Entity{ entity, this };
+					psc.script->OnCreate();
+					psc.create = true;
+				}
+				psc.script->OnUpdate(t);
+				
+			});
+
 		m_registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
 			{
 				if (!nsc.scriptableEntity)
@@ -217,6 +242,18 @@ namespace TurboGE
 		{
 			component.camera.SetViewPort((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		}
+		else if constexpr (std::is_same_v<T, PyScriptComponent>)
+		{
+			if (component.fileName.empty())
+				return;
+
+			if (PyScriptRepo::scriptMap.find(component.fileName) == PyScriptRepo::scriptMap.end())
+			{
+				component.script = std::make_shared<PyScript>(component.fileName);
+				PyScriptRepo::scriptMap.emplace(std::make_pair(component.fileName, component.script));
+			}
+
+		}
 	}
 
 	template void Scene::OnComponentAdded<CameraComponent>(CameraComponent& component);
@@ -225,4 +262,6 @@ namespace TurboGE
 	template void Scene::OnComponentAdded<Rigidbody2D>(Rigidbody2D& component);
 	template void Scene::OnComponentAdded<Fixture2D>(Fixture2D& component);
 	template void Scene::OnComponentAdded<CircleFixture2D>(CircleFixture2D& component);
+	template void Scene::OnComponentAdded<PyScriptComponent>(PyScriptComponent& component);
+
 }

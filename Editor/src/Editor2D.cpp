@@ -11,18 +11,12 @@
 #include"ImGuizmo.h"
 namespace TurboGE
 {
-
-    Editor2D::Editor2D()
+    void Editor2D::OnAttach()
     {
         m_Renderer = Renderer::Create();
         m_Renderer->Init();
         renderer2DInstance.Init();
 
-        OnAttach();
-    }
-
-    void Editor2D::OnAttach()
-    {
         m_Scene = std::make_shared<Scene>(m_ViewportSize);
         entityPanel(m_Scene);
 
@@ -60,12 +54,22 @@ namespace TurboGE
 
             if (playPanel.isPlay)
             {
+                if (playPanel.toggle)
+                {
+                    tempData = Serialize(); //SAVE CURRENT CONFIG
+                    m_Physics = std::make_shared<Physics2D>(m_Scene);
+                }
                 m_Scene->onUpdatePlay(delta, m_Physics, m_ShowPhysicsColliders);
             }
             else
             {
                 m_EditorCamera.OnUpdate(delta);
                 m_Scene->onUpdateEditor(delta, m_EditorCamera, m_ShowPhysicsColliders);
+                if (playPanel.toggle)
+                {
+                    m_Physics.reset();
+                    Deserialize(); //LOAD CURRENT CONFIG
+                }
             }
 
             auto [mx, my] = ImGui::GetMousePos();
@@ -237,10 +241,6 @@ namespace TurboGE
             ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
             ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
         }
-        else
-        {
-            std::cout << "Docking not enabled\n";
-        }
         style.WindowMinSize.x = minWinSizeX;
         if (ImGui::BeginMenuBar())
         {
@@ -300,18 +300,9 @@ namespace TurboGE
         entityPanel.OnImGuiRender();
         browserPanel.OnImGuiRender();
 
-        playPanel.OnImGuiRender([&]() {
-            //PLAY
-            tempData = Serialize(); //SAVE CURRENT CONFIG
-            m_Physics = std::make_shared<Physics2D>(m_Scene);
-            }, 
+        playPanel.OnImGuiRender();
 
-            [&]() {
-                //STOP
-                
-                m_Physics->DeleteWorld();
-                Deserialize(); //LOAD CURRENT CONFIG
-            });
+
 
         uint32_t textureID = m_FrameBuffer->GetID();
         ImGui::Begin("Color settings");
@@ -336,8 +327,6 @@ namespace TurboGE
         m_ViewportHovered = ImGui::IsWindowHovered();
 
         m_ViewportFocused == true ? Input::inputViewPort = Input::InputViewport::EDITOR : Input::inputViewPort = Input::InputViewport::PANEL;
-
-        std::cout << " focussed " << m_ViewportFocused << " hovered " << m_ViewportHovered << '\n';
 
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail(); //PIXEL WIDTH AND HEIGHT OF VIEWPORT EXCLUDING HEIGHT OF option BAR
         auto viewportOffset = ImGui::GetWindowPos(); //GET OFFSET FROM ACTUAL SCREEN COORD TO VIEWPORT COORD TOP LEFT

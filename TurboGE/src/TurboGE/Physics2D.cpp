@@ -78,7 +78,13 @@ namespace TurboGE
 
 	}
 
-	void Physics2D::DeleteWorld()
+	void Physics2D::ApplyLinearImpulse(void *body, float x, float y)
+	{
+		b2Body* rbbody = (b2Body*)body;
+		rbbody->ApplyLinearImpulseToCenter(b2Vec2(x, y), true);
+	}
+
+	Physics2D::~Physics2D()
 	{
 		if (world)
 		{
