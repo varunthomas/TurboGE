@@ -100,9 +100,7 @@ namespace TurboGE
         auto e = script->entity;
         auto& rb = e.GetComponent<Rigidbody2D>();
         
-        //b2Body* body = (b2Body*)rb.body;
         Physics2D::ApplyLinearImpulse(rb.body, x, y);
-        //body->ApplyLinearImpulseToCenter(b2Vec2(x,y), true);
 
         Py_RETURN_NONE;
     }
