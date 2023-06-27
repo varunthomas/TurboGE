@@ -19,9 +19,16 @@ https://sdk.lunarg.com/sdk/download/latest/windows/vulkan-sdk.exe <br/>
 Install the Vulkan SDK.<br/>
 Select all optional components<br/>
 
+<ins>**3. Download and install latest Python:**</ins>
+
+1. Go to https://www.python.org/downloads/ and download latest Python
+2. When installing check Add python.exe to PATH
+3. Select Customize installation. Select all components.
+
 <ins>**3. Generate the solution:**</ins>
 
-1. Run the [GenerateProjects.bat](https://github.com/varunthomas/TurboGE/blob/main/GenerateProjects.bat) file in the root directory. This will run the premake required to build the project. This will also create the Visual Studio solutions file.
+1. Run the [init.bat](https://github.com/varunthomas/TurboGE/blob/main/init.bat) file in the root directory. This will install premake and any dependencies.
+2. Run the [GenerateProjects.bat](https://github.com/varunthomas/TurboGE/blob/main/GenerateProjects.bat) file in the root directory. This will run the premake required to build the project. This will also create the Visual Studio solutions file.
 
 
 ***
