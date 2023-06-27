@@ -2,7 +2,7 @@ include "Deps.lua"
 
 workspace "TurboGE"
 	architecture "x64"
-	startproject "Sandbox"
+	startproject "Editor"
 
 	configurations
 	{
@@ -36,6 +36,7 @@ project "TurboGE"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+	
 
 	pchheader "tgepch.h"
 	pchsource "TurboGE/src/tgepch.cpp"
@@ -144,6 +145,7 @@ project "Editor"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
+	
 	files
 	{
 		"%{prj.name}/src/**.h",
@@ -181,6 +183,9 @@ project "Editor"
 		{
 			"%{Lib.Python_Debug}"
 		}
+		postbuildcommands {
+			'{COPY} %{Dll.Python_Debug} ../bin/' .. outputdir .. '/%{prj.name}'
+		}
 
 	filter "configurations:Release"
 		defines "TGE_RELEASE"
@@ -190,10 +195,18 @@ project "Editor"
 			"%{Lib.Python_Release}"
 		}
 		
+		postbuildcommands {
+			'{COPY} %{Dll.Python_Release} ../bin/' .. outputdir .. '/%{prj.name}'
+		}
+	
+		
 	filter "configurations:Dist"
 		defines "TGE_DIST"
 		optimize "on"
 		links
 		{
 			"%{Lib.Python_Release}"
+		}
+		postbuildcommands {
+			'{COPY} %{Dll.Python_Release} ../bin/' .. outputdir .. '/%{prj.name}'
 		}
