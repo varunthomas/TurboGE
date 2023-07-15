@@ -43,6 +43,7 @@ Select all optional components<br/>
 - Orthographic and Perspective camera
 - Free moving camera for editor.
 - Vulkan support using SPIRV
+- Chrome tracing for profiling
 
 **References:**
 
