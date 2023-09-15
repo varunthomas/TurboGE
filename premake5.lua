@@ -194,7 +194,6 @@ project "Editor"
 		{
 			"%{Lib.Python_Release}"
 		}
-		
 		postbuildcommands {
 			'{COPY} %{Dll.Python_Release} ../bin/' .. outputdir .. '/%{prj.name}'
 		}

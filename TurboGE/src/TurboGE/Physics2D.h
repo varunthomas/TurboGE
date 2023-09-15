@@ -8,12 +8,12 @@ namespace TurboGE
 
 	class Physics2D
 	{
-		std::shared_ptr<Scene> m_Scene;
+		const std::unique_ptr<Scene>& m_Scene;
 		b2World* world = nullptr;
 		int32_t velocityIterations = 6;
 		int32_t positionIterations = 2;
 	public:
-		Physics2D(std::shared_ptr<Scene>&);
+		Physics2D(const std::unique_ptr<Scene>&);
 		~Physics2D();
 
 		void UpdatePhysics(Time&, entt::entity);

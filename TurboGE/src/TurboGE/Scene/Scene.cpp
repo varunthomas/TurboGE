@@ -82,7 +82,7 @@ namespace TurboGE
 		renderer2DInstance.EndScene();
 	}
 
-	void Scene::onUpdatePlay(Time& t, std::shared_ptr<Physics2D>& physics, bool showCollider)
+	void Scene::onUpdatePlay(Time& t, const std::unique_ptr<Physics2D>& physics, bool showCollider)
 	{
 		m_registry.view<PyScriptComponent>().each([=](auto entity, auto& psc)
 			{

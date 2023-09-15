@@ -13,7 +13,6 @@ namespace TurboGE
 	Application* Application::s_Instance = nullptr;
 	Application::Application()
 	{
-
 		PyScript::Init();
 		s_Instance = this;
 		m_window = Window::Create();

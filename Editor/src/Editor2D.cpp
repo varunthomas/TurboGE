@@ -17,8 +17,8 @@ namespace TurboGE
         m_Renderer->Init();
         renderer2DInstance.Init();
 
-        m_Scene = std::make_shared<Scene>(m_ViewportSize);
-        entityPanel(m_Scene);
+        m_Scene = std::make_unique<Scene>(m_ViewportSize);
+        entityPanel = std::make_unique<EntityPanel>(m_Scene);
 
         FrameBufferSpec fbSpec;
         fbSpec.formats = { FrameBufferFormat::RGBA8, FrameBufferFormat::RED_INT, FrameBufferFormat::DEPTH24_STENCIL8 };
@@ -57,7 +57,7 @@ namespace TurboGE
                 if (playPanel.toggle)
                 {
                     tempData = Serialize(); //SAVE CURRENT CONFIG
-                    m_Physics = std::make_shared<Physics2D>(m_Scene);
+                    m_Physics = std::make_unique<Physics2D>(m_Scene);
                 }
                 m_Scene->onUpdatePlay(delta, m_Physics, m_ShowPhysicsColliders);
             }
@@ -109,7 +109,7 @@ namespace TurboGE
             auto& mousePressEvent = dynamic_cast<MousePressEvent&>(e);
             if (mousePressEvent.getMouseButton() == (int)MouseCode::ButtonLeft && m_ViewportHovered && !Input::isKeyPressed(Key::LeftAlt) && !ImGuizmo::IsOver())
             {
-                entityPanel.SetSelectedEntity(m_ClickedEntity);
+                entityPanel->SetSelectedEntity(m_ClickedEntity);
                 m_Scene->HighlightEntity((int)m_ClickedEntity);
             }
         }
@@ -297,7 +297,7 @@ namespace TurboGE
             ImGui::EndMenuBar();
         }
 
-        entityPanel.OnImGuiRender();
+        entityPanel->OnImGuiRender();
         browserPanel.OnImGuiRender();
 
         playPanel.OnImGuiRender();
@@ -352,7 +352,7 @@ namespace TurboGE
 
         //GIZMOS
 
-        auto selectedEntity = entityPanel.GetSelectedEntity();
+        auto selectedEntity = entityPanel->GetSelectedEntity();
         if (selectedEntity && m_TransformGizmo != -1)
         {
             ImGuizmo::SetOrthographic(false);
@@ -419,8 +419,8 @@ namespace TurboGE
         if (filePath == "C")
             return;
         m_CurrentSceneFile = filePath;
-        m_Scene = std::make_shared<Scene>(m_ViewportSize);
-        entityPanel(m_Scene);
+        m_Scene = std::make_unique<Scene>(m_ViewportSize);
+        entityPanel = std::make_unique<EntityPanel>(m_Scene);
         SceneSerializer deserializer(m_Scene);
         deserializer.Load(filePath);
 
@@ -453,16 +453,16 @@ namespace TurboGE
 
     void Editor2D::Deserialize()
     {
-        m_Scene = std::make_shared<Scene>(m_ViewportSize);
-        entityPanel(m_Scene);
+        m_Scene = std::make_unique<Scene>(m_ViewportSize);
+        entityPanel = std::make_unique<EntityPanel>(m_Scene);
         SceneSerializer deserializer(m_Scene);
         deserializer.Load(tempData, false);
     }
 
     void Editor2D::NewScene()
     {
-        m_Scene = std::make_shared<Scene>(m_ViewportSize);
-        entityPanel(m_Scene);
+        m_Scene = std::make_unique<Scene>(m_ViewportSize);
+        entityPanel = std::make_unique<EntityPanel>(m_Scene);
     }
 
     Editor2D* Editor2D::getLayer()

@@ -12,10 +12,10 @@ namespace TurboGE
 	
 	class SceneSerializer
 	{
-		std::shared_ptr<Scene> m_Scene;
+		const std::unique_ptr<Scene>& m_Scene;
 		
 	public:
-		SceneSerializer(std::shared_ptr<Scene> scene)
+		SceneSerializer(const std::unique_ptr<Scene>& scene)
 			:m_Scene{ scene } {};
 		void Save(const std::string&);
 		void Load(const std::string&, bool isFile = true);

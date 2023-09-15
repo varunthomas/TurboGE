@@ -22,7 +22,7 @@ namespace TurboGE
 		Scene(glm::vec2&);
 		Entity CreateEntity(std::string_view str = "");
 		void DestroyEntity(entt::entity);
-		void onUpdatePlay(Time& t, std::shared_ptr<Physics2D>&, bool);
+		void onUpdatePlay(Time& t, const std::unique_ptr<Physics2D>&, bool);
 		void onUpdateEditor(Time&, EditorCamera&, bool);
 		void OnResize(uint32_t, uint32_t);
 		Entity GetPrimaryCameraEntity();

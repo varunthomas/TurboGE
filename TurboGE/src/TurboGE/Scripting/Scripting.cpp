@@ -152,8 +152,8 @@ namespace TurboGE
     }
 	void PyScript::Init()
 	{
+        //Py_SetPythonHome(L"C:\\Program Files\\Python311");
 		Py_Initialize();
-
 
         PyObject* csMod = PyModule_Create(&ComponentModifierModuleDefinition);
         if (csMod)

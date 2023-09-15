@@ -7,10 +7,9 @@
 #include<imgui/imgui_internal.h>
 namespace TurboGE
 {
-
-	void EntityPanel::operator()(const std::shared_ptr<Scene>& scene)
+	EntityPanel::EntityPanel(const std::unique_ptr<Scene>& scene)
+		:m_Scene{scene}
 	{
-		m_Scene = scene;
 		m_SelectionContext = {};
 	}
 

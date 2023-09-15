@@ -6,13 +6,12 @@ namespace TurboGE
 {
 	class EntityPanel
 	{
-		std::shared_ptr<Scene> m_Scene;
+		const std::unique_ptr<Scene>& m_Scene;
 		Entity m_SelectionContext{};
 		template <typename T>
 		void DisplayPopup(const std::string&);
 	public:
-		EntityPanel() = default;
-		void operator()(const std::shared_ptr<Scene>&);
+		EntityPanel(const std::unique_ptr<Scene>&);
 		void OnImGuiRender();
 		void DrawEntityList(const Entity&);
 		void DrawPropertiesPanel(const Entity&);

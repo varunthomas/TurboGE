@@ -11,7 +11,7 @@
 
 namespace TurboGE
 {
-	Physics2D::Physics2D(std::shared_ptr<Scene>& scene)
+	Physics2D::Physics2D(const std::unique_ptr<Scene>& scene)
 		:m_Scene{scene}
 	{
 		world = new b2World({ 0.0f, -9.8f });

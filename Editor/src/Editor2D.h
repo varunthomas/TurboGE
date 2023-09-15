@@ -21,12 +21,12 @@ namespace TurboGE
 {
 	class Editor2D : public Layer
 	{
-		std::shared_ptr<Scene> m_Scene;
-		EntityPanel entityPanel;
+		std::unique_ptr<Scene> m_Scene;
+		std::unique_ptr<EntityPanel> entityPanel;
 		BrowserPanel browserPanel;
 		PlayPanel playPanel;
 
-		std::shared_ptr<Physics2D> m_Physics;
+		std::unique_ptr<Physics2D> m_Physics;
 
 		Entity m_ClickedEntity;
 
